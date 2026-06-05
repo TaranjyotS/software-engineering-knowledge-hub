@@ -1,9 +1,6 @@
 name: Sync Markdown to Confluence
 
 on:
-  push:
-    paths:
-      - "docs/*.md"
   workflow_dispatch:
 
 jobs:

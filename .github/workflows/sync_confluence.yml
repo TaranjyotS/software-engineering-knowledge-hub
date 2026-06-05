@@ -1,6 +1,9 @@
 name: Sync Markdown to Confluence
 
 on:
+  push:
+    paths:
+      - "docs/*.md"
   workflow_dispatch:
 
 jobs:
@@ -25,7 +28,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Validate Confluence secrets
+        id: confluence_config
+        env:
+          CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
+          CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
+          CONFLUENCE_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
+          CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
+        run: |
+          if [ -z "$CONFLUENCE_API_URL" ] || [ -z "$CONFLUENCE_USER" ] || [ -z "$CONFLUENCE_TOKEN" ] || [ -z "$CONFLUENCE_SPACE_KEY" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Missing required Confluence secrets. Skipping Confluence sync."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "Required Confluence secrets are configured."
+          fi
+
       - name: Confluence health check (fail fast)
+        if: steps.confluence_config.outputs.configured == 'true'
         env:
           CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
           CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
@@ -34,6 +54,7 @@ jobs:
         run: python confluence_sync/health_check.py
 
       - name: Build/refresh page map (bootstrap pages if needed)
+        if: steps.confluence_config.outputs.configured == 'true'
         env:
           CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
           CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
@@ -43,6 +64,7 @@ jobs:
         run: python confluence_sync/build_page_map.py
 
       - name: Push changed markdown files to Confluence
+        if: steps.confluence_config.outputs.configured == 'true'
         env:
           CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
           CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
@@ -51,17 +73,29 @@ jobs:
           CONFLUENCE_SPACE_NAME: ${{ secrets.CONFLUENCE_SPACE_NAME }}
         run: |
           set -e
-          files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^docs/.*\.md$' || true)
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ -d "docs" ]; then
+              files=$(find docs -name "*.md" -type f)
+            else
+              files=""
+            fi
+          else
+            files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^docs/.*\.md$' || true)
+          fi
+
           if [ -z "$files" ]; then
             echo "No markdown changes detected."
             exit 0
           fi
+
           for file in $files; do
             echo "🔼 Syncing $file"
             python confluence_sync/push_to_confluence.py "$file"
           done
 
       - name: Commit updated mapping (if any)
+        if: steps.confluence_config.outputs.configured == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"

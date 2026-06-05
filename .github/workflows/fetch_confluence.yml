@@ -27,7 +27,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Validate Confluence secrets
+        id: confluence_config
+        env:
+          CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
+          CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
+          CONFLUENCE_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
+          CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
+        run: |
+          if [ -z "$CONFLUENCE_API_URL" ] || [ -z "$CONFLUENCE_USER" ] || [ -z "$CONFLUENCE_TOKEN" ] || [ -z "$CONFLUENCE_SPACE_KEY" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Missing required Confluence secrets. Skipping Confluence fetch."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "Required Confluence secrets are configured."
+          fi
+
       - name: Confluence health check (fail fast)
+        if: steps.confluence_config.outputs.configured == 'true'
         env:
           CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
           CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
@@ -36,6 +53,7 @@ jobs:
         run: python confluence_sync/health_check.py
 
       - name: Build/refresh page map and fetch pages
+        if: steps.confluence_config.outputs.configured == 'true'
         env:
           CONFLUENCE_API_URL: ${{ secrets.CONFLUENCE_API_URL }}
           CONFLUENCE_USER: ${{ secrets.CONFLUENCE_USER }}
@@ -47,6 +65,7 @@ jobs:
           python confluence_sync/fetch_from_confluence.py
 
       - name: Commit & push updated files
+        if: steps.confluence_config.outputs.configured == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"

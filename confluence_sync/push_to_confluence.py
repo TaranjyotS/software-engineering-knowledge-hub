@@ -16,9 +16,8 @@ from markdown import markdown
 CONFLUENCE_API_URL = os.getenv("CONFLUENCE_API_URL", "").rstrip("/")
 CONFLUENCE_USER = os.getenv("CONFLUENCE_USER", "")
 CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN", "")
-
-# Optional: explicitly target a space (recommended for CI)
 CONFLUENCE_SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
+MARKDOWN_EXTENSIONS = ["extra", "tables", "fenced_code", "toc", "sane_lists"]
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PAGE_MAP_PATH = REPO_ROOT / "confluence_sync" / "page_map.json"
@@ -105,50 +104,46 @@ def update_page(page_id: str, title: str, html_body: str) -> None:
     )
 
 
+def title_from_markdown(md_text: str, md_file: Path) -> str:
+    for line in md_text.splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return md_file.stem.replace("_", " ").replace("-", " ").title()
+
+
 def ensure_page_id(mapping: Dict[str, str], title: str, html_body: str) -> str:
-    """
-    Ensure a Confluence page exists for this title.
-    If it's missing from page_map.json (or was deleted), create it and update the map.
-    """
-    # exact match
     page_id = mapping.get(title)
     if page_id:
         return page_id
 
-    # case-insensitive match against current mapping keys
     for existing_title, existing_id in mapping.items():
         if existing_title.strip().lower() == title.strip().lower():
             return existing_id
 
-    # Create from scratch
     space_key = get_target_space_key()
     created_id = create_page(space_key, title, html_body)
     mapping[title] = created_id
     save_page_map(mapping)
-    print(f"🆕 Created missing page '{title}' and updated page_map.json")
+    print(f"Created missing page '{title}' and updated page_map.json")
     return created_id
 
 
 def update_confluence_page_from_md(md_path: str) -> None:
     md_file = Path(md_path)
+    if not md_file.is_absolute():
+        md_file = REPO_ROOT / md_file
     if not md_file.exists():
         raise FileNotFoundError(f"Markdown file not found: {md_path}")
 
-    # Title logic: prefer first H1, else filename
     md_text = md_file.read_text(encoding="utf-8")
-    first_line = (md_text.splitlines()[0].strip() if md_text.splitlines() else "")
-    if first_line.startswith("# "):
-        title = first_line[2:].strip()
-    else:
-        title = md_file.stem.replace("_", " ").replace("-", " ").title()
-
-    html_body = markdown(md_text)
+    title = title_from_markdown(md_text, md_file)
+    html_body = markdown(md_text, extensions=MARKDOWN_EXTENSIONS)
 
     mapping = load_page_map()
     page_id = ensure_page_id(mapping, title, html_body)
 
     update_page(page_id, title, html_body)
-    print(f"✅ Synced '{title}' successfully")
+    print(f"Synced '{title}' successfully")
 
 
 if __name__ == "__main__":

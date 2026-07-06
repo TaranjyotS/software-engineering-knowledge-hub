@@ -1,437 +1,600 @@
-# System Design
+# System Design, Microservices & Distributed Systems
 
-# System Design – Highly Scalable Systems
-
-## Table of Contents
-
-1. [Foundations of Scalability – Q&A](#foundations-of-scalability--qa)
-2. [Vertical vs Horizontal Scaling](#vertical-vs-horizontal-scaling)
-3. [Load Balancing](#load-balancing)
-4. [Caching Strategies](#caching-strategies)
-5. [Databases, Sharding, and Replication](#databases-sharding-and-replication)
-6. [Message Queues and Asynchronous Processing](#message-queues-and-asynchronous-processing)
-7. [CDNs and Global Distribution](#cdns-and-global-distribution)
-8. [CAP Theorem and Consistency Models](#cap-theorem-and-consistency-models)
-9. [High-Level System Design Diagrams (Mermaid)](#high-level-system-design-diagrams-mermaid)
-10. [Example Designs – URL Shortener, News Feed, Ride Sharing](#example-designs--url-shortener-news-feed-ride-sharing)
-11. [Observability: Logging, Metrics, and Tracing](#observability-logging-metrics-and-tracing)
-12. [System Design Interview Questions & Answers](#system-design-interview-questions--answers)
+> **Purpose:** Scalability, microservices, distributed architecture, service communication, queues, caching, feature flags, and production trade-offs.
+> **Use this file for:** system design interviews and senior backend engineering rounds
 
 ---
 
-## Foundations of Scalability – Q&A
+## Recommended Study Flow
 
-### Q1. What is scalability in system design?
-
-**Scalability** is the ability of a system to handle increasing load – more users, more requests, more data – by adding resources, without requiring major redesign or sacrificing performance.
-
-A scalable system:
-
-* Maintains acceptable response times as traffic grows.
-* Allows capacity to be increased in a **predictable, cost-effective** way.
-* Can be expanded along different dimensions (compute, storage, network).
+1. Read the **Quick Summary** first.
+2. Review the **Key Concepts** and tables.
+3. Practice the **Interview Questions & Answers** out loud.
+4. Use the code snippets and examples to explain trade-offs clearly.
+5. Finish with the **Common Mistakes** and **Revision Checklist** sections.
 
 ---
 
-### Q2. What are the main factors that influence scalability?
+## Quick Summary
 
-Key factors:
-
-* **Architecture choice** – monolith vs microservices.
-* **Data model and database design** – indexes, normalization/denormalization.
-* **Caching** – how effectively we avoid recomputing or refetching.
-* **Load distribution** – via load balancers and partitioning.
-* **Concurrency handling** – thread model, async I/O, connection pooling.
-* **Bottlenecks** – the slowest component limits performance.
-
-Understanding where the system will experience pressure is critical to designing scalability.
+This file has been refreshed to keep the original repository topic while merging relevant detailed Q&A from the consolidated topic-wise interview-prep pack. Use the top sections for fast revision and the consolidated section for deeper interview preparation.
 
 ---
 
-### Q3. What are the typical scalability goals?
+## Core Topics to Master
 
-Common goals:
-
-* Maintain **low latency** (e.g. p95 < 200 ms).
-* Maintain **high availability** (e.g. 99.9% or 99.99%).
-* Handle **peak load** (e.g. 10x traffic spikes) gracefully.
-* Scale **horizontally** across multiple machines or regions.
-* Keep **costs under control** while scaling.
-
----
-
-## Vertical vs Horizontal Scaling
-
-### Q4. What is vertical scaling?
-
-**Vertical scaling (scaling up)** means adding more resources to a single machine: more CPU cores, more RAM, faster disks.
-
-* Pros: simpler architecture, fewer nodes to manage.
-* Cons: hard limits (max machine size), not always cost-effective, single point of failure.
-
-### Q5. What is horizontal scaling?
-
-**Horizontal scaling (scaling out)** means adding more machines or instances and distributing load across them.
-
-* Pros: increases capacity by adding more nodes, tolerates failure of individual nodes.
-* Cons: requires distributed system design (state sharing, coordination, consistency).
-
-Modern large-scale systems overwhelmingly rely on **horizontal scaling**.
+- Horizontal vs vertical scaling
+- Load balancing and caching
+- Database replication and sharding
+- Message queues and async processing
+- Microservices and database-per-service
+- Feature flags and safe rollouts
+- Reliability, observability, and incident response
+- URL shortener, chat system, rate limiter, and other design patterns
 
 ---
 
-## Load Balancing
+## Consolidated Interview Questions & Technical Notes
 
-### Q6. What is a load balancer and why is it important?
+The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
-A **load balancer** distributes incoming network traffic across multiple servers to achieve:
+> Microservices, distributed architecture, service communication, queues, Celery, Redis, RabbitMQ, feature flags, architecture trade-offs, and domain system design.
+> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
-* Better utilization of resources.
-* Increased throughput and capacity.
-* Improved availability and fault tolerance.
+### Topic Sections
 
-If one server goes down, the load balancer can stop sending traffic to it.
-
-### Q7. What load balancing strategies are common?
-
-* **Round Robin** – each request goes to the next server in order.
-* **Least Connections** – send to server with fewest active connections.
-* **IP Hash** – choose server based on client IP hash (for simple session stickiness).
-* **Weighted Round Robin** – some servers get more traffic based on weights.
-
-### Simple Load Balancer Diagram (Mermaid)
-
-`mermaid
-graph LR
-C[Clients] --> LB[Load Balancer]
-LB --> S1[Server 1]
-LB --> S2[Server 2]
-LB --> S3[Server 3]`
+1. Backend and Microservices Architecture — `interview_questions_topics_technical_prep.md`
+2. Caching, Rate Limiting, Abuse Prevention, and Feature Flags — `interview_questions_topics_technical_prep.md`
+3. Distributed Systems: Celery, Redis, RabbitMQ — `Interview_Topics_and_Technical_Prep.md`
+4. Code Reviews & Architecture Discussions — `Interview_Topics_and_Technical_Prep.md`
+5. E-Commerce / Logistics / Fintech Domain Topics — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
-## Caching Strategies
+### 2. Backend and Microservices Architecture
 
-### Q8. What is caching in system design?
+> Source: `interview_questions_topics_technical_prep.md`
 
-**Caching** is storing the result of expensive operations (database queries, computations, API calls) in a fast storage layer so future requests can be served quickly.
+#### 2.1 Pros and cons of microservices
 
-Benefits:
+##### Pros
 
-* Reduces load on the database/backend.
-* Reduces latency for clients.
-* Can dramatically increase throughput.
+- Independent deployment.
+- Independent scaling.
+- Clear service ownership.
+- Technology flexibility.
+- Fault isolation when designed well.
 
-### Q9. What are common caching layers?
+##### Cons
 
-* **Client-side cache** – browser caching of static assets.
-* **CDN** – network of edge servers caching static and sometimes dynamic content.
-* **Application cache** – in-process caches.
-* **Distributed cache** – Redis, Memcached, used by multiple app instances.
-* **Database cache** – query caching within the DB engine.
+- Distributed system complexity.
+- More network latency.
+- Harder debugging and tracing.
+- Data consistency challenges.
+- Deployment and observability overhead.
 
-### Q10. What are typical cache invalidation strategies?
+##### Interview wording
 
-* **Time-based** – TTL (time-to-live) expiration.
-* **Write-through** – data written to cache and DB simultaneously.
-* **Write-back** – data written to cache first, flushed to DB later.
-* **Explicit invalidation** – cache entries removed when data changes.
-
-Cache invalidation is one of the hardest problems in system design. Good strategies balance freshness and performance.
+> Microservices help with scale and independent ownership, but the trade-off is operational complexity. You need strong observability, API contracts, CI/CD, and clear ownership to make them work well.
 
 ---
 
-## Databases, Sharding, and Replication
+#### 2.2 Database ownership in microservices
 
-### Q11. What is database replication?
+##### Topic covered
 
-**Replication** means maintaining copies of the same data on multiple database servers.
+How services handle data when one service needs user information while another owns transactions.
 
-* **Primary–Replica (Master–Slave)**:
-* Primary handles writes; replicas handle reads.
-* Improves read scalability and availability.
-* **Multi-primary (Multi-master)**:
-* Multiple nodes accept writes; requires conflict resolution.
-* Increased complexity and careful design needed.
+##### Best practice
 
-### Q12. What is sharding (partitioning)?
+Each service should own its database. Other services should access data through APIs/events/read models rather than directly joining across databases.
 
-**Sharding** means splitting data horizontally across multiple database instances based on a shard key (e.g. user ID).
+##### Patterns
 
-* Each shard holds a subset of rows.
-* Improves both read and write scalability by reducing the data each node handles.
-* Requires a strategy to map keys to shards (hashing, range partitioning, etc.).
+- Service API call for real-time lookup.
+- Cached read model.
+- Event-driven replication.
+- API composition/BFF layer.
+- Avoid shared database coupling.
 
-### Q13. What are common sharding strategies?
+##### Example
 
-* **Range-based** – users 1–1M on shard 1, 1M–2M on shard 2.
-* **Hash-based** – hash(user\_id) mod N chooses shard.
-* **Directory-based** – a lookup service tells you which shard holds which key.
-
----
-
-## Message Queues and Asynchronous Processing
-
-### Q14. Why do we use message queues?
-
-Message queues (like Kafka, RabbitMQ, AWS SQS) decouple producers from consumers and enable **asynchronous processing**.
-
-Benefits:
-
-* Smooth out traffic spikes (buffering).
-* Increase reliability (messages not lost if consumer is down).
-* Allow slower tasks to be processed in background (emails, report generation).
-
-### Q15. What does a typical queue-based architecture look like?
-
-`mermaid
-graph LR
-C[Client] --> API[API Service]
-API --> MQ[Message Queue]
-MQ --> W1[Worker 1]
-MQ --> W2[Worker 2]
-W1 --> DB[(Database)]
-W2 --> DB`
-
-The API responds quickly after enqueuing work; workers process tasks asynchronously.
+```text
+Transaction Service → needs user risk tier
+User Service → owns user profile
+Solution → Transaction Service calls User Service API or reads a replicated user summary table.
+```
 
 ---
 
-## CDNs and Global Distribution
+#### 2.3 Service communication patterns
 
-### Q16. What is a CDN?
+##### Synchronous communication
 
-A **Content Delivery Network (CDN)** is a distributed network of edge servers that cache static (and some dynamic) content closer to users around the globe.
+Use when immediate response is required.
 
-Benefits:
+Examples:
 
-* Reduces latency by serving content from geographically closer locations.
-* Offloads traffic from the origin server.
-* Improves user experience for static assets (images, JS, CSS, videos).
+- Authorization check.
+- Payment validation.
+- User lookup needed immediately.
 
-### Q17. When should you use a CDN?
+##### Asynchronous communication
 
-Any time you serve static assets or large media files at scale, or when users are globally distributed.
+Use when work can happen later.
 
----
+Examples:
 
-## CAP Theorem and Consistency Models
+- Notifications.
+- Analytics.
+- Audit events.
+- Email dispatch.
 
-### Q18. What is the CAP theorem?
+##### Interview wording
 
-The **CAP theorem** states that in a distributed data store, you can only fully achieve two of the following three properties at the same time:
-
-* **Consistency (C)** – every read receives the latest write or an error.
-* **Availability (A)** – every request receives a non-error response, without guarantee it contains the latest write.
-* **Partition Tolerance (P)** – the system continues to operate despite network partitions.
-
-Since network partitions are unavoidable in distributed systems, you must trade between **strong consistency** and **high availability** during partitions.
-
-### Q19. What is eventual consistency?
-
-**Eventual consistency** means that, given enough time and no new updates, all replicas will converge to the same value. Reads may see stale data, but the system is easier to scale and more available.
-
-Used by many large-scale systems where slight staleness is acceptable (counters, feeds, analytics).
+> I keep critical request-path operations synchronous and move non-critical operations async to reduce latency and improve resilience.
 
 ---
 
-## High-Level System Design Diagrams (Mermaid)
+#### 2.4 API Gateway and BFF/API composition
 
-### 1. Classic Web Application
+##### Question covered
 
-`mermaid
-graph LR
-U[User] --> LB[Load Balancer]
-LB --> A1[App Server 1]
-LB --> A2[App Server 2]
-A1 --> Cache[(Redis Cache)]
-A2 --> Cache
-Cache --> DB[(Primary DB)]
-DB --> R1[(Read Replica)]
-DB --> R2[(Read Replica)]`
+How to expose one public API without coupling clients to each microservice.
 
----
+##### Recommended design
 
-### 2. Microservices with API Gateway
+```text
+Client → API Gateway → BFF/API Composition Layer → Internal Microservices
+```
 
-`mermaid
-graph LR
-C[Clients] --> GW[API Gateway]
-GW --> S1[User Service]
-GW --> S2[Order Service]
-GW --> S3[Payment Service]
-S1 --> DB1[(User DB)]
-S2 --> DB2[(Order DB)]
-S3 --> DB3[(Payment DB)]`
+##### API Gateway handles
 
-Each service has its own database (**database per service**), reducing coupling and improving scalability.
+- Authentication.
+- TLS termination.
+- Rate limiting.
+- Routing.
+- Request limits.
+- Basic observability.
 
----
+##### BFF/composition layer handles
 
-### 3. Global Architecture with CDN and Queue
+- Aggregating multiple service calls.
+- Shaping responses for web/mobile/partners.
+- Hiding internal service boundaries.
 
-`mermaid
-graph LR
-U[User] --> CDN[CDN/Edge Cache]
-CDN --> LB[Load Balancer]
-LB --> APP[Application Servers]
-APP --> MQ[Message Queue]
-MQ --> W[Workers]
-APP --> DB[(Database)]
-W --> DB`
+##### Interview wording
 
-This pattern is common for high-traffic web apps where writes are offloaded to background workers.
+> I use API Gateway for edge concerns and a BFF/composition layer for orchestration. That keeps clients decoupled from internal microservice changes.
 
 ---
 
-## Example Designs – URL Shortener, News Feed, Ride Sharing
+### 6. Caching, Rate Limiting, Abuse Prevention, and Feature Flags
 
-### URL Shortener – High Level
+> Source: `interview_questions_topics_technical_prep.md`
 
-Key requirements:
+#### 6.1 Cache consistency when target URL changes
 
-* Shorten long URLs to unique short codes.
-* Fast redirects.
-* Analytics (click counts).
-* High read volume.
+##### Approach
 
-Basic design:
+- Treat DB as source of truth.
+- Update DB first.
+- Invalidate or update cache immediately after commit.
+- Use versioned cache keys or short TTLs for safety.
 
-* Store mappings: `short_code -> long_url`.
-* Use cache to speed up reads.
-* Use DB with auto-increment ID or hash-based keys.
+##### Example
 
-`mermaid
-graph LR
-C[Client] --> API[URL API]
-API --> Cache[(Redis)]
-API --> DB[(URLs DB)]
-Cache --> DB`
-
-Redirect flow:
-
-1. Client hits `https://short.ly/abc123`.
-2. API checks cache for `abc123`.
-3. If not present, check DB, then populate cache.
-4. Return HTTP redirect (`301/302`) to the long URL.
+```text
+Update destination URL in DB → delete Redis key short_code:abc → next redirect reloads fresh value.
+```
 
 ---
 
-### News Feed – High Level
+#### 6.2 Preventing cache stampede
 
-Simplified design:
+##### Techniques
 
-* **Write path**: when user posts, write to a posts store and fan-out to followers’ feeds (for small–medium scale) or compute feeds on read (for huge scale).
-* **Read path**: read latest posts from feed store, use cache for hot feeds.
+- Distributed lock using Redis `SETNX`.
+- Stale-while-revalidate.
+- Jittered TTL.
+- Request coalescing.
 
-Challenges:
+##### Interview wording
 
-* High write and read volume.
-* Ranking algorithms.
-* Personalized feeds.
-
----
-
-### Ride Sharing (e.g., Uber) – Very Simplified View
-
-Key pieces:
-
-* **Real-time location tracking** (drivers & riders).
-* **Matching service** – match riders with nearby drivers.
-* **Pricing and surge logic**.
-* **Trip management**, **payments**, **notifications**.
-
-Design aspects:
-
-* Use **Geo-distributed stores** and **geo-indexing** (e.g. geohash).
-* Use **message queues** for handling events (ride requested, driver accepted).
-* Use **WebSockets** or long polling for real-time updates.
+> Only one request should rebuild the cache; others should wait briefly or serve stale data rather than all hitting the database.
 
 ---
 
-## Observability: Logging, Metrics, and Tracing
+#### 6.3 Graceful degradation if cache is unavailable
 
-### Q20. Why is observability important?
+##### Design
 
-As systems become distributed and complex, we need visibility to:
-
-* Detect issues early.
-* Understand performance bottlenecks.
-* Debug failures across multiple services.
-
-### Q21. What are the pillars of observability?
-
-1. **Logs** – detailed event records (e.g., request logs, error logs).
-2. **Metrics** – numeric time series (e.g., requests/sec, latency, CPU).
-3. **Traces** – distributed traces showing a request’s path through microservices.
-
-Tools: Prometheus, Grafana, ELK/EFK, Jaeger, Zipkin, CloudWatch, Datadog.
+- Cache is optimization, not source of truth.
+- Short cache timeout.
+- Fallback to DB.
+- Circuit breaker for cache failures.
+- Protect DB with backpressure/rate limiting.
+- Local in-memory LRU cache for very hot keys.
 
 ---
 
-## System Design Interview Questions & Answers
+#### 6.4 Rate limiting URL/order creation endpoints
 
-### Q1. How would you design a URL shortener? (high level answer)
+##### Best approach
 
-Key points:
+Use Redis-backed distributed rate limiting at gateway/middleware.
 
-* API to create short URLs: `POST /shorten`.
-* API to redirect: `GET /{short_code}`.
-* Data model: mapping from short code to original URL, plus metadata.
-* Use **hash function** or base62 encoding of an ID to create short codes.
-* Use **cache** for redirects (short\_code → long\_url).
-* Plan for **analytics**, **rate limiting**, and preventing abuse.
-* Consider sharding DB by short code prefix for very large scale.
+##### Dimensions
 
-### Q2. How would you design a rate limiter?
+- Per IP.
+- Per user.
+- Per API key.
+- Per tenant/org.
 
-Common approaches:
+##### Algorithms
 
-* **Token Bucket** or **Leaky Bucket** algorithms.
-* Store counters in Redis with TTL.
-* Key format: `rate:{user_id}:{time_window}`.
-* On each request, increment the counter; if above threshold, reject with `429 Too Many Requests`.
+- Token bucket.
+- Sliding window.
 
-### Q3. How would you design a highly available database?
+##### Response
 
-* Use **replication**: primary for writes, replicas for reads.
-* Use **automatic failover**: if primary dies, promote a replica.
-* Store data across **multiple availability zones** or regions.
-* Use **backups** and **point-in-time recovery**.
-* For global apps, consider **multi-region replication**.
+```http
+429 Too Many Requests
+Retry-After: 60
+```
 
-### Q4. How do you decide between SQL and NoSQL?
+---
 
-Consider:
+#### 6.5 Protecting against automated abuse beyond rate limits
 
-* Data model – relational vs document/graph/key-value.
-* Query patterns – complex joins vs simple lookups.
-* Consistency and transaction requirements.
-* Scalability needs – some NoSQL stores scale horizontally more easily.
-* Existing ecosystem, tooling, and team expertise.
+##### Techniques
 
-Often, large systems use a mix of both.
+- API keys/authentication.
+- Bot detection.
+- CAPTCHA/challenge for suspicious traffic.
+- URL reputation checks.
+- Malware/phishing domain scanning.
+- Behavior-based anomaly detection.
+- Progressive enforcement.
+- Async moderation pipeline.
 
-### Q5. How would you design a chat system? (very high level)
+---
 
-* Use **WebSockets** or long-lived connections for real-time messaging.
-* Partition users or chat rooms across servers.
-* Use **message queue** or pub/sub for delivering messages.
-* Persist messages in a database for history.
-* Use **presence service** to track who is online.
-* Handle **typing indicators**, **read receipts**, **delivery status**.
+#### 6.6 Feature flag system for safe releases
 
-### Q6. How do you handle hot keys or hotspots in a distributed cache?
+##### Design principles
 
-* Add another layer of **local cache** inside the app process.
-* Use **sharding** with consistent hashing to distribute load.
-* Replicate hot keys across multiple nodes.
-* Adjust data model to avoid extreme skew.
+- Separate deployment from release.
+- Centralized flag config.
+- Local in-memory evaluation.
+- Background refresh.
+- Percentage rollout.
+- Tenant/user/region targeting.
+- Sticky assignment using hashing.
+- Audit all changes.
+- Safe default if flag service fails.
 
-### Q7. What’s your strategy for breaking a monolith into microservices?
+##### Example rollout
 
-* Identify bounded contexts or modules with clear boundaries.
-* Extract services one at a time, starting with less risky domains.
-* Introduce an **API Gateway** as a single entry point.
-* Ensure good **observability** and **automation** before migration.
-* Maintain data consistency using events or saga patterns.
+```text
+internal users → 1% → 5% → 25% → 50% → 100%
+```
+
+---
+
+#### 6.7 Fast and reliable runtime flag checks
+
+##### Best practice
+
+Evaluate flags locally from memory, not by calling the flag service on every request.
+
+##### Why
+
+- Lower latency.
+- Higher reliability.
+- No network dependency in hot path.
+
+---
+
+### 7. Distributed Systems: Celery, Redis, RabbitMQ
+
+> Source: `Interview_Topics_and_Technical_Prep.md`
+
+#### Likely Questions
+
+- What are background jobs?
+- Why use Celery?
+- What is Redis used for?
+- What is RabbitMQ used for?
+- How do you handle retries?
+- How do you avoid duplicate job execution?
+- How do you design async processing for slow tasks?
+- What happens if a worker crashes?
+- How do you monitor background jobs?
+
+---
+
+#### Why Use Background Jobs?
+
+Use background jobs for work that should not block the API response:
+
+- Sending emails
+- Generating reports
+- Syncing with third-party APIs
+- Processing uploads
+- Running scheduled tasks
+- Retrying failed integrations
+
+---
+
+#### Celery Example
+
+```python
+from celery import Celery
+
+celery_app = Celery(
+    "tasks",
+    broker="redis://localhost:6379/0",
+    backend="redis://localhost:6379/1",
+)
+
+
+@celery_app.task(bind=True, max_retries=3)
+def sync_order_to_partner(self, order_id: int):
+    try:
+        response = external_partner_api.sync_order(order_id)
+        return response
+
+    except TemporaryAPIError as exc:
+        raise self.retry(exc=exc, countdown=60)
+```
+
+##### Interview Explanation
+
+This shows:
+
+- Redis as broker/backend
+- Async background execution
+- Retry handling
+- Protection from temporary external API failures
+
+---
+
+#### Redis Use Cases
+
+Redis can be used for:
+
+- Caching
+- Rate limiting
+- Distributed locks
+- Session storage
+- Celery broker
+- Temporary counters
+- Idempotency keys
+
+---
+
+#### Redis Cache Example
+
+```python
+import json
+import redis
+
+cache = redis.Redis(host="localhost", port=6379, decode_responses=True)
+
+
+def get_customer_profile(customer_id: int):
+    key = f"customer:{customer_id}"
+
+    cached = cache.get(key)
+    if cached:
+        return json.loads(cached)
+
+    profile = database.fetch_customer(customer_id)
+    cache.setex(key, 300, json.dumps(profile))
+
+    return profile
+```
+
+---
+
+#### Distributed Lock Example
+
+```python
+def process_order(order_id: int):
+    lock_key = f"lock:order:{order_id}"
+
+    lock_acquired = cache.set(lock_key, "1", nx=True, ex=60)
+
+    if not lock_acquired:
+        return "Order is already being processed"
+
+    try:
+        # process order safely
+        return "processed"
+    finally:
+        cache.delete(lock_key)
+```
+
+##### Interview Explanation
+
+Distributed locks prevent multiple workers from processing the same item at the same time.
+
+---
+
+### 16. Code Reviews & Architecture Discussions
+
+> Source: `Interview_Topics_and_Technical_Prep.md`
+
+#### Likely Questions
+
+- How do you approach code reviews?
+- How do you give feedback?
+- How do you receive feedback?
+- How do you make architecture tradeoffs?
+- How do you handle disagreement?
+- How do you improve legacy code safely?
+
+---
+
+#### Code Review Checklist
+
+Check for:
+
+- Correctness
+- Readability
+- Simplicity
+- Tests
+- Error handling
+- Security
+- Performance
+- Database impact
+- Backward compatibility
+- Observability
+- Maintainability
+
+---
+
+#### Good Code Review Comment Example
+
+```text
+This works, but I wonder if we should move this validation closer to the service layer. 
+That would keep the API handler thinner and make the rule easier to reuse from background jobs.
+```
+
+##### Why This Is Good
+
+- Specific
+- Respectful
+- Explains reasoning
+- Suggests improvement
+- Does not attack the person
+
+---
+
+#### Refactoring Legacy Code Safely
+
+Good strategy:
+
+1. Add tests around current behavior
+2. Identify risky areas
+3. Refactor in small steps
+4. Keep external behavior stable
+5. Use feature flags if needed
+6. Monitor after release
+
+---
+
+### 17. E-Commerce / Logistics / Fintech Domain Topics
+
+> Source: `Interview_Topics_and_Technical_Prep.md`
+
+These are general domain concepts that may come up in product engineering interviews for commerce, logistics, payments, or ERP-style platforms.
+
+#### Likely Questions
+
+- How would you design an order management workflow?
+- How do you handle inventory updates?
+- How do you prevent duplicate payments?
+- How do you handle third-party shipping integrations?
+- How do you reconcile financial transactions?
+- How do you handle webhook retries?
+- How do you design for eventual consistency?
+
+---
+
+#### Order Lifecycle Example
+
+```text
+created
+   ↓
+paid
+   ↓
+confirmed
+   ↓
+packed
+   ↓
+shipped
+   ↓
+delivered
+```
+
+Possible exception states:
+
+```text
+cancelled
+refunded
+payment_failed
+shipment_failed
+returned
+```
+
+---
+
+#### Webhook Handling Example
+
+```python
+@app.post("/webhooks/shipping")
+def handle_shipping_webhook(payload: dict, idempotency_key: str):
+    if webhook_already_processed(idempotency_key):
+        return {"status": "already_processed"}
+
+    validate_signature(payload)
+    save_webhook_event(payload, idempotency_key)
+    process_shipping_update.delay(payload)
+
+    return {"status": "accepted"}
+```
+
+##### Interview Explanation
+
+Webhook handlers should:
+
+- Validate signatures
+- Be idempotent
+- Respond quickly
+- Process heavy work asynchronously
+- Store raw event for audit/debugging
+- Retry safely
+
+---
+
+#### Inventory Race Condition Example
+
+##### Problem
+
+Two users buy the last item at the same time.
+
+##### Solution Ideas
+
+- Database row locking
+- Atomic update
+- Reservation system
+- Idempotent order processing
+
+```sql
+UPDATE inventory
+SET quantity = quantity - 1
+WHERE sku = 'ABC123'
+  AND quantity > 0;
+```
+
+Then check affected rows. If zero rows were updated, inventory was unavailable.
+
+---
+
+#### Payment Idempotency
+
+Payment systems should prevent duplicate charges when clients retry.
+
+```text
+Client sends payment request with idempotency key
+   ↓
+Server checks if key already exists
+   ↓
+If yes, return previous result
+   ↓
+If no, process payment and store result
+```
+
+---

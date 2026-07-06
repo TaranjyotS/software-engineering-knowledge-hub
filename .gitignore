@@ -38,3 +38,7 @@ Thumbs.db
 
 # Local generated files
 *.tmp
+
+# Generated archives / local exports
+*.zip
+*.patch

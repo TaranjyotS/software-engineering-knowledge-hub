@@ -17,10 +17,11 @@ CONFLUENCE_USER = os.getenv("CONFLUENCE_USER", "")
 CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN", "")
 
 # Optional: explicitly target a space (recommended for CI)
-CONFLUENCE_SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")  # e.g. "INTPREP"
-CONFLUENCE_SPACE_NAME = os.getenv("CONFLUENCE_SPACE_NAME")  # e.g. "Interview Prep"
+CONFLUENCE_SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
+CONFLUENCE_SPACE_NAME = os.getenv("CONFLUENCE_SPACE_NAME")
 
 IGNORED_TITLES = {"overview", "getting started in confluence"}
+MARKDOWN_EXTENSIONS = ["extra", "tables", "fenced_code", "toc", "sane_lists"]
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs"
@@ -37,9 +38,6 @@ def _auth() -> Tuple[str, str]:
 
 
 def _request(method: str, url: str, **kwargs) -> requests.Response:
-    """
-    Wrapper to provide consistent errors for common auth failures.
-    """
     res = requests.request(method, url, auth=_auth(), timeout=60, **kwargs)
     if res.status_code in (401, 403):
         raise RuntimeError(
@@ -51,9 +49,6 @@ def _request(method: str, url: str, **kwargs) -> requests.Response:
 
 
 def fetch_personal_space_key() -> str:
-    """
-    Fetch the personal space key for the authenticated user (Confluence Cloud).
-    """
     url = f"{CONFLUENCE_API_URL}/space"
     res = _request("GET", url)
     data = res.json()
@@ -78,61 +73,37 @@ def space_exists(space_key: str) -> bool:
 
 
 def try_create_space(space_key: str, space_name: str) -> bool:
-    """
-    Attempt to create a Confluence space (requires admin/global permissions).
-    If Confluence denies, we return False and let caller fallback.
-    """
     url = f"{CONFLUENCE_API_URL}/space"
-    payload = {
-        "key": space_key,
-        "name": space_name,
-        "type": "global",
-    }
+    payload = {"key": space_key, "name": space_name, "type": "global"}
     res = requests.post(url, auth=_auth(), json=payload, timeout=60)
     if res.status_code in (200, 201):
-        print(f"✅ Created Confluence space '{space_key}'")
+        print(f"Created Confluence space '{space_key}'")
         return True
-    # Permission issues are common here; don't hard fail.
     if res.status_code in (401, 403):
         print(
-            f"⚠️ Could not create space '{space_key}' (permission denied). "
+            f"Could not create space '{space_key}' due to permissions. "
             "Falling back to your personal space."
         )
         return False
     if res.status_code == 400:
-        # Already exists or invalid key format
         return False
-    try:
-        print(f"⚠️ Could not create space '{space_key}'. Status={res.status_code}. Body={res.text[:300]}")
-    except Exception:
-        pass
+    print(f"Could not create space '{space_key}'. Status={res.status_code}. Body={res.text[:300]}")
     return False
 
 
 def get_target_space_key() -> str:
-    """
-    Decide which space to use:
-    - If CONFLUENCE_SPACE_KEY is provided: use it (create if missing and possible).
-    - Else: use the authenticated user's personal space.
-    """
     if CONFLUENCE_SPACE_KEY:
         desired = CONFLUENCE_SPACE_KEY
         if space_exists(desired):
             return desired
-        # If missing, try to create it (admin permission required)
-        name = CONFLUENCE_SPACE_NAME or desired
-        created = try_create_space(desired, name)
+        created = try_create_space(desired, CONFLUENCE_SPACE_NAME or desired)
         if created and space_exists(desired):
             return desired
-        # Fallback
         return fetch_personal_space_key()
     return fetch_personal_space_key()
 
 
 def fetch_all_pages(space_key: str) -> Dict[str, str]:
-    """
-    Return {Title: PageId} for all pages in a space.
-    """
     pages: Dict[str, str] = {}
     start = 0
     limit = 50
@@ -162,28 +133,14 @@ def fetch_all_pages(space_key: str) -> Dict[str, str]:
 
 
 def read_title_and_body_from_md(md_path: Path) -> Tuple[str, str]:
-    """
-    Title priority:
-      1) First Markdown H1: '# Title'
-      2) Filename (excel.md -> Excel)
-    Body:
-      - Entire markdown converted to HTML (Confluence storage format)
-    """
     text = md_path.read_text(encoding="utf-8")
-    first_line = (text.splitlines()[0].strip() if text.splitlines() else "")
-    if first_line.startswith("# "):
-        title = first_line[2:].strip()
-    else:
-        title = md_path.stem.replace("_", " ").replace("-", " ").title()
-
-    html_body = markdown(text)
+    first_h1 = next((line[2:].strip() for line in text.splitlines() if line.startswith("# ")), None)
+    title = first_h1 or md_path.stem.replace("_", " ").replace("-", " ").title()
+    html_body = markdown(text, extensions=MARKDOWN_EXTENSIONS)
     return title, html_body
 
 
 def create_page(space_key: str, title: str, html_body: str, parent_id: Optional[str] = None) -> str:
-    """
-    Create a new Confluence page in the given space. Returns page_id.
-    """
     url = f"{CONFLUENCE_API_URL}/content"
     payload = {
         "type": "page",
@@ -196,48 +153,42 @@ def create_page(space_key: str, title: str, html_body: str, parent_id: Optional[
 
     res = _request("POST", url, json=payload, headers={"Content-Type": "application/json"})
     page_id = res.json()["id"]
-    print(f"🆕 Created page: '{title}' (id={page_id})")
+    print(f"Created page: '{title}' (id={page_id})")
     return page_id
 
 
 def ensure_pages_from_docs(space_key: str, existing_pages: Dict[str, str]) -> Dict[str, str]:
-    """
-    If Confluence is empty (or page_map.json is empty), bootstrap Confluence from docs/*.md:
-      - For each docs/*.md: create the page if it doesn't exist
-      - Return an updated mapping (existing + created)
+    """Ensure every docs/*.md file has a Confluence page.
+
+    This runs every time, not only when the page map is empty. That matters when new
+    Markdown topics are added to the repository after the initial sync.
     """
     if not DOCS_DIR.exists():
-        print(f"⚠️ Docs dir not found: {DOCS_DIR}")
+        print(f"Docs dir not found: {DOCS_DIR}")
         return existing_pages
 
     updated = dict(existing_pages)
-
     md_files = sorted(DOCS_DIR.glob("*.md"))
     if not md_files:
-        print("⚠️ No markdown files found in docs/. Nothing to bootstrap.")
+        print("No markdown files found in docs/. Nothing to bootstrap.")
         return updated
 
     for md_file in md_files:
         title, html_body = read_title_and_body_from_md(md_file)
-
         if title.strip().lower() in IGNORED_TITLES:
-            print(f"⏭️ Skipping ignored markdown: {md_file.name}")
+            print(f"Skipping ignored markdown: {md_file.name}")
             continue
 
-        # Confluence titles are case-sensitive in API results; try exact match first,
-        # then a case-insensitive scan.
         page_id = updated.get(title)
         if not page_id:
             for existing_title, existing_id in updated.items():
                 if existing_title.strip().lower() == title.strip().lower():
                     page_id = existing_id
-                    title = existing_title  # preserve canonical title
                     break
 
         if page_id:
             continue
 
-        # Create from scratch
         created_id = create_page(space_key, title, html_body)
         updated[title] = created_id
 
@@ -247,7 +198,7 @@ def ensure_pages_from_docs(space_key: str, existing_pages: Dict[str, str]) -> Di
 def save_page_map(mapping: Dict[str, str]) -> None:
     PAGE_MAP_PATH.parent.mkdir(parents=True, exist_ok=True)
     PAGE_MAP_PATH.write_text(json.dumps(mapping, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"✅ Saved page_map.json with {len(mapping)} pages -> {PAGE_MAP_PATH}")
+    print(f"Saved page_map.json with {len(mapping)} pages -> {PAGE_MAP_PATH}")
 
 
 def load_existing_page_map() -> Dict[str, str]:
@@ -264,12 +215,12 @@ if __name__ == "__main__":
         space_key = get_target_space_key()
         confluence_pages = fetch_all_pages(space_key)
 
-        # If the map is empty or Confluence is empty, bootstrap from docs/
+        # Merge existing map as a fallback, but prefer live Confluence IDs.
         existing_map = load_existing_page_map()
-        if not existing_map or not confluence_pages:
-            print("ℹ️ Bootstrapping Confluence pages from docs/ because page_map.json or space is empty.")
-            confluence_pages = ensure_pages_from_docs(space_key, confluence_pages)
+        merged_pages = {**existing_map, **confluence_pages}
+        merged_pages = ensure_pages_from_docs(space_key, merged_pages)
 
-        save_page_map(confluence_pages)
+        save_page_map(merged_pages)
     except Exception as e:
-        print(f"❌ Failed: {e}")
+        print(f"Failed: {e}")
+        raise

@@ -18,11 +18,11 @@ def _auth() -> tuple[str, str]:
     user = os.getenv("CONFLUENCE_USER", "")
     token = os.getenv("CONFLUENCE_TOKEN", "")
     if not api_url:
-        _die("❌ Missing env var: CONFLUENCE_API_URL (e.g., https://<site>.atlassian.net/wiki/rest/api)")
+        _die("Missing env var: CONFLUENCE_API_URL (e.g., https://<site>.atlassian.net/wiki/rest/api)")
     if not user:
-        _die("❌ Missing env var: CONFLUENCE_USER (your Confluence/Atlassian email)")
+        _die("Missing env var: CONFLUENCE_USER (your Confluence/Atlassian email)")
     if not token:
-        _die("❌ Missing env var: CONFLUENCE_TOKEN (API token / PAT). Update your GitHub Secret.")
+        _die("Missing env var: CONFLUENCE_TOKEN (API token / PAT). Update your GitHub Secret.")
     return user, token
 
 
@@ -46,11 +46,11 @@ def main() -> None:
         try:
             res = _request(url)
         except Exception as e:
-            _die(f"❌ Confluence health check failed while calling {url}: {e}")
+            _die(f"Confluence health check failed while calling {url}: {e}")
 
         if res.status_code in (401, 403):
             _die(
-                "❌ Confluence authentication failed (HTTP %s).\n"
+                "Confluence authentication failed (HTTP %s).\n"
                 "Likely causes:\n"
                 "- CONFLUENCE_TOKEN expired/revoked\n"
                 "- Token/user mismatch\n"
@@ -67,16 +67,16 @@ def main() -> None:
             auth_ok = True
             break
 
-        _die(f"❌ Confluence health check got unexpected status {res.status_code} for {url}: {res.text[:200]}")
+        _die(f"Confluence health check got unexpected status {res.status_code} for {url}: {res.text[:200]}")
 
     if not auth_ok:
         _die(
-            "❌ Could not verify Confluence API endpoints.\n"
+            "Could not verify Confluence API endpoints.\n"
             "Tried:\n- " + "\n- ".join(tried) + "\n\n"
             "Your CONFLUENCE_API_URL may be incorrect. It should usually end with /wiki/rest/api."
         )
 
-    print("✅ Confluence auth looks good.")
+    print("Confluence auth looks good.")
 
     # 2) Check space reachability if a space key is provided
     if space_key:
@@ -85,24 +85,24 @@ def main() -> None:
 
         if res.status_code == 404:
             print(
-                f"⚠️ Space '{space_key}' not found. The sync will attempt to create it (requires permissions) "
+                f"Space '{space_key}' not found. The sync will attempt to create it (requires permissions) "
                 "or fall back to personal space depending on your scripts."
             )
             return
 
         if res.status_code in (401, 403):
             _die(
-                f"❌ Auth ok, but cannot access space '{space_key}' (HTTP {res.status_code}).\n"
+                f"Auth ok, but cannot access space '{space_key}' (HTTP {res.status_code}).\n"
                 "Your token/user may not have access to this space."
             )
 
         if 200 <= res.status_code < 300:
-            print(f"✅ Space '{space_key}' is accessible.")
+            print(f"Space '{space_key}' is accessible.")
             return
 
-        _die(f"❌ Unexpected status {res.status_code} while checking space '{space_key}': {res.text[:200]}")
+        _die(f"Unexpected status {res.status_code} while checking space '{space_key}': {res.text[:200]}")
 
-    print("ℹ️ No CONFLUENCE_SPACE_KEY provided; using personal space behavior.")
+    print("No CONFLUENCE_SPACE_KEY provided; using personal space behavior.")
 
 
 if __name__ == "__main__":

@@ -16,3 +16,7 @@ This repository may connect to Confluence through local environment variables or
 2. Generate a new token.
 3. Update your local `.env` and GitHub Secrets.
 4. Remove the exposed value from Git history if it was committed.
+
+## Secret Handling
+
+Do not commit `.env`, API tokens, Confluence credentials, resume-private data, or generated archives containing secrets. Use `.env.example` locally and GitHub Secrets in CI.

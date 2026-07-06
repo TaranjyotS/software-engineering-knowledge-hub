@@ -1,82 +1,116 @@
-# UNIX
+# Unix
 
-# UNIX
+> **Purpose:** Unix/Linux commands, shell basics, file management, permissions, text processing, networking, and process management.
+> **Use this file for:** backend, DevOps, data engineering, and production support interviews
 
-Unix commands are the instructions or programs used to interact with the Unix operating system. They perform various operations, such as managing files, processes, users, and system settings. Here's a breakdown of some commonly used Unix commands, grouped by their categories and purposes:
+---
 
-### 1. **File and Directory Management**
+## Recommended Study Flow
 
-* `ls`: Lists files and directories in the current directory.
-* `cd`: Changes the current directory.
-* `pwd`: Prints the current working directory.
-* `mkdir`: Creates a new directory.
-* `rmdir`: Removes an empty directory.
-* `cp`: Copies files or directories.
-* `mv`: Moves or renames files or directories.
-* `rm`: Removes files or directories.
-* `touch`: Creates a new empty file or updates the timestamp of an existing file.
+1. Read the **Quick Summary** first.
+2. Review the **Key Concepts** and tables.
+3. Practice the **Interview Questions & Answers** out loud.
+4. Use the code snippets and examples to explain trade-offs clearly.
+5. Finish with the **Common Mistakes** and **Revision Checklist** sections.
 
-### 2. **File Content Manipulation**
+---
 
-* `cat`: Concatenates and displays the content of files.
-* `more` and `less`: Views file content one page at a time.
-* `head`: Displays the first few lines of a file.
-* `tail`: Displays the last few lines of a file.
-* `grep`: Searches for a specific pattern in files.
-* `sed`: Stream editor for filtering and transforming text.
-* `awk`: Pattern scanning and processing language.
+## Quick Summary
 
-### 3. **System Information**
+Unix commands are used to manage files, inspect logs, debug services, automate tasks, and operate production systems. For interviews, focus on file commands, permissions, process inspection, text processing, pipes, and networking.
 
-* `uname`: Displays system information.
-* `top`: Displays real-time system information and processes.
-* `ps`: Displays information about currently running processes.
-* `df`: Reports file system disk space usage.
-* `du`: Estimates file space usage.
-* `free`: Displays memory usage.
+---
 
-### 4. **Networking Commands**
+## Command Categories
 
-* `ping`: Checks network connectivity to a host.
-* `ifconfig` or `ip`: Configures network interfaces.
-* `netstat`: Displays network connections, routing tables, and interface statistics.
-* `curl`: Transfers data from or to a server using various protocols.
-* `wget`: Downloads files from the internet.
+| Category          | Commands                                              |
+| ----------------- | ----------------------------------------------------- |
+| Files/directories | `ls`, `cd`, `pwd`, `mkdir`, `cp`, `mv`, `rm`, `touch` |
+| File content      | `cat`, `less`, `head`, `tail`, `grep`, `sed`, `awk`   |
+| System info       | `uname`, `top`, `ps`, `df`, `du`, `free`              |
+| Networking        | `ping`, `ip`, `netstat`/`ss`, `curl`, `wget`          |
+| Permissions       | `chmod`, `chown`, `chgrp`                             |
+| Compression       | `tar`, `gzip`, `gunzip`, `zip`, `unzip`               |
+| Processes         | `kill`, `jobs`, `fg`, `bg`, `ps`, `top`               |
+| Text processing   | `sort`, `uniq`, `wc`, `cut`, `tr`                     |
 
-### 5. **Permissions and Ownership**
+---
 
-* `chmod`: Changes file permissions.
-* `chown`: Changes file ownership.
-* `chgrp`: Changes the group ownership of a file.
+## Interview Questions & Answers
 
-### 6. **Compression and Archiving**
+### Q1. How do you find errors in a log file?
 
-* `tar`: Archives files.
-* `gzip` and `gunzip`: Compresses and decompresses files.
-* `zip` and `unzip`: Compresses and decompresses files in zip format.
+```bash
+grep -i "error" app.log
+```
 
-### 7. **Process Management**
+For live logs:
 
-* `kill`: Sends a signal to a process.
-* `killall`: Kills all processes with the specified name.
-* `jobs`: Lists background jobs in the current shell session.
-* `fg` and `bg`: Resumes a stopped job in the foreground or background.
+```bash
+tail -f app.log | grep -i "error"
+```
 
-### 8. **Text Processing**
+### Q2. How do you check disk usage?
 
-* `sort`: Sorts lines of text files.
-* `uniq`: Reports or omits repeated lines.
-* `wc`: Word count; counts lines, words, and characters in a file.
+```bash
+df -h      # file system usage
+du -sh *   # directory/file sizes
+```
 
-### 9. **Other Useful Commands**
+### Q3. How do you check running processes?
 
-* `echo`: Displays a line of text.
-* `date`: Displays or sets the system date and time.
-* `who`: Displays who is logged in to the system.
-* `history`: Displays the history of commands typed.
-* `alias`: Creates an alias for a command.
+```bash
+ps aux | grep python
+top
+```
 
-### 10. **Combining Commands**
+### Q4. How do you change file permissions?
 
-* **Pipes (**`|`): Combines multiple commands, where the output of one command serves as input to another.
-* **Redirection (**`>` and `>>`): Redirects output to a file.
+```bash
+chmod 755 script.sh
+chmod 644 config.txt
+```
+
+### Q5. What is a pipe?
+
+A pipe sends the output of one command as input to another command.
+
+```bash
+cat app.log | grep ERROR | wc -l
+```
+
+### Q6. What is the difference between `>` and `>>`?
+
+- `>` overwrites a file.
+- `>>` appends to a file.
+
+```bash
+echo "hello" > file.txt
+echo "again" >> file.txt
+```
+
+---
+
+## Common Production Debugging Commands
+
+```bash
+curl -I https://example.com
+curl -X POST https://api.example.com/health
+ps aux | grep uvicorn
+netstat -tulpn
+ss -tulpn
+tail -n 100 app.log
+grep -R "DATABASE_URL" .
+```
+
+---
+
+## Revision Checklist
+
+- [ ] File and directory commands
+- [ ] Permissions and ownership
+- [ ] grep, sed, awk
+- [ ] Pipes and redirection
+- [ ] Process inspection
+- [ ] Disk and memory checks
+- [ ] curl and networking basics

@@ -1,379 +1,1225 @@
-# SQL
+# SQL, Databases, ORM, Caching & Idempotency
 
-# SQL
-
-### 1. **What is SQL?**
-
-**Answer:**  
-SQL (Structured Query Language) is a standardized programming language used for managing and manipulating relational databases. It allows users to create, read, update, and delete (CRUD) data within a database. SQL is essential for querying data, performing data analysis, and managing database structures.
-
-**Example:**
-
-### 2. **What are the different types of SQL commands?**
-
-**Answer:**  
-SQL commands are categorized into several types based on their functionality:
-
-1. **DDL (Data Definition Language):** Defines the database structure.
-2. `CREATE`, `ALTER`, `DROP`, `TRUNCATE`, `COMMENT`, `RENAME`
-3. **DML (Data Manipulation Language):** Manipulates data within the database.
-4. `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `MERGE`, `CALL`
-5. **DCL (Data Control Language):** Controls access to data.
-6. `GRANT`, `REVOKE`
-7. **TCL (Transaction Control Language):** Manages transactions within the database.
-8. `COMMIT`, `ROLLBACK`, `SAVEPOINT`
-
-**Example:**
-
-### 3. **What is the difference between** `INNER JOIN` and `OUTER JOIN`?
-
-**Answer:**
-
-* **INNER JOIN:** Returns only the rows that have matching values in both tables.
-* **OUTER JOIN:** Returns all rows from one table and the matched rows from the other. If there is no match, NULL values are returned for columns from the other table. There are three types:
-* **LEFT OUTER JOIN (LEFT JOIN):** All rows from the left table and matched rows from the right table.
-* **RIGHT OUTER JOIN (RIGHT JOIN):** All rows from the right table and matched rows from the left table.
-* **FULL OUTER JOIN:** All rows when there is a match in one of the tables.
-
-**Example:**
-
-### 4. **What is a primary key?**
-
-**Answer:**  
-A primary key is a column or a set of columns in a table that uniquely identifies each row in that table. It must contain unique values and cannot contain NULLs. Each table should have one primary key.
-
-**Example:**
-
-### 5. **Explain the concept of normalization.**
-
-**Answer:**  
-Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity. It involves dividing large tables into smaller, related tables and defining relationships between them. The main goals are to eliminate duplicate data, ensure data dependencies make sense, and simplify the database structure.
-
-**Normal Forms:**
-
-1. **First Normal Form (1NF):** Ensure each column contains atomic (indivisible) values and each entry in a column is of the same data type.
-2. **Second Normal Form (2NF):** Meet all requirements of 1NF and ensure that all non-key attributes are fully functionally dependent on the primary key.
-3. **Third Normal Form (3NF):** Meet all requirements of 2NF and ensure that there are no transitive dependencies.
-
-**Example:**  
-Before Normalization:
-
-After Normalization:
-
-### 6. **What is a foreign key?**
-
-**Answer:**  
-A foreign key is a column or a set of columns in one table that establishes a link between data in two tables. It refers to the primary key in another table, ensuring referential integrity by restricting actions that would leave orphaned records.
-
-**Example:**
-
-### 7. **What are indexes and why are they used?**
-
-**Answer:**  
-Indexes are database objects that improve the speed of data retrieval operations on a table at the cost of additional storage and maintenance overhead. They work similarly to an index in a book, allowing the database to find rows more quickly without scanning the entire table.
-
-**Types of Indexes:**
-
-* **Unique Index:** Ensures that all values in the indexed column are unique.
-* **Composite Index:** An index on multiple columns.
-* **Clustered Index:** Determines the physical order of data in a table. Only one per table.
-* **Non-Clustered Index:** A separate structure from the data table. Multiple can exist per table.
-
-**Example:**
-
-### 8. **What is a subquery, and how does it differ from a join?**
-
-**Answer:**  
-A subquery is a query nested inside another SQL query (such as `SELECT`, `INSERT`, `UPDATE`, or `DELETE`). It is used to perform operations that require multiple steps or conditions.
-
-**Differences between Subquery and Join:**
-
-* **Subquery:** Can be used to perform operations that are not easily achievable with joins, such as selecting records based on aggregated results.
-* **Join:** Typically faster and more efficient for combining rows from two or more tables based on related columns.
-
-**Example of Subquery:**
-
-**Example of Join:**
-
-### 9. **Explain the** `GROUP BY` clause and provide an example.
-
-**Answer:**  
-The `GROUP BY` clause is used in SQL to arrange identical data into groups. It is often used with aggregate functions (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`) to perform calculations on each group.
-
-**Example:**
-
-**Result:**
-
-| DeptID | EmployeeCount |
-| --- | --- |
-| 1 | 10 |
-| 2 | 5 |
-| 3 | 8 |
-
-### 10. **What is a** `VIEW` in SQL and why would you use it?
-
-**Answer:**  
-A `VIEW` is a virtual table based on the result-set of an SQL statement. It contains rows and columns just like a real table but does not store data physically. Views can simplify complex queries, enhance security by restricting access to specific data, and provide a level of abstraction.
-
-**Example:**
-
-### 11. **What is the difference between** `DELETE`, `TRUNCATE`, and `DROP`?
-
-**Answer:**
-
-* **DELETE:**
-* Removes rows from a table based on a `WHERE` clause.
-* Can be rolled back if used within a transaction.
-* Triggers are activated.
-* Slower for large tables.
-* **TRUNCATE:**
-* Removes all rows from a table.
-* Cannot be rolled back in some databases.
-* Resets table identity.
-* Faster than DELETE as it deallocates data pages.
-* Triggers are not activated.
-* **DROP:**
-* Removes the entire table or database.
-* All data and the table structure are deleted.
-* Cannot be rolled back.
-* Triggers are removed.
-
-**Example:**
-
-### 12. **What is a** `CROSS JOIN`?
-
-**Answer:**  
-A `CROSS JOIN` returns the Cartesian product of two tables, meaning it combines each row of the first table with every row of the second table. It does not require any condition to join the tables.
-
-**Use Case:**
-
-* Generating combinations of items, such as pairing every product with every customer for testing purposes.
-
-**Example:**
-
-**Result:**  
-If `Employees` has 3 rows and `Departments` has 2 rows, the result will have 3 x 2 = 6 rows.
-
-### 13. **Explain the concept of** `ACID` properties in databases.
-
-**Answer:**  
-`ACID` stands for Atomicity, Consistency, Isolation, and Durability. These properties ensure reliable processing of database transactions.
-
-1. **Atomicity:** Ensures that all operations within a transaction are completed; if not, the transaction is aborted.
-2. **Consistency:** Ensures that a transaction brings the database from one valid state to another, maintaining database invariants.
-3. **Isolation:** Ensures that concurrently executing transactions do not interfere with each other.
-4. **Durability:** Ensures that once a transaction is committed, it remains so, even in the event of a system failure.
-
-**Example:**  
-Consider a bank transfer where money is moved from Account A to Account B:
-
-* **Atomicity:** Both the debit from A and credit to B must occur, or neither.
-* **Consistency:** The total money remains the same before and after the transfer.
-* **Isolation:** Concurrent transfers do not affect each other.
-* **Durability:** Once the transfer is committed, it persists even if the system crashes.
-
-### 14. **What is the** `HAVING` clause, and how is it different from `WHERE`?
-
-**Answer:**  
-The `HAVING` clause is used to filter groups created by the `GROUP BY` clause based on a specified condition. Unlike the `WHERE` clause, which filters rows before grouping, `HAVING` filters groups after aggregation.
-
-**Example:**
-
-### 15. **How do you optimize an SQL query?**
-
-**Answer:**  
-Optimizing SQL queries involves several strategies to improve performance:
-
-1. **Use Indexes:** Create indexes on columns frequently used in `WHERE`, `JOIN`, and `ORDER BY` clauses.
-2. \**Avoid SELECT :* Retrieve only the necessary columns.
-3. **Use Proper Joins:** Prefer `INNER JOIN` over `OUTER JOIN` when appropriate.
-4. **Limit the Use of Subqueries:** Use joins instead of subqueries where possible.
-5. **Optimize WHERE Clauses:** Use efficient conditions and avoid functions on indexed columns.
-6. **Use Stored Procedures:** Reduce execution time by compiling queries.
-7. **Analyze Query Execution Plans:** Identify and address bottlenecks.
-8. **Partition Tables:** Divide large tables into smaller, more manageable pieces.
-9. **Use Aggregate Functions Wisely:** Avoid unnecessary calculations in `SELECT` statements.
-10. **Avoid Redundant Data:** Ensure the database is normalized to reduce redundancy.
-
-**Example:**
-
-*Explanation:* The optimized query allows the use of an index on `HireDate`, whereas applying the `YEAR()` function prevents index utilization.
+> **Purpose:** SQL fundamentals, analytical SQL, data modeling, ORM, caching, transactions, idempotency, and database performance.
+> **Use this file for:** SQL interviews, backend database rounds, and data engineering interviews
 
 ---
 
-### 16. **What is SQL?**
+## Recommended Study Flow
 
-**Answer**:   
-SQL (Structured Query Language) is a standardized programming language used to manage and manipulate relational databases. It is used to perform tasks such as querying, updating, inserting, and deleting data from a database.
+1. Read the **Quick Summary** first.
+2. Review the **Key Concepts** and tables.
+3. Practice the **Interview Questions & Answers** out loud.
+4. Use the code snippets and examples to explain trade-offs clearly.
+5. Finish with the **Common Mistakes** and **Revision Checklist** sections.
+
+---
+
+## Quick Summary
+
+This file has been refreshed to keep the original repository topic while merging relevant detailed Q&A from the consolidated topic-wise interview-prep pack. Use the top sections for fast revision and the consolidated section for deeper interview preparation.
+
+---
+
+## Core Topics to Master
+
+- DDL, DML, DCL, TCL
+- Primary keys, foreign keys, unique constraints
+- JOINs, GROUP BY, HAVING, subqueries
+- Window functions: ROW_NUMBER, RANK, DENSE_RANK
+- Transactions and ACID
+- Indexes and query optimization
+- ORM performance and N+1 queries
+- Caching and idempotency patterns
+
+---
+
+## Consolidated Interview Questions & Technical Notes
+
+The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
+
+> SQL patterns, joins, window functions, relational modeling, ORM performance, Django/SQLAlchemy, caching, idempotency, transactions, and data consistency.
+> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
+
+### Topic Sections
+
+1. SQL Interview Patterns — `Interview_Prep_Topics_and_Questions.md`
+2. Databases, ORM, and Data Modeling — `deloitte_python_genai_interview_prep_topics.md`
+3. Databases, Caching, and Messaging Systems — `deloitte_python_genai_interview_prep_topics.md`
+4. REST API Design and Idempotency — `interview_questions_topics_technical_prep.md`
+5. Django and ORM Performance — `interview_questions_topics_technical_prep.md`
+6. Databases and Data Modeling — `interview_questions_topics_technical_prep.md`
+7. SQL Interview Questions — `transaction_etl_sql_data_engineering_interview_handbook.md`
+8. Databases, ORMs & PostgreSQL — `Interview_Topics_and_Technical_Prep.md`
+
+---
+
+### 11. SQL Interview Patterns
+
+> Source: `Interview_Prep_Topics_and_Questions.md`
+
+#### 11.1 Top 3 orders per customer
+
+```sql
+SELECT *
+FROM (
+    SELECT
+        o.*,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer_id
+            ORDER BY amount DESC
+        ) AS rn
+    FROM orders o
+) t
+WHERE rn <= 3;
+```
+
+**Pattern:** Top N per group using `ROW_NUMBER()`.
+
+---
+
+#### 11.2 Type 2 SCD as-of join
+
+```sql
+SELECT *
+FROM orders o
+JOIN customer_address a
+  ON o.customer_id = a.customer_id
+ AND o.order_date >= a.effective_start
+ AND (
+      o.order_date < a.effective_end
+      OR a.effective_end IS NULL
+ );
+```
+
+**Pattern:** Join facts to the dimension version active at the event date.
+
+---
+
+#### 11.3 Monthly spend increased for 3 consecutive months
 
-### 17. **What is a Primary Key?**
+```sql
+WITH m AS (
+  SELECT
+      customer_id,
+      DATE_TRUNC('month', order_date) AS month,
+      SUM(amount) AS total_amount
+  FROM orders
+  GROUP BY customer_id, DATE_TRUNC('month', order_date)
+),
+x AS (
+  SELECT
+      *,
+      CASE
+          WHEN total_amount > LAG(total_amount) OVER (
+              PARTITION BY customer_id
+              ORDER BY month
+          ) THEN 1
+          ELSE 0
+      END AS increased
+  FROM m
+)
+SELECT
+    customer_id,
+    month,
+    total_amount
+FROM x
+QUALIFY SUM(increased) OVER (
+    PARTITION BY customer_id
+    ORDER BY month
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+) = 3;
+```
 
-**Answer**:   
-A primary key is a unique identifier for a record in a table. It ensures that each record in the table can be uniquely identified. A table can have only one primary key, and it cannot contain `NULL` values.
+**Pattern:** Aggregate monthly, compare with `LAG`, then use a rolling window.
 
-**Example**:
+---
 
-### 18. **What is a Foreign Key?**
+### 10. Databases, ORM, and Data Modeling
 
-**Answer**:   
-A foreign key is a column (or a set of columns) in a table that is used to create a link between the data in two tables. A foreign key in one table refers to the primary key in another table.
+> Source: `deloitte_python_genai_interview_prep_topics.md`
 
-**Example**:
+#### Topics to revise
 
-### 19. **What is a JOIN in SQL?**
+- Relational databases.
+- SQL basics.
+- Indexing.
+- Normalization.
+- Transactions.
+- SQLAlchemy ORM.
+- Migrations.
+- Connection pooling.
+- Data modeling.
 
-**Answer**:   
-A JOIN clause is used to combine rows from two or more tables based on a related column between them. Types of JOINs include:
+#### Example: SQLAlchemy model
 
-* `INNER JOIN`
-* `LEFT JOIN`
-* `RIGHT JOIN`
-* `FULL OUTER JOIN`
+```python
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import declarative_base
+from datetime import datetime
 
-**Example (INNER JOIN)**:
+Base = declarative_base()
 
-### 20. **What is the difference between** `WHERE` and `HAVING`?
 
-**Answer**:
+class Document(Base):
+    __tablename__ = "documents"
 
-* `WHERE` is used to filter records before any grouping (i.e., before `GROUP BY`).
-* `HAVING` is used to filter records after grouping.
+    id = Column(Integer, primary_key=True)
+    title = Column(String(255), nullable=False)
+    storage_path = Column(String(500), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+```
 
-**Example**:
+#### Common interview questions
 
-### 21. **What is the difference between** `DELETE` and `TRUNCATE`?
+1. What is an ORM?
+2. What are the benefits and risks of using an ORM?
+3. How do indexes improve query performance?
+4. How would you model documents and embeddings?
+5. How do you handle migrations?
 
-**Answer**:
+---
 
-* `DELETE` removes rows from a table based on a condition and can be rolled back (if within a transaction). It logs each row deletion.
-* `TRUNCATE` removes all rows from a table without logging individual row deletions and is faster, but it cannot be rolled back in many databases.
+### 16. Databases, Caching, and Messaging Systems
 
-**Example**:
+> Source: `deloitte_python_genai_interview_prep_topics.md`
 
-### 22. **What is an Index in SQL?**
+#### Databases
 
-**Answer**:   
-An index is a database object that improves the speed of data retrieval operations on a table. However, indexes can slow down `INSERT`, `UPDATE`, and `DELETE` operations.
+Topics mentioned or implied:
 
-**Example**:
+- PostgreSQL.
+- MySQL.
+- SQLAlchemy.
+- Data modeling.
+- Transactions.
+- Indexes.
 
-### 23. **What is the difference between** `INNER JOIN` and `OUTER JOIN`?
+#### Redis
 
-**Answer**:
+Redis can be used for:
 
-* `INNER JOIN` returns only the rows where there is a match between the tables.
-* `OUTER JOIN` (including `LEFT`, `RIGHT`, and `FULL` joins) returns rows even when there is no match in one of the tables.
+- Caching.
+- Rate limiting.
+- Session storage.
+- Job status tracking.
+- Semantic cache metadata.
 
-**Example**:
+#### Kafka / SQS / Queue Systems
 
-### 24. **How do you optimize a SQL query?**
+Messaging systems are used for asynchronous workloads.
 
-**Answer**:
+Examples:
 
-1. Use proper indexing.
-2. Avoid `SELECT *` by specifying the columns needed.
-3. Avoid `DISTINCT` when not necessary.
-4. Use `EXISTS` instead of `IN` for better performance.
-5. Write simpler, smaller subqueries.
+- Document ingestion.
+- Embedding generation.
+- Email notifications.
+- Background LLM processing.
+- Event-driven pipelines.
 
-### 25. **What is normalization?**
+#### Common interview question
 
-**Answer**:   
-Normalization is the process of organizing data to reduce redundancy and improve data integrity. It involves dividing large tables into smaller, related tables and defining relationships between them.
+##### When would you use a queue?
 
-### 26. **What are the different types of normalization?**
+**Answer:**
 
-**Answer**:
+Use a queue when a task is slow, asynchronous, retryable, or should not block the API request. For example, document parsing and embedding generation can be queued so the API remains responsive while background workers process the document.
 
-1. **1NF (First Normal Form)**: Eliminate duplicate columns and create separate tables for related data.
-2. **2NF (Second Normal Form)**: Eliminate partial dependencies by creating separate tables for subsets of data.
-3. **3NF (Third Normal Form)**: Remove transitive dependencies where a non-key column depends on another non-key column.
+---
 
-### 27. **What is a subquery in SQL?**
+### 3. REST API Design and Idempotency
 
-**Answer**:   
-A subquery is a query nested within another SQL query. It can be used in `SELECT`, `INSERT`, `UPDATE`, or `DELETE` statements.
+> Source: `interview_questions_topics_technical_prep.md`
 
-**Example**:
+#### 3.1 Idempotent HTTP methods
 
-### 28. **What is a stored procedure?**
+##### Idempotent methods
 
-**Answer**:   
-A stored procedure is a precompiled collection of SQL statements and optional control-of-flow statements, stored on the database server, that can be reused.
+- `GET`
+- `PUT`
+- `DELETE`
+- `HEAD`
+- `OPTIONS`
 
-**Example**:
+##### Not idempotent by default
 
-### 29. **What is a trigger in SQL?**
+- `POST`
 
-**Answer**:   
-A trigger is a special type of stored procedure that automatically executes when certain events occur, such as an `INSERT`, `UPDATE`, or `DELETE`.
+##### Why it matters
 
-**Example**:
+Idempotency determines whether clients can safely retry after timeouts or network failures.
 
-### 30. **What is a** `GROUP BY` clause?
+##### Example
 
-**Answer**:   
-The `GROUP BY` clause is used to group rows that have the same values in specified columns. It is commonly used with aggregate functions like `COUNT()`, `SUM()`, `AVG()`.
+```text
+GET /orders/123      → safe to retry
+PUT /profile/123     → safe if same payload
+DELETE /users/123    → safe final state remains deleted
+POST /orders         → unsafe unless idempotency key is used
+```
 
-**Example**:
+---
 
-### 31. **What is the** `CASE` statement in SQL?
+#### 3.2 Safely retriable POST endpoint
 
-**Answer**:   
-The `CASE` statement allows you to perform conditional logic in SQL queries.
+##### Problem
 
-**Example**:
+A client retries `POST /orders` after timeout. Without protection, duplicate orders may be created.
 
-### 32. **What are SQL constraints?**
+##### Solution
 
-**Answer**:   
-SQL constraints are rules enforced on columns in a table to limit the type of data that can go into a table. Common constraints include:
+Use an `Idempotency-Key`.
 
-* `NOT NULL`: Ensures that a column cannot have a NULL value.
-* `UNIQUE`: Ensures that all values in a column are unique.
-* `CHECK`: Ensures that all values in a column satisfy a specific condition.
-* `DEFAULT`: Provides a default value for a column when none is specified.
+```http
+POST /api/v1/orders
+Authorization: Bearer <token>
+Idempotency-Key: 7f6d2a91-8c4e-4b8b-9c2e-12345
+Content-Type: application/json
+```
 
-### 33. **How do you use the** `LIMIT` or `TOP` clause in SQL?
+##### Store
 
-**Answer**:   
-The `LIMIT` clause in MySQL (or `TOP` in SQL Server) is used to specify the number of rows to return.
+- Client/user ID.
+- Idempotency key.
+- Request hash.
+- Status: `PROCESSING`, `SUCCEEDED`, `FAILED`.
+- Response body.
+- Status code.
+- Safe response headers.
 
-**Example (MySQL)**:
+---
 
-**Example (SQL Server)**:
+#### 3.3 Request/response contract for idempotent create order
 
-### 34. **What is a View in SQL?**
+##### First response
 
-**Answer**:   
-A view is a virtual table that is based on the result set of an SQL query. Views do not store data themselves but display data from one or more tables.
+```http
+201 Created
+Location: /api/v1/orders/order_789
+```
 
-**Example**:
+```json
+{
+  "order_id": "order_789",
+  "status": "created"
+}
+```
 
-### 35. **How do you handle NULL values in SQL?**
+##### Retry with same key and same body
 
-**Answer**:  
-NULL represents a missing or undefined value in SQL. Functions like `IS NULL`, `IS NOT NULL`, and `COALESCE` can be used to handle NULL values.
+Return the same stored response.
 
-**Example**:
+```http
+201 Created
+```
 
-### 36. **Find duplicate rows in a table.**
+```json
+{
+  "order_id": "order_789",
+  "status": "created"
+}
+```
 
-*Example*: Find duplicate records based on `column1` and `column2`.
+##### Same key but different body
 
-### 37. **Left join and filter out nulls.**
+```http
+409 Conflict
+```
 
-*Example*: Get records from `table_a` that have a matching `id` in `table_b`.
+```json
+{
+  "error": "Idempotency key reused with different request payload"
+}
+```
 
-### 38. **Window function for ranking data.**
+##### Original request still processing
 
-*Example*: Rank rows in `your_table` based on the `value` column in descending order.
+```http
+202 Accepted
+Retry-After: 2
+```
 
-### 39. **Cumulative sum for a column.**
+```json
+{
+  "status": "processing"
+}
+```
 
-*Example*: Calculate cumulative sum of `value` based on the ordering of `id`.
+---
 
-### 40. **Difference between UNION and UNION ALL.**
+#### 3.4 Exactly-once behavior with RDS and DynamoDB
 
-1. `UNION`: Removes duplicates.
-2. `UNION ALL`: Keeps all duplicates.
+##### Topic covered
+
+How to avoid duplicate order creation without distributed transactions.
+
+##### Recommended approach
+
+- Use DynamoDB for fast idempotency lookup/replay.
+- Use RDS unique constraint as the final correctness guardrail.
+
+##### RDS uniqueness
+
+```sql
+UNIQUE (client_id, idempotency_key)
+```
+
+##### Why
+
+Even if DynamoDB and RDS are not atomically committed together, RDS prevents duplicate order rows.
+
+##### Recovery scenario
+
+If RDS commits but DynamoDB update fails:
+
+- Retry sees idempotency record stuck in `PROCESSING`.
+- Backend checks RDS by `(client_id, idempotency_key)`.
+- If order exists, rebuild response and mark DynamoDB `SUCCEEDED`.
+
+---
+
+#### 3.5 Django implementation of idempotency
+
+##### Model example
+
+```python
+class IdempotencyKey(models.Model):
+    key = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request_hash = models.CharField(max_length=64)
+    status = models.CharField(max_length=20)  # PROCESSING, SUCCEEDED, FAILED
+    response_body = models.JSONField(null=True, blank=True)
+    response_status_code = models.IntegerField(null=True, blank=True)
+    response_headers = models.JSONField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "key"],
+                name="unique_idempotency_key_per_user",
+            )
+        ]
+```
+
+##### Transaction and lock
+
+```python
+from django.db import transaction, IntegrityError
+from rest_framework.response import Response
+
+with transaction.atomic():
+    try:
+        record = IdempotencyKey.objects.create(
+            user=request.user,
+            key=idempotency_key,
+            request_hash=request_hash,
+            status="PROCESSING",
+        )
+        is_owner = True
+    except IntegrityError:
+        record = (
+            IdempotencyKey.objects
+            .select_for_update()
+            .get(user=request.user, key=idempotency_key)
+        )
+        is_owner = False
+
+    if record.request_hash != request_hash:
+        return Response(
+            {"error": "Idempotency key reused with different request"},
+            status=409,
+        )
+
+    if not is_owner:
+        if record.status == "SUCCEEDED":
+            return Response(
+                record.response_body,
+                status=record.response_status_code,
+                headers=record.response_headers or {},
+            )
+        return Response({"status": "processing"}, status=202)
+```
+
+##### Key idea
+
+Use unique constraints plus row-level locks to ensure two simultaneous requests do not both process.
+
+---
+
+#### 3.6 REST API versioning
+
+##### Preferred external API style
+
+```text
+/api/v1/orders
+/api/v2/orders
+```
+
+##### Why URL versioning
+
+- Clear for external clients.
+- Easy to document.
+- Easy to route and monitor.
+- Simple deprecation tracking.
+
+##### Three decision factors
+
+1. Client simplicity.
+2. Operational visibility.
+3. Type of change: breaking vs non-breaking.
+
+---
+
+#### 3.7 Deprecating an old API version
+
+##### Safe process
+
+1. Announce deprecation.
+2. Add headers:
+
+```http
+Deprecation: true
+Sunset: <date>
+Link: </api/v2/docs>; rel="successor-version"
+```
+
+3. Monitor usage by client/API key.
+4. Provide migration guide.
+5. Keep old version running during migration window.
+6. Sunset only after usage is low and clients are migrated.
+
+---
+
+#### 3.8 Client SDK design
+
+##### SDK responsibilities
+
+- Authentication.
+- Timeouts.
+- Retries.
+- Pagination.
+- Error mapping.
+- API version compatibility.
+
+##### Example
+
+```python
+client = UrlShortenerClient(api_key="...", base_url="https://api.example.com")
+
+client.create_url(long_url, expiry=None, custom_alias=None)
+client.get_url(short_code)
+client.list_urls(limit=50, cursor=None)
+client.delete_url(short_code)
+```
+
+##### Custom errors
+
+```python
+class RateLimitError(Exception): pass
+class AuthenticationError(Exception): pass
+class ValidationError(Exception): pass
+class NotFoundError(Exception): pass
+```
+
+---
+
+### 4. Django and ORM Performance
+
+> Source: `interview_questions_topics_technical_prep.md`
+
+#### 4.1 Avoiding N+1 queries in nested serialization
+
+##### Use `select_related`
+
+For single-valued relationships:
+
+```python
+queryset = Order.objects.select_related("customer")
+```
+
+##### Use `prefetch_related`
+
+For many-to-many or reverse FK relationships:
+
+```python
+queryset = Order.objects.prefetch_related("items")
+```
+
+##### Use `Prefetch` for nested optimization
+
+```python
+from django.db.models import Prefetch
+
+queryset = Order.objects.prefetch_related(
+    Prefetch("items", queryset=OrderItem.objects.select_related("product"))
+)
+```
+
+##### Signals of N+1
+
+- Query count grows with row count.
+- Same SQL repeated many times.
+- Django Debug Toolbar shows repetitive queries.
+- APM shows DB time dominating request latency.
+
+---
+
+#### 4.2 Structuring large list endpoints with optional filters
+
+##### Recommended pattern
+
+Use a query builder or custom manager instead of putting all logic in the view.
+
+```python
+def build_order_queryset(params):
+    qs = Order.objects.all()
+    qs = apply_base_selects(qs)
+    qs = apply_filters(qs, params)
+    qs = apply_annotations(qs, params)
+    qs = apply_sorting(qs, params)
+    return qs
+```
+
+##### Efficient annotations
+
+```python
+from django.db.models import Exists, OuterRef, Count, Q
+
+def apply_annotations(qs, params):
+    recent_payment = Payment.objects.filter(
+        order_id=OuterRef("pk"),
+        created_at__gte=params.get("recent_since"),
+    )
+
+    return qs.annotate(
+        has_recent_payment=Exists(recent_payment),
+        failed_payment_count=Count(
+            "payments",
+            filter=Q(payments__status="failed"),
+        ),
+    )
+```
+
+##### Why this helps
+
+- Readable.
+- Testable.
+- Easier to optimize.
+- Avoids one giant view function.
+
+---
+
+#### 4.3 RESTful filtering and sorting with validation
+
+##### Query parameter example
+
+```http
+GET /api/orders?status=paid&customer_id=123&created_after=2026-01-01&sort=-created_at&limit=50
+```
+
+##### DRF validation example
+
+```python
+class OrderListParamsSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=["pending", "paid", "failed"],
+        required=False,
+    )
+    customer_id = serializers.IntegerField(required=False)
+    created_after = serializers.DateField(required=False)
+    sort = serializers.ChoiceField(
+        choices=["created_at", "-created_at", "amount", "-amount"],
+        required=False,
+    )
+```
+
+##### Safe sort mapping
+
+```python
+SORT_MAP = {
+    "created_at": "created_at",
+    "-created_at": "-created_at",
+    "amount": "total_amount",
+    "-amount": "-total_amount",
+}
+
+order_by = SORT_MAP[validated_data.get("sort", "-created_at")]
+qs = qs.order_by(order_by)
+```
+
+##### Avoid
+
+```python
+qs.order_by(request.GET["sort"])
+```
+
+Raw user input should not be passed directly into query construction.
+
+---
+
+### 5. Databases and Data Modeling
+
+> Source: `interview_questions_topics_technical_prep.md`
+
+#### 5.1 Primary key vs unique constraint
+
+##### Primary key
+
+- Main identifier for a row.
+- Cannot be null.
+- One primary key per table.
+- Common target for foreign keys.
+
+##### Unique constraint
+
+- Enforces business uniqueness.
+- Multiple allowed per table.
+- Null behavior depends on database.
+
+##### Example
+
+```sql
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE
+);
+```
+
+---
+
+#### 5.2 Many-to-many modeling
+
+##### Join table example
+
+```sql
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE roles (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE user_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+```
+
+##### Add metadata if needed
+
+```sql
+CREATE TABLE user_roles (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    assigned_by BIGINT,
+    created_at TIMESTAMP NOT NULL,
+    UNIQUE (user_id, role_id)
+);
+```
+
+---
+
+#### 5.3 MongoDB embedding vs referencing
+
+##### Embed when
+
+- Data is read together.
+- Child belongs to parent.
+- Data is small and bounded.
+- Updates happen together.
+
+Example:
+
+```json
+{
+  "order_id": "123",
+  "items": [
+    {"sku": "A1", "quantity": 2},
+    {"sku": "B2", "quantity": 1}
+  ]
+}
+```
+
+##### Reference when
+
+- Data is large or unbounded.
+- Data is shared.
+- Data updates independently.
+- Independent querying/indexing is needed.
+
+---
+
+#### 5.4 INNER JOIN vs LEFT JOIN
+
+##### INNER JOIN
+
+Returns only rows with matches in both tables.
+
+```sql
+SELECT *
+FROM orders o
+INNER JOIN customers c
+ON o.customer_id = c.id;
+```
+
+##### LEFT JOIN
+
+Returns all left table rows and nulls for missing right-side matches.
+
+```sql
+SELECT *
+FROM orders o
+LEFT JOIN customers c
+ON o.customer_id = c.id;
+```
+
+##### Expected result if no right-side match
+
+- `INNER JOIN`: row excluded.
+- `LEFT JOIN`: row included with `NULL` right-side columns.
+
+---
+
+#### 5.5 Strong consistency vs eventual consistency
+
+##### Strong consistency when
+
+- Duplicate order creation is unacceptable.
+- Money movement is involved.
+- Inventory limits matter.
+- Permissions/security decisions are involved.
+- Stale data violates business rules.
+
+##### Eventual consistency when
+
+- Analytics counters.
+- Notifications.
+- Search indexes.
+- Activity feeds.
+- Reporting dashboards.
+
+##### Signal
+
+> If stale/conflicting data breaks an invariant or causes financial/security risk, use strong consistency. If the system can correct itself later and the user can tolerate delay, eventual consistency is acceptable.
+
+---
+
+#### 5.6 Preventing duplicate processing in eventual consistency
+
+##### Techniques
+
+- Idempotency key/event ID.
+- Inbox pattern.
+- Outbox pattern.
+- Unique constraints.
+- Idempotent state transitions.
+
+##### Inbox pattern
+
+```text
+Consumer receives event → inserts event_id into inbox table → processes only if insert succeeds.
+```
+
+##### Outbox pattern
+
+```text
+Business update + outbox event written in same DB transaction → background publisher sends event.
+```
+
+##### Transaction handling
+
+```text
+Begin transaction
+  Insert inbox event
+  Apply business update
+  Mark inbox event processed
+Commit
+```
+
+If transaction fails, retry starts cleanly.
+
+---
+
+#### 5.7 Optimizing equality queries without an index
+
+##### Techniques
+
+- Check execution plan.
+- Filter early.
+- Avoid functions around filtered columns.
+- Select only needed columns.
+- Partition/cluster/sort data around common filters.
+- Precompute smaller tables for frequent queries.
+
+##### Example
+
+```sql
+EXPLAIN SELECT id, status, created_at
+FROM orders
+WHERE customer_id = 123;
+```
+
+##### DuckDB-specific note
+
+Sorting or clustering data can help zone-map pruning skip row groups even without a traditional index.
+
+---
+
+### 3. SQL Interview Questions
+
+> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
+
+#### 3.1 Successful Revenue by Region
+
+##### Interview Question
+
+> **“How do you calculate successful revenue by region?”**
+
+```sql
+SELECT
+    region,
+    SUM(amount) AS total_revenue,
+    COUNT(*) AS successful_transactions
+FROM transactions
+WHERE status = 'SUCCESS'
+GROUP BY region
+ORDER BY total_revenue DESC;
+```
+
+##### Explanation
+
+- `WHERE status = 'SUCCESS'` filters only successful transactions.
+- `GROUP BY region` groups revenue by region.
+- `SUM(amount)` calculates revenue.
+- `COUNT(*)` counts successful transactions.
+
+---
+
+#### 3.2 Top One Transaction Per Customer
+
+##### Interview Question
+
+> **“For each customer, find the top one transaction.”**
+
+If **top** means highest transaction amount:
+
+```sql
+SELECT
+    transaction_id,
+    customer_id,
+    amount,
+    transaction_date
+FROM (
+    SELECT
+        transaction_id,
+        customer_id,
+        amount,
+        transaction_date,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer_id
+            ORDER BY amount DESC
+        ) AS rn
+    FROM transactions
+) t
+WHERE rn = 1;
+```
+
+##### Explanation
+
+| SQL Part                   | Meaning                                  |
+| -------------------------- | ---------------------------------------- |
+| `PARTITION BY customer_id` | Creates separate ranking per customer    |
+| `ORDER BY amount DESC`     | Highest transaction comes first          |
+| `ROW_NUMBER()`             | Assigns unique rank within each customer |
+| `WHERE rn = 1`             | Selects top transaction per customer     |
+
+##### Interview Answer
+
+> “I would use `ROW_NUMBER()` as a window function. I partition by `customer_id`, order by amount descending, and select only rows where row number is 1. This gives exactly one top transaction per customer.”
+
+---
+
+#### 3.3 Top Transaction With Ties
+
+##### Follow-Up Question
+
+> **“What if two transactions have the same highest amount?”**
+
+Use `RANK()` instead of `ROW_NUMBER()`:
+
+```sql
+SELECT
+    transaction_id,
+    customer_id,
+    amount
+FROM (
+    SELECT
+        transaction_id,
+        customer_id,
+        amount,
+        RANK() OVER (
+            PARTITION BY customer_id
+            ORDER BY amount DESC
+        ) AS rnk
+    FROM transactions
+) t
+WHERE rnk = 1;
+```
+
+##### Difference
+
+| Function       | Behavior                                        |
+| -------------- | ----------------------------------------------- |
+| `ROW_NUMBER()` | Returns exactly one row per customer            |
+| `RANK()`       | Returns all tied top rows, but leaves rank gaps |
+| `DENSE_RANK()` | Returns all tied top rows, no rank gaps         |
+
+---
+
+#### 3.4 Latest Transaction Per Customer
+
+If **top** means most recent transaction:
+
+```sql
+SELECT
+    transaction_id,
+    customer_id,
+    transaction_date,
+    amount
+FROM (
+    SELECT
+        transaction_id,
+        customer_id,
+        transaction_date,
+        amount,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer_id
+            ORDER BY transaction_date DESC
+        ) AS rn
+    FROM transactions
+) t
+WHERE rn = 1;
+```
+
+---
+
+#### 3.5 Customers With More Than One Paid Transaction
+
+##### Interview Question
+
+> **“Find customers with more than one paid transaction only.”**
+
+```sql
+SELECT
+    customer_id,
+    COUNT(*) AS paid_transaction_count
+FROM transactions
+WHERE status = 'PAID'
+GROUP BY customer_id
+HAVING COUNT(*) > 1;
+```
+
+If the dataset uses `SUCCESS` instead of `PAID`:
+
+```sql
+SELECT
+    customer_id,
+    COUNT(*) AS successful_transaction_count
+FROM transactions
+WHERE status = 'SUCCESS'
+GROUP BY customer_id
+HAVING COUNT(*) > 1;
+```
+
+##### Why `HAVING`?
+
+- `WHERE` filters rows before aggregation.
+- `HAVING` filters grouped/aggregated results.
+
+##### If They Want Full Transaction Details
+
+```sql
+SELECT *
+FROM transactions
+WHERE status = 'PAID'
+  AND customer_id IN (
+      SELECT customer_id
+      FROM transactions
+      WHERE status = 'PAID'
+      GROUP BY customer_id
+      HAVING COUNT(*) > 1
+  );
+```
+
+##### Interview Answer
+
+> “I would first filter paid transactions using `WHERE status = 'PAID'`, then group by customer and use `HAVING COUNT(*) > 1` because `HAVING` is used to filter aggregate results.”
+
+---
+
+### 6. Databases, ORMs & PostgreSQL
+
+> Source: `Interview_Topics_and_Technical_Prep.md`
+
+#### Likely Questions
+
+- What is relational data modeling?
+- How do you design tables for orders/customers/payments?
+- What is normalization?
+- What are indexes?
+- What is a foreign key?
+- How do you use SQLAlchemy or Django ORM?
+- How do you avoid N+1 queries?
+- How do transactions work?
+- How do you handle migrations?
+- How do you optimize slow queries?
+
+---
+
+#### Basic Relational Model Example
+
+```sql
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    customer_id INTEGER NOT NULL REFERENCES customers(id),
+    status VARCHAR(50) NOT NULL,
+    total_amount NUMERIC(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payments (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL REFERENCES orders(id),
+    amount NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+##### Interview Explanation
+
+- `customers` owns customer data.
+- `orders` references customers.
+- `payments` references orders.
+- Foreign keys enforce data integrity.
+- Separate tables reduce duplication and improve consistency.
+
+---
+
+#### SQLAlchemy Model Example
+
+```python
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey
+from sqlalchemy.orm import relationship, declarative_base
+
+Base = declarative_base()
+
+
+class Customer(Base):
+    __tablename__ = "customers"
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True, nullable=False)
+    name = Column(String, nullable=False)
+
+    orders = relationship("Order", back_populates="customer")
+
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    id = Column(Integer, primary_key=True)
+    customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
+    status = Column(String, nullable=False)
+    total_amount = Column(Numeric(10, 2), nullable=False)
+
+    customer = relationship("Customer", back_populates="orders")
+```
+
+---
+
+#### Avoiding N+1 Queries
+
+##### Problem
+
+If you load 100 orders and then separately query the customer for each order, you may execute 101 queries.
+
+##### SQLAlchemy Fix
+
+```python
+from sqlalchemy.orm import joinedload
+
+orders = (
+    session.query(Order)
+    .options(joinedload(Order.customer))
+    .all()
+)
+```
+
+##### Interview Explanation
+
+Use eager loading when related data is needed upfront.
+
+---
+
+#### Index Example
+
+```sql
+CREATE INDEX idx_orders_customer_id ON orders(customer_id);
+CREATE INDEX idx_orders_status_created_at ON orders(status, created_at);
+```
+
+##### When to Add Indexes
+
+Add indexes on:
+
+- Foreign keys
+- Frequently filtered columns
+- Frequently sorted columns
+- Columns used in joins
+
+##### Tradeoff
+
+Indexes speed up reads but slow down writes and take storage.
+
+---
+
+#### Transaction Example
+
+```python
+def create_order_with_payment(session, order_data, payment_data):
+    try:
+        order = Order(**order_data)
+        session.add(order)
+        session.flush()
+
+        payment = Payment(order_id=order.id, **payment_data)
+        session.add(payment)
+
+        session.commit()
+        return order
+
+    except Exception:
+        session.rollback()
+        raise
+```
+
+##### Interview Explanation
+
+Use transactions when multiple database changes must either all succeed or all fail.
+
+---

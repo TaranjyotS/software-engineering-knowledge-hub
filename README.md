@@ -2,16 +2,18 @@
 
 # 📚 Software Engineering Knowledge Hub
 
-### A version-controlled interview preparation and engineering notes repository with Confluence sync automation.
+### A version-controlled software engineering, AI engineering, and interview preparation knowledge base with Confluence sync automation.
 
-This repository keeps technical notes, coding questions, interview resources, and documentation workflows in one place. It is designed to stay useful as a personal study hub while also being clean enough for other developers, learners, and recruiters to understand quickly.
+This repository keeps technical notes, coding questions, interview resources, downloadable PDFs, and documentation automation in one place. It is designed as a personal learning hub, recruiter-friendly portfolio resource, and docs-as-code workflow for keeping Markdown and Confluence aligned.
 
 <br/>
 
 <img src="https://img.shields.io/badge/Docs-Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white" />
 <img src="https://img.shields.io/badge/Python-Automation-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+<img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+<img src="https://img.shields.io/badge/GenAI-LLM%20%7C%20RAG%20%7C%20Agents-7B61FF?style=for-the-badge" />
 <img src="https://img.shields.io/badge/Confluence-Sync-172B4D?style=for-the-badge&logo=confluence&logoColor=white" />
-<img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" />
+<img src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" />
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
 
 </div>
@@ -20,9 +22,9 @@ This repository keeps technical notes, coding questions, interview resources, an
 
 ## ✨ Overview
 
-This project is a curated software engineering knowledge base built around practical interview preparation. It combines Markdown notes, coding practice, downloadable PDFs, and Confluence automation so the same content can be maintained locally, versioned on GitHub, and synchronized to a documentation workspace.
+This project is a curated software engineering knowledge base built around practical interview preparation and engineering reference notes. It combines Markdown notes, coding practice, downloadable PDFs, and Confluence automation so the same content can be maintained locally, versioned on GitHub, and synchronized to a documentation workspace.
 
-The original purpose is preserved: **keep notes handy and help others prepare**. The repository is now organized to look more polished, easier to navigate, and more portfolio-friendly.
+The repository now includes both traditional software engineering topics and updated AI engineering topics, including Python, REST APIs, SQL, system design, cloud/DevOps, testing, observability, GenAI, RAG, LLM evaluation, AI agents, data engineering, ML/MLOps, and behavioral interview preparation.
 
 ---
 
@@ -30,16 +32,21 @@ The original purpose is preserved: **keep notes handy and help others prepare**.
 
 <div align="center">
 
-|               Area               |                     What You’ll Find                         |
-|----------------------------------|--------------------------------------------------------------|
-| 🐍 Python                        | Core concepts, examples, coding questions, interview notes   |
-| 🗄️ SQL                           | Query patterns, joins, optimization concepts, interview prep |
-| 🧱 System Design                 | Architecture fundamentals, scalability, design trade-offs    |
-| 🌐 REST APIs                     | HTTP, endpoints, contracts, authentication, backend concepts |
-| 🖥️ Unix                          | Common commands, shell usage, developer productivity notes   |
-| 📊 Excel / Tableau / Power BI    | Analytics, reporting, dashboards, BI concepts                |
-| 🤖 Machine Learning              | ML fundamentals and interview-oriented summaries             |
-| ☕ Java / Spring / Microservices | Downloadable PDFs and related interview resources            |
+|                 Area                  |                               What You’ll Find                                        |
+| ------------------------------------- | ------------------------------------------------------------------------------------- |
+| 🐍 Python                             | Core concepts, advanced Python, concurrency, decorators, generators, coding patterns  |
+| 🌐 Backend APIs                       | REST, FastAPI, Flask, gRPC, GraphQL, validation, versioning, idempotency              |
+| 🗄️ SQL & Databases                    | Joins, indexes, transactions, ORM, caching, query optimization, data modeling         |
+| 🧱 System Design                      | Scalability, microservices, distributed systems, queues, consistency, caching         |
+| 🤖 GenAI / LLMs                       | RAG, AI agents, prompt engineering, tool calling, hallucination reduction, evaluation |
+| 📈 ML / MLOps                         | ML lifecycle, model validation, drift, model registry, deployment, monitoring         |
+| 🔁 Data Engineering                   | ETL, batch/streaming, data quality, lineage, cloud data architecture                  |
+| ☁️ Cloud / DevOps                     | AWS, Docker, Kubernetes, Jenkins, GitHub Actions, Terraform, CI/CD                    |
+| 🧪 Testing / Security / Observability | Pytest, AI QA, API security, PII handling, logs, metrics, tracing, runbooks           |
+| ⚛️ Frontend                           | React, TypeScript, API integration, product engineering basics                        |
+| 📊 BI Tools                           | Excel, Power BI, Tableau analytics and interview notes                                |
+| 🖥️ Unix                               | Commands, shell usage, permissions, process and file management                       |
+| ☕ PDF Resources                      | Java, Spring Boot, Microservices, and REST API interview PDFs                         |
 
 </div>
 
@@ -70,19 +77,25 @@ software-engineering-knowledge-hub/
 
 <div align="center">
 
-|        Topic        |                             Link                           |
-|---------------------|------------------------------------------------------------|
-| Excel               | [docs/excel.md](docs/excel.md)                             |
-| Interview Questions | [docs/interview_questions.md](docs/interview_questions.md) |
-| Machine Learning    | [docs/machine_learning.md](docs/machine_learning.md)       |
-| My Profile          | [docs/my_profile.md](docs/my_profile.md)                   |
-| Power BI            | [docs/power_bi.md](docs/power_bi.md)                       |
-| Python              | [docs/python.md](docs/python.md)                           |
-| REST API            | [docs/rest_api.md](docs/rest_api.md)                       |
-| SQL                 | [docs/sql.md](docs/sql.md)                                 |
-| System Design       | [docs/system_design.md](docs/system_design.md)             |
-| Tableau             | [docs/tableau.md](docs/tableau.md)                         |
-| Unix                | [docs/unix.md](docs/unix.md)                               |
+| Topic                                | Link                                                                             |
+| ------------------------------------ | -------------------------------------------------------------------------------- |
+| My Profile                           | [docs/my_profile.md](docs/my_profile.md)                                         |
+| Interview Questions                  | [docs/interview_questions.md](docs/interview_questions.md)                       |
+| Python                               | [docs/python.md](docs/python.md)                                                 |
+| REST API / Backend APIs              | [docs/rest_api.md](docs/rest_api.md)                                             |
+| SQL / Databases                      | [docs/sql.md](docs/sql.md)                                                       |
+| System Design                        | [docs/system_design.md](docs/system_design.md)                                   |
+| GenAI, LLMs, RAG & Agents            | [docs/genai_llm_rag.md](docs/genai_llm_rag.md)                                   |
+| Machine Learning / MLOps             | [docs/machine_learning.md](docs/machine_learning.md)                             |
+| Data Engineering                     | [docs/data_engineering.md](docs/data_engineering.md)                             |
+| Cloud / DevOps / Docker / Kubernetes | [docs/cloud_devops.md](docs/cloud_devops.md)                                     |
+| Testing / Security / Observability   | [docs/testing_security_observability.md](docs/testing_security_observability.md) |
+| Frontend React / TypeScript          | [docs/frontend_react_typescript.md](docs/frontend_react_typescript.md)           |
+| Excel                                | [docs/excel.md](docs/excel.md)                                                   |
+| Power BI                             | [docs/power_bi.md](docs/power_bi.md)                                             |
+| Tableau                              | [docs/tableau.md](docs/tableau.md)                                               |
+| Unix                                 | [docs/unix.md](docs/unix.md)                                                     |
+| Coding Practice                      | [coding_questions/README.md](coding_questions/README.md)                         |
 
 </div>
 
@@ -107,13 +120,15 @@ Versioned Engineering Notes
 
 ### Included automation scripts
 
-|                  Script                    |                     Purpose                       |
-|--------------------------------------------|---------------------------------------------------|
-| `confluence_sync/health_check.py`          | Validates Confluence credentials and space access |
-| `confluence_sync/build_page_map.py`        | Builds or refreshes the local page mapping file   |
-| `confluence_sync/fetch_from_confluence.py` | Pulls pages from Confluence into Markdown         |
-| `confluence_sync/push_to_confluence.py`    | Pushes Markdown documentation back to Confluence  |
-| `utils/generate_pdf_links.py`              | Regenerates PDF links for the README              |
+| Script                                     | Purpose                                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `confluence_sync/health_check.py`          | Validates Confluence credentials and space access                                          |
+| `confluence_sync/build_page_map.py`        | Builds or refreshes the local page mapping file and creates missing pages from `docs/*.md` |
+| `confluence_sync/fetch_from_confluence.py` | Pulls pages from Confluence into matching Markdown files                                   |
+| `confluence_sync/push_to_confluence.py`    | Pushes Markdown documentation back to Confluence                                           |
+| `utils/generate_pdf_links.py`              | Regenerates PDF links for the README                                                       |
+| `utils/generate_docs_index.py`             | Regenerates `docs/README.md` from the current `docs/*.md` files                            |
+| `utils/format_markdown_tables.py`          | Aligns Markdown pipe tables across files or folders                                        |
 
 ---
 
@@ -122,8 +137,8 @@ Versioned Engineering Notes
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/TaranjyotS/interview-prep.git
-cd interview-prep
+git clone https://github.com/TaranjyotS/software-engineering-knowledge-hub.git
+cd software-engineering-knowledge-hub
 ```
 
 ### 2. Create and activate a virtual environment
@@ -166,6 +181,18 @@ python confluence_sync/health_check.py
 python confluence_sync/build_page_map.py
 ```
 
+### Format Markdown tables
+
+```bash
+python utils/format_markdown_tables.py README.md FILE_INDEX.md docs confluence_sync coding_questions
+```
+
+Check table alignment without writing files:
+
+```bash
+python utils/format_markdown_tables.py docs --check
+```
+
 ### Push a Markdown file to Confluence
 
 ```bash
@@ -184,18 +211,18 @@ python confluence_sync/fetch_from_confluence.py
 
 The following interview resources are included in the repository:
 
-- [Java-1 Interview Questions](interview_questions/Java-1%20Interview%20Questions.pdf)
-- [Java-2 Interview Questions](interview_questions/Java-2%20Interview%20Questions.pdf)
+- [Java 1 Interview Questions](interview_questions/Java-1%20Interview%20Questions.pdf)
+- [Java 2 Interview Questions](interview_questions/Java-2%20Interview%20Questions.pdf)
 - [Microservices Interview Questions](interview_questions/Microservices%20Interview%20Questions.pdf)
-- [REST API Interview Questions](interview_questions/REST%20API%20Interview%20Questions.pdf)
+- [Rest Api Interview Questions](interview_questions/REST%20API%20Interview%20Questions.pdf)
 - [Spring Boot Interview Questions](interview_questions/Spring%20Boot%20Interview%20Questions.pdf)
 
 ---
 
 ## 📝 Helpful Reference Links
 
-|                                     Resource                                                 |             Use Case             |
-|----------------------------------------------------------------------------------------------|----------------------------------|
+| Resource                                                                                     | Use Case                         |
+| -------------------------------------------------------------------------------------------- | -------------------------------- |
 | [QuickRef](https://quickref.me/)                                                             | Fast syntax references           |
 | [Python Guides](https://pythonguides.com/python-interview-questions-and-answers/)            | Python interview preparation     |
 | [InterviewBit](https://www.interviewbit.com/technical-interview-questions/)                  | Multi-topic interview prep       |
@@ -213,9 +240,6 @@ This repository is intended to be safe for public GitHub use.
 - Real `.env` files are ignored.
 - `.env.example` is included as a safe template.
 - API tokens should be stored in GitHub Secrets.
-- The original uploaded ZIP contained a local `.env` file and `.git/` directory; both were removed from this revised version.
-
-If a real Confluence token was ever committed or shared publicly, revoke it and generate a new one.
 
 ---
 

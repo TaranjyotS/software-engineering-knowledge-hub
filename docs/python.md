@@ -1,451 +1,2512 @@
-# PYTHON
+# Python
 
-# PYTHON
-
-Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data and code: data in the form of fields (often known as attributes or properties), and code, in the form of procedures (often known as methods). OOP focuses on using objects to design and build applications. It aims to implement real-world entities like inheritance, polymorphism, encapsulation, and abstraction in programming.
-
-### **Core Concepts of OOP**
-
-1. **Class and Object**
-2. **Encapsulation**
-3. **Inheritance**
-4. **Polymorphism**
-5. **Abstraction**
-
-Let's go through each concept with examples in Python.
-
-### **1. Class and Object**
-
-* **Class**: A blueprint or template for creating objects. It defines a datatype by bundling data and methods that work on the data into one single unit.
-* **Object**: An instance of a class. When a class is defined, no memory is allocated until an object of that class is created.
-
-**Example:**
-
-### **2. Encapsulation**
-
-Encapsulation is the process of wrapping data (variables) and methods (functions) together as a single unit. It restricts direct access to some of an object's components and can prevent the accidental modification of data. In Python, encapsulation is achieved by defining private variables and methods using underscores (`_` or `__`).
-
-**Example:**
-
-### **3. Inheritance**
-
-Inheritance is a mechanism where a new class (derived class) is created from an existing class (base class). The derived class inherits all the features (properties and methods) of the base class, but it can also have its own properties and methods.
-
-**Types of Inheritance**:
-
-* Single Inheritance
-* Multiple Inheritance
-* Multilevel Inheritance
-* Hierarchical Inheritance
-* Hybrid Inheritance
-
-**Example: Single Inheritance**
-
-### **4. Polymorphism**
-
-Polymorphism means "many shapes" and allows methods to do different things based on the object it is acting upon. Polymorphism allows the same method to be used on different objects, achieving the concept of "one interface, many implementations."
-
-**Types of Polymorphism**:
-
-* **Compile-time (Method Overloading)**: Achieved by defining multiple methods with the same name but different signatures. Note that Python does not support method overloading directly.
-* **Run-time (Method Overriding)**: Achieved when a method in the derived class has the same name and signature as a method in the base class.
-
-**Example: Method Overriding**
-
-### **5. Abstraction**
-
-Abstraction is the concept of hiding the internal details and showing only the functionality. It helps in reducing programming complexity and effort. In Python, abstraction can be achieved using abstract classes and methods, which are defined in the `abc` module.
-
-**Example:**
-
-In the above example, `Animal` is an abstract base class with an abstract method `sound()`. The derived classes `Dog` and `Cat` provide specific implementations of the `sound()` method.
-
-### **Summary of OOP Concepts:**
-
-* **Class and Object**: Class is a blueprint; Object is an instance of a class.
-* **Encapsulation**: Hides internal data to protect from unauthorized access.
-* **Inheritance**: Reuses code by inheriting properties and methods from a base class.
-* **Polymorphism**: Allows methods to do different things based on the object it is acting upon.
-* **Abstraction**: Hides complex implementation details and shows only the necessary functionality.
-
-### **Technical Python Questions**
-
-#### **Core Python Concepts**
-
-1. **Explain the difference between** `deepcopy` and `shallow copy` in Python.
-2. **Shallow Copy**: Creates a new object but inserts references into it to the objects found in the original. Modifications to mutable objects (like lists) within the copied object affect the original.
-3. **Deep Copy**: Creates a new object and recursively copies all objects found in the original, creating fully independent copies.
-
-**Example:**
-2. **How does the Global Interpreter Lock (GIL) affect multi-threading in Python?**
-
-* The **Global Interpreter Lock (GIL)** is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. This means that in CPython (the standard Python implementation), even in a multi-threaded program, only one thread can execute Python code at a time.
-* **Effect**: This can limit the effectiveness of multi-threading for CPU-bound tasks but not for I/O-bound tasks where threads spend much of their time waiting for external resources.
-* **What are Python decorators, and how are they used?**
-* **Decorators** are functions that modify the behavior of another function or class. They are often used for logging, enforcing access control, instrumentation, caching, and more.
-
-**Example:**
-4. **Describe the use of lambda functions in Python. Provide an example.**
-
-* **Lambda functions** are small anonymous functions defined with the `lambda` keyword. They can take any number of arguments but have only one expression.
-
-**Example:**
-5. **Explain the difference between list, tuple, set, and dictionary in Python.**
-
-* **List**: An ordered, mutable collection that allows duplicate elements.
-* **Tuple**: An ordered, immutable collection that allows duplicate elements.
-* **Set**: An unordered, mutable collection of unique elements (no duplicates).
-* **Dictionary**: An unordered, mutable collection of key-value pairs.
-
-**Example:**
-
-#### **Advanced Python Features**
-
-1. **How do you implement context managers in Python?**
-2. **Context managers** allow you to allocate and release resources precisely when you want. The most common use of context managers is `with` statement. You can implement them using a class with `__enter__` and `__exit__` methods or using the `contextlib` module with the `@contextmanager` decorator.
-
-**Example:**
-2. **Can you explain the use of** `asyncio` in Python? How does asynchronous programming differ from multithreading?
-
-* `asyncio` is a library to write concurrent code using the `async`/`await` syntax. It is designed for handling asynchronous I/O operations, such as networking requests, without blocking the main thread.
-* **Asynchronous programming** allows tasks to run independently from one another. **Multithreading** involves running multiple threads in parallel. While both can be used for concurrency, `asyncio` is more lightweight and efficient for I/O-bound tasks.
-
-**Example:**
-3. **How does Python handle memory management?**
-
-* Python uses a **private heap** space for memory management where all Python objects and data structures are stored. The management is done by the Python memory manager, which handles the allocation of memory for Python objects.
-* **Garbage collection** is used to reclaim memory from objects that are no longer in use. Python primarily uses **reference counting** for memory management, complemented by a cyclic garbage collector to detect and clean up reference cycles.
-* **What is the difference between** `__init__` and `__new__` methods?
-* `__init__` is the initializer method in Python called after the object is created. It is used to initialize the object's state.
-* `__new__` is a method that creates the instance of the class. It is called before `__init__` and is responsible for returning a new instance of the class.
-
-**Example:**
-5. **Explain the use of generators in Python and how they differ from iterators.**
-
-* **Generators** are a simple way to create iterators using functions and the `yield` statement. A generator function returns an iterator object that produces a sequence of results instead of returning a single value.
-* **Iterators** are objects that implement the iterator protocol, consisting of the `__iter__()` and `__next__()` methods. Generators automatically create iterators.
-
-**Example:**
-
-#### **Error Handling and Debugging**
-
-1. **How do you handle exceptions in Python? Give examples of some common exceptions.**
-2. Exceptions in Python are handled using `try`, `except`, `else`, and `finally` blocks.
-
-**Example:**
-
-* **Common Exceptions:**
-
-  + `ValueError`: Raised when a function receives an argument of the correct type but inappropriate value.
-  + `TypeError`: Raised when an operation or function is applied to an object of inappropriate type.
-  + `KeyError`: Raised when a dictionary key is not found.
-  + **What strategies would you use to debug a memory leak in a Python application?**
-* Use **profiling tools** like `tracemalloc`, `memory_profiler`, or `objgraph` to identify memory usage and detect leaks.
-* Inspect objects in memory using `gc` (garbage collector) module to find unreachable or reference-cycled objects.
-* Review the code to identify any reference cycles or improperly closed resources (e.g., files, network connections).
-
-**Example using** `tracemalloc`:
-3. **How do you log errors and exceptions in a Python application?**
-
-* Use the built-in `logging` module to log errors and exceptions. It provides a flexible framework for emitting log messages from Python programs.
-
-**Example:**
-
-### **Data Structures and Algorithms**
-
-1. **What is the time complexity of common operations (insert, delete, lookup) for Python’s list, set, and dictionary?**
-2. **List**:
-
-   * Insert: O(1) (append), O(n) (insert at arbitrary position)
-   * Delete: O(n)
-   * Lookup: O(1) (index access), O(n) (search)
-   * **Set**:
-   * Insert: O(1)
-   * Delete: O(1)
-   * Lookup: O(1)
-   * **Dictionary**:
-   * Insert: O(1)
-   * Delete: O(1)
-   * Lookup: O(1)
-   * **How would you implement a binary search in Python?**
-
-**Example:**
-3. **Can you write a Python program to detect a cycle in a linked list?**
-
-**Example using Floyd’s Cycle Detection Algorithm:**
-4. **Describe how you would optimize a Python program that needs to handle a large dataset.**
-
-* Use **Generators** to avoid loading the entire dataset into memory.
-* Use **Pandas** with `chunksize` to process large CSV files in smaller chunks.
-* Optimize algorithms to use **O(log n)** or **O(1)** complexity where possible.
-* Use **multiprocessing** or **asyncio** for I/O-bound operations.
-* Utilize **NumPy** for efficient numerical computation and manipulation.
-* **How would you implement a stack and a queue using Python’s list?**
-
-**Stack Implementation:**
-
-**Queue Implementation:**
-
-### **System Design and Architecture**
-
-1. **How would you design a RESTful API using Python frameworks (e.g., Django, Flask)?**
-2. Use **Flask** or **Django REST Framework** to design RESTful APIs. Define routes using decorators in Flask or URL patterns in Django.
-
-**Example using Flask:**
-2. **Describe a microservices architecture and how you would implement it using Python.**
-
-* **Microservices Architecture** involves breaking down a large application into smaller, independent services that communicate via APIs. Each service is responsible for a specific functionality.
-* **Implementation**: Use lightweight frameworks like **Flask** or **FastAPI** for microservices. Use **Docker** for containerization, **Kubernetes** for orchestration, and **RabbitMQ** or **Kafka** for inter-service communication.
-* **What considerations would you take into account when designing a scalable Python application?**
-* **Modularity**: Break down the application into modular components.
-* **Database Sharding**: Distribute data across multiple servers.
-* **Load Balancing**: Distribute incoming traffic across multiple servers.
-* **Caching**: Use caching strategies to reduce database load.
-* **Concurrency**: Use asynchronous programming for I/O-bound tasks and multiprocessing for CPU-bound tasks.
-* **How do you manage state in a distributed system?**
-* Use centralized data storage systems like **Redis** or **Memcached** for maintaining session states.
-* Implement **Stateless Services** where possible, storing state information in client-side cookies or tokens.
-* Use distributed databases (e.g., **Cassandra**, **DynamoDB**) for persisting state information.
-* **What are the best practices for deploying a Python application in a cloud environment?**
-* **Containerization**: Use Docker to package your application and its dependencies.
-* **CI/CD Pipelines**: Implement continuous integration and deployment pipelines using tools like **Jenkins**, **GitHub Actions**, or **GitLab CI**.
-* **Monitoring and Logging**: Use monitoring tools like **Prometheus** and **ELK Stack** for observability.
-* **Scaling**: Use auto-scaling features provided by cloud platforms (e.g., AWS EC2 Auto Scaling, Azure VM Scale Sets).
-
-### **Database and ORM (Object-Relational Mapping)**
-
-1. **How do you connect a Python application to a database? Provide an example using SQLAlchemy or Django ORM.**
-
-**Example using SQLAlchemy:**
-2. **What is an ORM, and how does it help in application development?**
-
-* **ORM (Object-Relational Mapping)** is a technique that allows you to query and manipulate data from a database using an object-oriented paradigm. It helps in development by allowing developers to interact with a database using Python classes and objects instead of writing raw SQL queries.
-* **How would you optimize a slow database query in a Python application?**
-* **Indexing**: Create indexes on frequently queried columns.
-* **Caching**: Use in-memory caching solutions like Redis to store query results.
-* **Query Optimization**: Analyze the query execution plan and rewrite queries for better performance.
-* **Database Optimization**: Adjust database configurations and parameters for performance optimization.
-* **What are the differences between SQL and NoSQL databases, and when would you choose one over the other?**
-* **SQL Databases**:
-
-  + Relational, structured schema.
-  + Suitable for complex queries and transactions.
-  + ACID-compliant (Atomicity, Consistency, Isolation, Durability).
-  + **NoSQL Databases**:
-  + Non-relational, schema-less.
-  + Suitable for hierarchical data storage.
-  + BASE-compliant (Basically Available, Soft state, Eventually consistent).
-  + **When to choose**:
-  + Use SQL for structured data and complex queries.
-  + Use NoSQL for large volumes of unstructured data and when scalability is a priority.
-  + **How do you handle database migrations in a Python-based application?**
-* Use **migration tools** like **Alembic** with SQLAlchemy or **Django migrations** for Django applications.
-* Create migration scripts that outline the changes to be applied (e.g., adding or removing columns).
-
-**Example with Django:**
-
-### **Web Frameworks and Libraries**
-
-1. **Explain the differences between Django and Flask. Which would you choose for a given project and why?**
-2. **Django**:
-3. Full-stack web framework.
-4. Provides an admin interface, ORM, form handling, and more.
-5. Suitable for larger applications requiring a lot of built-in functionality.
-6. **Flask**:
-7. Micro web framework.
-8. Lightweight, minimalistic, and highly customizable.
-9. Suitable for smaller applications or microservices.
-10. **Choice**:
-11. Use **Django** for feature-rich applications needing a rapid development environment.
-12. Use **Flask** for simple, lightweight applications or microservices.
-13. **How do you implement authentication and authorization in a Python web application?**
-14. Use built-in authentication systems like **Django’s authentication** or libraries like **Flask-Login** for Flask applications.
-15. Implement **JWT (JSON Web Token)** for stateless, token-based authentication.
-16. **Describe how middleware works in Django.**
-17. Middleware is a way to process requests globally before they reach the view or after the view has processed them. Middleware can be used for:
-
-    * Request/response processing.
-    * Session handling.
-    * Authentication.
-    * Logging.
-    * **Example:**
-    * **How do you handle file uploads in a Python web application?**
-18. Use libraries like **Werkzeug** for file uploads in Flask or built-in support in **Django**.
-19. Ensure that file uploads are properly validated and sanitized.
-
-**Example with Flask:**
-5. **Can you explain the concept of “signals” in Django?**
-
-* **Signals** are a way of allowing decoupled applications to get notified when certain actions occur elsewhere in the framework. They are used for:
-
-  + Sending notifications or emails after certain actions.
-  + Logging user activity.
-  + Automatically updating related models.
-
-**Example:**
-
-### **Version Control and CI/CD**
-
-1. **How do you manage version control in a multi-developer Python project?**
-2. Use **Git** as the version control system.
-3. Create feature branches for new features or bug fixes.
-4. Use **pull requests** to review and merge changes.
-5. Implement **branch protection rules** to enforce code reviews.
-6. **Explain the importance of CI/CD in software development. How would you set up a CI/CD pipeline for a Python project?**
-7. **CI/CD** ensures code changes are automatically tested and deployed, reducing manual effort and errors.
-8. **Setup**:
-
-   * Use tools like **Jenkins**, **GitHub Actions**, or **GitLab CI**.
-   * Define a pipeline to include steps for testing, building, and deploying the application.
-   * **What are the best practices for writing commit messages in version control systems like Git?**
-9. Use clear and concise messages.
-10. Follow a **convention** like "type: subject", e.g., `feat: add user authentication`.
-11. Write a detailed description of what the commit does and why, if necessary.
-12. **How do you handle conflicts in Git, and what strategies do you use to resolve them?**
-13. **Conflict Handling**:
-
-    * Use `git merge` or `git rebase` to combine branches.
-    * Manually resolve conflicts by editing conflicting files.
-    * Use `git add` to stage resolved files and `git commit` to complete the merge or rebase.
-    * **Strategies**:
-    * Communicate with team members to avoid conflicting changes.
-    * Frequently pull changes from the main branch to keep up-to-date.
-    * Use tools like **GitKraken** or **Sourcetree** for visual conflict resolution.
-    * **What tools would you use for continuous integration and deployment of Python applications?**
-14. **CI Tools**: Jenkins, GitHub Actions, GitLab CI, CircleCI, Travis CI.
-15. **CD Tools**: Jenkins, AWS CodePipeline, Azure DevOps, GitLab CI/CD.
-
-### **Problem-Solving and Coding Challenges**
-
-1. **Given a list of integers, write a Python function to find the maximum product of two integers.**
-
-**Example:**
-2. **Write a Python function to check if a string is a palindrome.**
-
-**Example:**
-3. **How would you implement a cache system in Python? Provide a code example.**
-
-**Example using LRU Cache:**
-4. **Solve a coding problem involving string manipulation or data processing.**
-
-**Example: Reverse words in a sentence.**
-5. **Write a Python script to read and process large files efficiently.**
-
-**Example:**
-6. **Import a CSV into pandas and handle missing data**:
-
-*Example*: Read a CSV and fill missing values with 0.
-
-1. **List comprehensions for filtering and transforming**:
-
-*Example*: Square even numbers.
-
-1. **Differences between apply() and map()**:
-2. `map()` applies a function element-wise on a Series.
-3. `apply()` applies a function along an axis (row or column) in a DataFrame.
-4. **Visualize data using matplotlib or seaborn**:
-5. **Function to calculate correlation**:
-
-### **Domain-Specific or Industry-Related Questions**
-
-1. **How would you use Python to implement machine learning models in a production environment?**
-2. Train models using **libraries like Scikit-Learn, TensorFlow, or PyTorch**.
-3. Use frameworks like **Flask** or **FastAPI** to create APIs for serving the models.
-4. Implement **model versioning** and **monitoring** for continuous improvement.
-5. Deploy models using **Docker** containers and orchestrate with **Kubernetes**.
-6. **Explain how Python is used in data analysis and data science.**
-7. Use libraries like **Pandas**
-
-for data manipulation, **NumPy** for numerical computations, **Matplotlib** and **Seaborn** for data visualization, and **Scikit-Learn** for machine learning.
-
-* Write scripts to clean and preprocess data, perform exploratory data analysis (EDA), and build predictive models.
-* **Discuss the use of Python in web scraping. Provide a code example using BeautifulSoup or Scrapy.**
-
-**Example with BeautifulSoup:**
-4. **How is Python used in DevOps, and what libraries or tools would you use?**
-
-* Use Python for writing **automation scripts** for infrastructure management and deployment.
-* Libraries like **Fabric** and **Paramiko** for remote server management.
-* Tools like **Ansible** for configuration management and **Python-based plugins** in **Jenkins** for CI/CD.
-* **Describe how Python is used in finance or quantitative analysis.**
-* Use libraries like **Pandas** and **NumPy** for data manipulation and analysis.
-* Implement financial models using **Scipy** and **Statsmodels**.
-* Use **Jupyter notebooks** for interactive financial analysis and reporting.
+> **Purpose:** Python fundamentals, advanced Python, backend coding patterns, concurrency, performance, and coding interview preparation.
+> **Use this file for:** Python technical interviews and backend engineering interviews
 
 ---
 
-### **Design Patterns**
+## Recommended Study Flow
 
-In Python, **design patterns** are common solutions to recurring problems in software design. They provide a standard approach to organizing and structuring code, making it more flexible, reusable, and maintainable. Design patterns can be broadly classified into three categories: **Creational**, **Structural**, and **Behavioral**.
+1. Read the **Quick Summary** first.
+2. Review the **Key Concepts** and tables.
+3. Practice the **Interview Questions & Answers** out loud.
+4. Use the code snippets and examples to explain trade-offs clearly.
+5. Finish with the **Common Mistakes** and **Revision Checklist** sections.
 
-### 1. **Creational Patterns**
+---
 
-Creational design patterns deal with object creation mechanisms. They help make the system independent of how objects are created, composed, and represented.
+## Quick Summary
 
-#### a. **Singleton Pattern**
+This file has been refreshed to keep the original repository topic while merging relevant detailed Q&A from the consolidated topic-wise interview-prep pack. Use the top sections for fast revision and the consolidated section for deeper interview preparation.
 
-The Singleton Pattern ensures that a class has only one instance and provides a global point of access to that instance.
+---
 
-#### Example:
+## Core Topics to Master
 
-#### b. **Factory Pattern**
+- OOP: encapsulation, inheritance, polymorphism, abstraction
+- Data structures: list, tuple, set, dict
+- Decorators, generators, context managers, lambda functions
+- Exception handling and logging
+- GIL, threading, multiprocessing, asyncio
+- Performance optimization, memory management, profiling
+- Testing with Pytest and coding interview patterns
 
-The Factory Pattern provides a way to instantiate objects without exposing the creation logic to the client. Instead, the client refers to a common interface.
+---
 
-#### Example:
+## Consolidated Interview Questions & Technical Notes
 
-#### c. **Builder Pattern**
+The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
-The Builder Pattern helps to construct a complex object step by step and provides a way to construct objects that require numerous parameters.
+> Python fundamentals, data structures, decorators, generators, exception handling, GIL, threading, multiprocessing, asyncio, performance, and coding exercises.
+> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
-#### Example:
+### Topic Sections
 
-### 2. **Structural Patterns**
+1. Python Internals & Concurrency — `Interview_Prep_Topics_and_Questions.md`
+2. Python Topics — `ai_engineer_interview_prep_topics.md`
+3. Python Core Topics — `deloitte_python_genai_interview_prep_topics.md`
+4. Python Fundamentals — `interview_prep_python_rest_fastapi_genai.md`
+5. Python Operators & Expressions — `interview_prep_python_rest_fastapi_genai.md`
+6. Lists, Tuples, and Sets — `interview_prep_python_rest_fastapi_genai.md`
+7. Python Functions, Decorators, and Generators — `interview_prep_python_rest_fastapi_genai.md`
+8. Exception Handling — `interview_prep_python_rest_fastapi_genai.md`
+9. Concurrency in Python — `interview_prep_python_rest_fastapi_genai.md`
+10. Coding Interview Practice Topics — `interview_prep_python_rest_fastapi_genai.md`
+11. Python Core Concepts — `interview_questions_topics_technical_prep.md`
+12. Python Coding Problems and Algorithms — `interview_questions_topics_technical_prep.md`
+13. Python — `ML_AI_Systems_Interview_Prep_Handbook.md`
+14. Python Engineering — `Interview_Topics_and_Technical_Prep.md`
 
-Structural design patterns deal with object composition, helping to form larger structures between objects while keeping them flexible and efficient.
+---
 
-#### a. **Adapter Pattern**
+### 4. Python Internals & Concurrency
 
-The Adapter Pattern allows incompatible interfaces to work together by converting one interface into another that a client expects.
+> Source: `Interview_Prep_Topics_and_Questions.md`
 
-#### Example:
+#### 4.1 Python GIL
 
-#### b. **Decorator Pattern**
+**Interview answer:**
 
-The Decorator Pattern allows behavior to be added to an individual object, dynamically, without affecting the behavior of other objects from the same class.
+> The Global Interpreter Lock, or GIL, is a mechanism in CPython that allows only one thread to execute Python bytecode at a time inside a process. It simplifies memory management but limits true parallelism for CPU-bound multithreaded workloads. For I/O-bound tasks like API calls or database queries, threads or asyncio still work well because they spend most of their time waiting. For CPU-bound work, multiprocessing is usually better.
 
-#### Example:
+---
 
-#### c. **Facade Pattern**
+#### 4.2 Threading vs Multiprocessing vs AsyncIO
 
-The Facade Pattern provides a simplified interface to a complex subsystem.
+| Approach        | Best For              | Notes                                                        |
+| --------------- | --------------------- | ------------------------------------------------------------ |
+| Threading       | Simple I/O-bound work | Shared memory, affected by GIL for CPU work                  |
+| Multiprocessing | CPU-bound work        | Separate processes, avoids GIL limits                        |
+| AsyncIO         | High-concurrency I/O  | Single-threaded event loop, efficient for many network calls |
 
-#### Example:
+**Interview answer:**
 
-### 3. **Behavioral Patterns**
+> I choose based on workload. For many API calls or LLM requests, I use asyncio with an async HTTP client and semaphores for rate limits. For CPU-heavy tasks, I use multiprocessing. Threading is useful for simpler I/O tasks, but not ideal for CPU-bound computation because of the GIL.
 
-Behavioral design patterns are concerned with communication between objects and help to define the flow of interactions between them.
+---
 
-#### a. **Observer Pattern**
+#### 4.3 AsyncIO with rate limiting
 
-The Observer Pattern is used when there is a one-to-many relationship between objects, where one object changes state and all its dependents are notified.
+```python
+import asyncio
+import time
+import aiohttp
 
-#### Example:
+MAX_CONCURRENCY = 10
+RATE_LIMIT = 50  # requests per minute
 
-#### b. **Strategy Pattern**
+semaphore = asyncio.Semaphore(MAX_CONCURRENCY)
 
-The Strategy Pattern allows you to define a family of algorithms, encapsulate each one, and make them interchangeable.
 
-#### Example:
+class RateLimiter:
+    def __init__(self, rate_per_minute: int):
+        self.interval = 60 / rate_per_minute
+        self.lock = asyncio.Lock()
+        self.last_call = 0.0
 
-#### c. **Command Pattern**
+    async def acquire(self):
+        async with self.lock:
+            now = time.monotonic()
+            wait_time = max(0, self.interval - (now - self.last_call))
+            if wait_time:
+                await asyncio.sleep(wait_time)
+            self.last_call = time.monotonic()
 
-The Command Pattern turns a request into a stand-alone object that contains all information about the request. This helps in parameterizing objects with operations, delaying the execution of a request, or queueing requests.
 
-#### Example:
+rate_limiter = RateLimiter(RATE_LIMIT)
 
-### Summary of Design Patterns:
 
-1. **Creational Patterns**: Singleton, Factory, Builder, Prototype.
-2. **Structural Patterns**: Adapter, Decorator, Facade, Composite, Proxy.
-3. **Behavioral Patterns**: Observer, Strategy, Command, Chain of Responsibility, Mediator.
+async def fetch(session: aiohttp.ClientSession, url: str):
+    retries = 0
+    start = time.perf_counter()
+
+    while True:
+        try:
+            await rate_limiter.acquire()
+
+            async with semaphore:
+                async with session.get(url) as response:
+                    if response.status >= 500 and retries < 3:
+                        raise RuntimeError("Server error")
+
+                    data = await response.json()
+                    latency = time.perf_counter() - start
+                    print(f"{url} latency={latency:.2f}s retries={retries}")
+                    return data
+
+        except Exception:
+            if retries >= 3:
+                return None
+
+            await asyncio.sleep(2 ** retries)
+            retries += 1
+
+
+async def fetch_all(urls):
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
+```
+
+---
+
+#### 4.4 Semaphore
+
+**Interview answer:**
+
+> A semaphore controls how many tasks can run concurrently. In an LLM application, I might allow only 10 simultaneous API requests to avoid hitting provider rate limits or overwhelming downstream services.
+
+---
+
+#### 4.5 Retry Strategy
+
+For API or LLM failures:
+
+- Retry transient 5xx errors
+- Use exponential backoff
+- Add jitter
+- Set max retry count
+- Use timeouts
+- Add circuit breaker for repeated failures
+- Fallback to another model/service if needed
+
+---
+
+### 15. Python Topics
+
+> Source: `ai_engineer_interview_prep_topics.md`
+
+#### 15.1 Why Use Generators in AI Pipelines?
+
+> "Generators help process large datasets efficiently by producing one item at a time instead of loading everything into memory."
+
+#### 15.2 Generator Example
+
+```python
+def read_documents(file_paths):
+    for path in file_paths:
+        with open(path, "r", encoding="utf-8") as file:
+            yield file.read()
+
+for document in read_documents(["doc1.txt", "doc2.txt"]):
+    print(document[:100])
+```
+
+#### 15.3 AI Pipeline Use Case
+
+In a RAG ingestion pipeline:
+
+```python
+def generate_chunks(document: str, chunk_size: int = 500):
+    words = document.split()
+
+    for i in range(0, len(words), chunk_size):
+        yield " ".join(words[i:i + chunk_size])
+
+def process_documents(documents):
+    for doc in documents:
+        for chunk in generate_chunks(doc):
+            embedding = create_embedding(chunk)
+            store_embedding(chunk, embedding)
+```
+
+#### 15.4 Benefits of Generators
+
+- Memory efficient
+- Good for large files
+- Useful for streaming data
+- Improves scalability
+- Works well for ETL pipelines
+- Useful for document chunking
+- Prevents loading everything into RAM
+
+#### 15.5 Strong Interview Line
+
+> "I use generators in AI pipelines to stream large datasets, documents, logs, or chunks one item at a time, which improves memory efficiency and scalability."
+
+---
+
+### 4. Python Core Topics
+
+> Source: `deloitte_python_genai_interview_prep_topics.md`
+
+The role expects strong Python fundamentals.
+
+#### Topics to revise
+
+- Data structures: list, tuple, set, dict.
+- List comprehensions and generator expressions.
+- Functions, decorators, closures.
+- Iterators and generators.
+- Exception handling.
+- Context managers.
+- Async programming with `asyncio`.
+- Type hints.
+- Packaging and dependency management.
+- Performance profiling.
+- Memory management basics.
+
+---
+
+#### Example: Type hints
+
+```python
+from typing import Optional
+
+
+def calculate_total(price: float, tax_rate: float, discount: Optional[float] = None) -> float:
+    total = price + (price * tax_rate)
+    if discount:
+        total -= discount
+    return round(total, 2)
+```
+
+**Interview explanation:**
+
+Type hints improve readability, make large codebases easier to maintain, and allow tools such as `mypy` or IDEs to detect type-related issues before runtime.
+
+---
+
+#### Example: Async programming
+
+```python
+import asyncio
+import httpx
+
+
+async def fetch_url(url: str) -> str:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        response.raise_for_status()
+        return response.text
+
+
+async def main() -> None:
+    urls = [
+        "https://example.com/a",
+        "https://example.com/b",
+        "https://example.com/c",
+    ]
+    results = await asyncio.gather(*(fetch_url(url) for url in urls))
+    print(len(results))
+
+
+## asyncio.run(main())
+```
+
+**Interview explanation:**
+
+`asyncio` is useful for I/O-bound workloads such as API calls, database operations, or network requests. It is not ideal for CPU-heavy tasks unless combined with multiprocessing or worker systems.
+
+---
+
+#### Example: Decorator
+
+```python
+import time
+from functools import wraps
+from typing import Callable, Any
+
+
+def log_duration(func: Callable[..., Any]) -> Callable[..., Any]:
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        duration = time.perf_counter() - start
+        print(f"{func.__name__} took {duration:.4f}s")
+        return result
+    return wrapper
+
+
+@log_duration
+def process_records(records: list[dict]) -> int:
+    return len(records)
+```
+
+**Interview explanation:**
+
+A decorator wraps a function to add reusable behavior such as logging, timing, authentication, caching, or retry handling without changing the function's core logic.
+
+---
+
+### 1. Python Fundamentals
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 1.1 What is the difference between a tuple and a set?
+
+##### Interview Answer
+
+A **tuple** is an ordered, immutable collection that allows duplicates.  
+A **set** is an unordered collection that stores only unique elements.
+
+| Feature           | Tuple         | Set                              |
+| ----------------- | ------------- | -------------------------------- |
+| Ordered           | Yes           | No guaranteed order              |
+| Mutable           | No            | Yes                              |
+| Allows duplicates | Yes           | No                               |
+| Indexing          | Yes           | No                               |
+| Common use        | Fixed records | Unique values, membership checks |
+
+##### Example
+
+```python
+my_tuple = (3, 1, 2, 2)
+my_set = {3, 1, 2, 2}
+
+print(my_tuple)
+print(my_set)
+```
+
+Possible output:
+
+```python
+(3, 1, 2, 2)
+{1, 2, 3}
+```
+
+##### Key Point
+
+The tuple preserves the order and duplicates.  
+The set removes duplicates and does not guarantee insertion order.
+
+##### Strong One-Liner
+
+> Tuples preserve order and allow duplicates, while sets are unordered collections optimized for uniqueness and fast membership checks.
+
+---
+
+#### 1.2 Write a list comprehension to find squares from 1 to 5
+
+##### Code
+
+```python
+squares = [x ** 2 for x in range(1, 6)]
+
+print(squares)
+```
+
+##### Output
+
+```python
+[1, 4, 9, 16, 25]
+```
+
+##### Explanation
+
+- `range(1, 6)` generates numbers from `1` to `5`.
+- `x ** 2` calculates the square of each number.
+- The list comprehension creates a new list in one line.
+
+---
+
+### 2. Python Operators & Expressions
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 2.1 What is the output of `2**3**2`?
+
+##### Code
+
+```python
+print(2 ** 3 ** 2)
+```
+
+##### Output
+
+```python
+512
+```
+
+##### Explanation
+
+Exponentiation in Python is evaluated **right to left**.
+
+So:
+
+```python
+2 ** 3 ** 2
+```
+
+is interpreted as:
+
+```python
+2 ** (3 ** 2)
+```
+
+Step-by-step:
+
+```python
+3 ** 2 = 9
+2 ** 9 = 512
+```
+
+---
+
+#### 2.2 What is the output of `a | b` when `a = 4` and `b = 11`?
+
+##### Code
+
+```python
+a = 4
+b = 11
+
+print(a | b)
+```
+
+##### Output
+
+```python
+15
+```
+
+##### Explanation
+
+`|` is the **bitwise OR** operator.
+
+Binary representation:
+
+```text
+4  = 0100
+11 = 1011
+```
+
+Bitwise OR:
+
+```text
+0100
+1011
+----
+1111
+```
+
+Binary `1111` equals decimal `15`.
+
+---
+
+### 3. Lists, Tuples, and Sets
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 3.1 What does `seta ^ setb` mean?
+
+##### Answer
+
+`^` between two sets means **symmetric difference**.
+
+It returns elements that are present in either set, but **not in both**.
+
+##### Example
+
+```python
+seta = {1, 2, 3}
+setb = {3, 4, 5}
+
+print(seta ^ setb)
+```
+
+##### Output
+
+```python
+{1, 2, 4, 5}
+```
+
+##### Explanation
+
+- `3` exists in both sets, so it is removed.
+- Unique elements from both sets are returned.
+
+Equivalent expression:
+
+```python
+(seta - setb) | (setb - seta)
+```
+
+---
+
+#### 3.2 Different ways to join two lists
+
+##### Method 1: Using `+`
+
+```python
+a = [1, 2]
+b = [3, 4]
+
+result = a + b
+
+print(result)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+This creates a new list.
+
+---
+
+##### Method 2: Using `extend()`
+
+```python
+a = [1, 2]
+b = [3, 4]
+
+a.extend(b)
+
+print(a)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+This modifies the original list.
+
+---
+
+##### Method 3: Using unpacking
+
+```python
+a = [1, 2]
+b = [3, 4]
+
+result = [*a, *b]
+
+print(result)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+---
+
+##### Method 4: Using `itertools.chain()`
+
+```python
+from itertools import chain
+
+a = [1, 2]
+b = [3, 4]
+
+result = list(chain(a, b))
+
+print(result)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+Useful for large iterables.
+
+---
+
+##### Method 5: Using a loop
+
+```python
+a = [1, 2]
+b = [3, 4]
+
+for item in b:
+    a.append(item)
+
+print(a)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+---
+
+#### 3.3 Difference between `append()` and `extend()`
+
+##### `append()`
+
+Adds the entire object as one element.
+
+```python
+list1 = [1, 2]
+list2 = [3, 4]
+
+list1.append(list2)
+
+print(list1)
+```
+
+Output:
+
+```python
+[1, 2, [3, 4]]
+```
+
+Here, `[3, 4]` is added as a single object.
+
+---
+
+##### `extend()`
+
+Adds each element individually.
+
+```python
+list1 = [1, 2]
+list2 = [3, 4]
+
+list1.extend(list2)
+
+print(list1)
+```
+
+Output:
+
+```python
+[1, 2, 3, 4]
+```
+
+Equivalent to:
+
+```python
+for item in list2:
+    list1.append(item)
+```
+
+##### Strong One-Liner
+
+> `append()` adds the whole object as a single element, while `extend()` iterates through the iterable and adds each element individually.
+
+---
+
+#### 3.4 What happens when we multiply a list by 2?
+
+##### Example
+
+```python
+my_list = [1, 2, 3]
+
+print(my_list * 2)
+```
+
+Output:
+
+```python
+[1, 2, 3, 1, 2, 3]
+```
+
+##### Explanation
+
+`* 2` repeats the list twice. It does **not** multiply individual elements.
+
+---
+
+#### 3.5 Character list multiplication
+
+##### Example
+
+```python
+chars = ['a', 'b', 'c']
+
+print(chars * 2)
+```
+
+Output:
+
+```python
+['a', 'b', 'c', 'a', 'b', 'c']
+```
+
+It does **not** produce:
+
+```python
+['aa', 'bb', 'cc']
+```
+
+##### Important Caveat
+
+```python
+arr = [[]] * 3
+
+arr[0].append(1)
+
+print(arr)
+```
+
+Output:
+
+```python
+[[1], [1], [1]]
+```
+
+Why?  
+All inner lists refer to the same object in memory.
+
+Correct way:
+
+```python
+arr = [[] for _ in range(3)]
+
+arr[0].append(1)
+
+print(arr)
+```
+
+Output:
+
+```python
+[[1], [], []]
+```
+
+---
+
+### 4. Python Functions, Decorators, and Generators
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 4.1 What are decorators in Python?
+
+##### Interview Answer
+
+A decorator is a function that modifies or extends the behavior of another function without changing its source code.
+
+Decorators are commonly used for:
+
+- Logging
+- Authentication
+- Authorization
+- Caching
+- Retry logic
+- Performance measurement
+- API route registration
+
+---
+
+##### Simple Decorator Example
+
+```python
+def logger(func):
+    def wrapper():
+        print("Function started")
+        func()
+        print("Function ended")
+    return wrapper
+
+@logger
+def greet():
+    print("Hello")
+
+greet()
+```
+
+Output:
+
+```python
+Function started
+Hello
+Function ended
+```
+
+---
+
+##### What does `@logger` mean?
+
+This:
+
+```python
+@logger
+def greet():
+    print("Hello")
+```
+
+is equivalent to:
+
+```python
+def greet():
+    print("Hello")
+
+greet = logger(greet)
+```
+
+---
+
+##### Decorator with Arguments
+
+```python
+def logger(func):
+    def wrapper(*args, **kwargs):
+        print("Calling function")
+        return func(*args, **kwargs)
+    return wrapper
+
+@logger
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+```
+
+Output:
+
+```python
+Calling function
+5
+```
+
+---
+
+##### FastAPI Decorator Example
+
+```python
+@app.get("/users")
+def get_users():
+    return {"users": []}
+```
+
+Here, `@app.get("/users")` is a decorator.
+
+It tells FastAPI:
+
+> When a GET request comes to `/users`, execute this function.
+
+---
+
+##### Strong One-Liner
+
+> Decorators allow us to add reusable behavior like logging, authentication, caching, or route registration without modifying the original function.
+
+---
+
+#### 4.2 What is a generator in Python?
+
+##### Interview Answer
+
+A generator is a special function that returns values one at a time using `yield`, instead of returning all values at once.
+
+Generators are memory efficient because they produce values lazily.
+
+---
+
+##### Normal Function Using `return`
+
+```python
+def get_numbers():
+    return [1, 2, 3]
+
+result = get_numbers()
+print(result)
+```
+
+Output:
+
+```python
+[1, 2, 3]
+```
+
+The entire list is created in memory.
+
+---
+
+##### Generator Function Using `yield`
+
+```python
+def get_numbers():
+    yield 1
+    yield 2
+    yield 3
+
+gen = get_numbers()
+
+print(next(gen))
+print(next(gen))
+print(next(gen))
+```
+
+Output:
+
+```python
+1
+2
+3
+```
+
+The values are generated one by one.
+
+---
+
+#### 4.3 Difference between `yield` and `return`
+
+| `return`                         | `yield`                      |
+| -------------------------------- | ---------------------------- |
+| Ends function execution          | Pauses function execution    |
+| Returns full result at once      | Produces one value at a time |
+| More memory usage for large data | Memory efficient             |
+| Function state is lost           | Function state is preserved  |
+
+---
+
+#### 4.4 When should we use `yield` and when should we use `return`?
+
+##### Use `return` when:
+
+- The dataset is small.
+- You need all results immediately.
+- The result should be available at once.
+- Memory usage is not a concern.
+
+Example:
+
+```python
+def get_users():
+    return ["John", "Alice", "Bob"]
+```
+
+---
+
+##### Use `yield` when:
+
+- The dataset is large.
+- You are streaming data.
+- You are reading large files.
+- You want memory efficiency.
+- You are processing records one by one.
+
+Example:
+
+```python
+def read_large_file():
+    with open("logs.txt") as f:
+        for line in f:
+            yield line
+```
+
+---
+
+##### Large Dataset Example
+
+Using `return`:
+
+```python
+def numbers():
+    return [i for i in range(1, 1000001)]
+```
+
+This creates one million numbers in memory.
+
+Using `yield`:
+
+```python
+def numbers():
+    for i in range(1, 1000001):
+        yield i
+```
+
+This generates values on demand.
+
+---
+
+##### Strong One-Liner
+
+> Use `return` when you need the complete result immediately. Use `yield` when processing large datasets, streams, files, or values that should be generated one at a time.
+
+---
+
+### 5. Exception Handling
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 5.1 When does the `finally` block execute?
+
+##### Answer
+
+The `finally` block is executed **always**, whether an exception occurs or not.
+
+It runs:
+
+- If no exception occurs.
+- If an exception occurs and is handled.
+- If an exception occurs and is not handled.
+- Even if there is a `return` statement inside `try` or `except`.
+
+---
+
+##### Example 1: No Exception
+
+```python
+try:
+    print("Inside try")
+except:
+    print("Inside except")
+finally:
+    print("Inside finally")
+```
+
+Output:
+
+```python
+Inside try
+Inside finally
+```
+
+---
+
+##### Example 2: Exception Occurs
+
+```python
+try:
+    10 / 0
+except ZeroDivisionError:
+    print("Exception handled")
+finally:
+    print("Inside finally")
+```
+
+Output:
+
+```python
+Exception handled
+Inside finally
+```
+
+---
+
+##### Example 3: `return` Statement
+
+```python
+def test():
+    try:
+        return "try"
+    finally:
+        print("finally")
+
+print(test())
+```
+
+Output:
+
+```python
+finally
+try
+```
+
+The `finally` block executes before the function actually returns.
+
+---
+
+##### Real-World Use
+
+`finally` is commonly used for cleanup:
+
+```python
+file = open("data.txt")
+
+try:
+    data = file.read()
+finally:
+    file.close()
+```
+
+Even if reading fails, the file is closed.
+
+---
+
+##### Strong One-Liner
+
+> The `finally` block always executes and is mainly used for cleanup operations like closing files, database connections, or network sockets.
+
+---
+
+### 6. Concurrency in Python
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+#### 6.1 What is the GIL?
+
+##### Answer
+
+GIL stands for **Global Interpreter Lock**.
+
+It is a mechanism in CPython that allows only one thread to execute Python bytecode at a time within a process.
+
+---
+
+##### Why does Python have GIL?
+
+The GIL simplifies:
+
+- Memory management
+- Thread safety of Python objects
+- Reference counting
+
+---
+
+##### Important Effect
+
+Even if we create multiple threads, only one thread can execute Python bytecode at a time in CPython.
+
+---
+
+#### 6.2 Is multithreading useless because of GIL?
+
+No.
+
+Multithreading is still useful for **I/O-bound tasks**, such as:
+
+- API calls
+- Database queries
+- File operations
+- Network requests
+- External LLM calls
+
+While one thread waits for I/O, another thread can run.
+
+---
+
+#### 6.3 Why is multiprocessing better for CPU-heavy tasks?
+
+For CPU-heavy tasks, threads compete for the GIL.
+
+Examples:
+
+- Image processing
+- ML computation
+- Mathematical calculations
+- Large data transformations
+
+Multiprocessing creates separate processes with separate Python interpreters, so it bypasses the GIL.
+
+---
+
+#### 6.4 Multithreading vs Multiprocessing
+
+| Multithreading                  | Multiprocessing                |
+| ------------------------------- | ------------------------------ |
+| Multiple threads in one process | Multiple independent processes |
+| Shared memory                   | Separate memory                |
+| Lightweight                     | Heavier                        |
+| Good for I/O-bound tasks        | Good for CPU-bound tasks       |
+| Affected by GIL                 | Bypasses GIL                   |
+
+---
+
+##### Multithreading Example
+
+```python
+import threading
+
+def task():
+    print("Running thread")
+
+t1 = threading.Thread(target=task)
+t1.start()
+t1.join()
+```
+
+---
+
+##### Multiprocessing Example
+
+```python
+from multiprocessing import Process
+
+def task():
+    print("Running process")
+
+p = Process(target=task)
+p.start()
+p.join()
+```
+
+---
+
+##### Strong Interview Answer
+
+> Multithreading is mainly useful for I/O-bound concurrency, while multiprocessing is better for CPU-bound parallel execution because it bypasses Python’s GIL by running separate processes.
+
+---
+
+### 13. Coding Interview Practice Topics
+
+> Source: `interview_prep_python_rest_fastapi_genai.md`
+
+These topics were discussed as likely coding interview preparation areas.
+
+#### 13.1 Arrays and strings
+
+Prepare:
+
+- Reverse string
+- Palindrome check
+- Valid anagram
+- Longest common prefix
+- Two sum
+- Remove duplicates
+- Count character frequency
+
+##### Frequency Counter Example
+
+```python
+def char_frequency(s):
+    freq = {}
+
+    for char in s:
+        freq[char] = freq.get(char, 0) + 1
+
+    return freq
+
+print(char_frequency("banana"))
+```
+
+Output:
+
+```python
+{'b': 1, 'a': 3, 'n': 2}
+```
+
+---
+
+#### 13.2 Hash maps
+
+Useful for:
+
+- Two Sum
+- Frequency counting
+- Group anagrams
+- Detect duplicates
+
+##### Two Sum Example
+
+```python
+def two_sum(nums, target):
+    seen = {}
+
+    for i, num in enumerate(nums):
+        diff = target - num
+
+        if diff in seen:
+            return [seen[diff], i]
+
+        seen[num] = i
+
+    return []
+
+print(two_sum([2, 7, 11, 15], 9))
+```
+
+Output:
+
+```python
+[0, 1]
+```
+
+---
+
+#### 13.3 Sliding window
+
+Useful for:
+
+- Longest substring without repeating characters
+- Maximum sum subarray of size `k`
+- Minimum window substring
+
+##### Example: Maximum Sum of Size K
+
+```python
+def max_sum_subarray(nums, k):
+    window_sum = sum(nums[:k])
+    max_sum = window_sum
+
+    for i in range(k, len(nums)):
+        window_sum += nums[i] - nums[i - k]
+        max_sum = max(max_sum, window_sum)
+
+    return max_sum
+
+print(max_sum_subarray([2, 1, 5, 1, 3, 2], 3))
+```
+
+Output:
+
+```python
+9
+```
+
+---
+
+#### 13.4 Stack
+
+Useful for:
+
+- Valid parentheses
+- Browser history
+- Expression evaluation
+- Monotonic stack problems
+
+##### Valid Parentheses Example
+
+```python
+def is_valid(s):
+    stack = []
+    mapping = {
+        ")": "(",
+        "}": "{",
+        "]": "["
+    }
+
+    for char in s:
+        if char in mapping.values():
+            stack.append(char)
+        elif char in mapping:
+            if not stack or stack.pop() != mapping[char]:
+                return False
+
+    return not stack
+
+print(is_valid("()[]{}"))
+```
+
+Output:
+
+```python
+True
+```
+
+---
+
+#### 13.5 Linked list
+
+Prepare:
+
+- Reverse linked list
+- Detect cycle
+- Merge two sorted lists
+
+##### Reverse Linked List Pattern
+
+```python
+def reverse_list(head):
+    prev = None
+    current = head
+
+    while current:
+        next_node = current.next
+        current.next = prev
+        prev = current
+        current = next_node
+
+    return prev
+```
+
+---
+
+#### 13.6 Trees
+
+Prepare:
+
+- DFS
+- BFS
+- Maximum depth
+- Validate BST
+- Level order traversal
+
+##### Max Depth Example
+
+```python
+def max_depth(root):
+    if not root:
+        return 0
+
+    return 1 + max(max_depth(root.left), max_depth(root.right))
+```
+
+---
+
+#### 13.7 SQL topics
+
+Prepare:
+
+- Joins
+- Aggregations
+- Group By
+- Window functions
+- `ROW_NUMBER()`
+- `RANK()`
+- `DENSE_RANK()`
+
+##### Example: Top transaction per customer
+
+```sql
+SELECT *
+FROM (
+    SELECT
+        t.*,
+        ROW_NUMBER() OVER (
+            PARTITION BY customer_id
+            ORDER BY amount DESC
+        ) AS rn
+    FROM transactions t
+) ranked
+WHERE rn = 1;
+```
+
+---
+
+### 10. Python Core Concepts
+
+> Source: `interview_questions_topics_technical_prep.md`
+
+#### 10.1 Threading, multiprocessing, asyncio, and GIL
+
+##### GIL
+
+The Global Interpreter Lock allows only one thread to execute Python bytecode at a time in CPython.
+
+##### Threading
+
+Best for I/O-bound tasks.
+
+```python
+import threading
+
+def fetch():
+    print("I/O task")
+
+thread = threading.Thread(target=fetch)
+thread.start()
+thread.join()
+```
+
+##### Multiprocessing
+
+Best for CPU-bound tasks.
+
+```python
+from multiprocessing import Pool
+
+def square(x):
+    return x * x
+
+with Pool() as pool:
+    print(pool.map(square, [1, 2, 3]))
+```
+
+##### AsyncIO
+
+Best for high-concurrency I/O with async libraries.
+
+```python
+import asyncio
+
+async def fetch():
+    await asyncio.sleep(1)
+    return "done"
+
+asyncio.run(fetch())
+```
+
+---
+
+#### 10.2 Mutable vs immutable objects
+
+##### Mutable
+
+Can be changed after creation.
+
+Examples:
+
+- `list`
+- `dict`
+- `set`
+
+##### Immutable
+
+Cannot be changed after creation.
+
+Examples:
+
+- `int`
+- `float`
+- `str`
+- `tuple`
+- `frozenset`
+
+---
+
+#### 10.3 List vs tuple
+
+##### List
+
+- Mutable.
+- Good for dynamic collections.
+- Supports append/remove/update.
+
+##### Tuple
+
+- Immutable.
+- Good for fixed records.
+- Can be used as dictionary key if all elements are hashable.
+
+```python
+items = [1, 2, 3]
+items.append(4)
+
+point = (10, 20)
+```
+
+---
+
+#### 10.4 Dictionary keys
+
+Dictionary keys must be hashable.
+
+##### Valid keys
+
+```python
+my_dict = {
+    "name": "Ava",
+    1: "one",
+    (1, 2): "tuple key"
+}
+```
+
+##### Invalid key
+
+```python
+## TypeError: unhashable type: 'list'
+my_dict = {[1, 2]: "bad"}
+```
+
+##### Tuple caveat
+
+```python
+valid = {(1, 2): "ok"}
+
+## invalid because tuple contains mutable list
+## invalid = {([1, 2], 3): "bad"}
+```
+
+---
+
+#### 10.5 Class variables vs instance variables
+
+```python
+class User:
+    role = "member"          # class variable
+
+    def __init__(self, name):
+        self.name = name      # instance variable
+```
+
+##### Behavior
+
+- Class variable shared across class unless shadowed by instance.
+- Instance variable belongs to a specific object.
+
+```python
+u1 = User("A")
+u2 = User("B")
+
+u1.role = "admin"  # creates instance attribute shadowing class variable
+
+print(u1.role)  # admin
+print(u2.role)  # member
+print(User.role)  # member
+```
+
+---
+
+#### 10.6 Instance method, class method, static method
+
+```python
+class Example:
+    value = 10
+
+    def instance_method(self):
+        return self.value
+
+    @classmethod
+    def class_method(cls):
+        return cls.value
+
+    @staticmethod
+    def static_method(x, y):
+        return x + y
+```
+
+##### Use cases
+
+- Instance method: needs object state.
+- Class method: needs class state or alternate constructor.
+- Static method: utility function logically belongs to class.
+
+---
+
+#### 10.7 Decorators and custom decorators
+
+##### Simple decorator
+
+```python
+def log_call(func):
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+@log_call
+def greet(name):
+    return f"Hello {name}"
+```
+
+##### Flask/FastAPI-like use case
+
+- Authentication.
+- Authorization.
+- Logging.
+- Timing.
+- Validation.
+
+---
+
+#### 10.8 `*args` and `**kwargs`
+
+```python
+def demo(required, *args, **kwargs):
+    print(required)
+    print(args)
+    print(kwargs)
+
+demo(1, 2, 3, name="Ava")
+```
+
+Output:
+
+```text
+1
+(2, 3)
+{'name': 'Ava'}
+```
+
+---
+
+#### 10.9 `==` vs `is`
+
+##### `==`
+
+Checks value equality.
+
+##### `is`
+
+Checks object identity.
+
+```python
+a = [1, 2]
+b = [1, 2]
+
+print(a == b)  # True
+print(a is b)  # False
+```
+
+Use `is` for `None`:
+
+```python
+if value is None:
+    pass
+```
+
+---
+
+#### 10.10 Exceptions, multiple except blocks, and finally
+
+```python
+try:
+    result = 10 / x
+except ZeroDivisionError:
+    print("division by zero")
+except TypeError:
+    print("wrong type")
+finally:
+    print("always runs")
+```
+
+##### Important behavior
+
+`finally` runs even if `return` occurs in `try`.
+
+```python
+def test():
+    try:
+        return "try"
+    finally:
+        print("finally still runs")
+```
+
+---
+
+#### 10.11 Mutable default argument bug
+
+##### Bad
+
+```python
+def add_item(item, items=[]):
+    items.append(item)
+    return items
+```
+
+##### Good
+
+```python
+def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+```
+
+##### Why
+
+Default arguments are evaluated once when the function is defined.
+
+---
+
+#### 10.12 Lists, sets, and dicts for membership/deduplication
+
+##### List
+
+- Ordered.
+- Allows duplicates.
+- Membership is `O(n)`.
+
+##### Set
+
+- Unique values.
+- Average `O(1)` membership.
+- Best for deduplication.
+
+##### Dict
+
+- Key-value mapping.
+- Average `O(1)` key lookup.
+- Good for counts/frequencies.
+
+```python
+seen = set()
+unique = []
+
+for item in items:
+    if item not in seen:
+        seen.add(item)
+        unique.append(item)
+```
+
+---
+
+### 11. Python Coding Problems and Algorithms
+
+> Source: `interview_questions_topics_technical_prep.md`
+
+#### 11.1 Longest substring without repeating characters
+
+##### Sliding window solution
+
+```python
+def longest_substring(s):
+    seen = {}
+    left = 0
+    best_len = 0
+    best_start = 0
+
+    for right, char in enumerate(s):
+        if char in seen and seen[char] >= left:
+            left = seen[char] + 1
+
+        seen[char] = right
+
+        if right - left + 1 > best_len:
+            best_len = right - left + 1
+            best_start = left
+
+    return s[best_start:best_start + best_len]
+
+print(longest_substring("abcabcbb"))  # abc
+```
+
+##### Complexity
+
+- Time: `O(n)`
+- Space: `O(k)` where `k` is unique chars.
+
+---
+
+#### 11.2 Minimum window substring without Counter
+
+##### Problem
+
+Find the smallest substring in `s` containing all characters of `t`, including duplicates.
+
+```python
+def min_window_substring(s: str, t: str) -> str:
+    if not s or not t:
+        return ""
+
+    target = {}
+    for char in t:
+        target[char] = target.get(char, 0) + 1
+
+    window = {}
+    required = len(target)
+    formed = 0
+    left = 0
+    min_len = float("inf")
+    result = ""
+
+    for right in range(len(s)):
+        char = s[right]
+        window[char] = window.get(char, 0) + 1
+
+        if char in target and window[char] == target[char]:
+            formed += 1
+
+        while formed == required:
+            if right - left + 1 < min_len:
+                min_len = right - left + 1
+                result = s[left:right + 1]
+
+            left_char = s[left]
+            window[left_char] -= 1
+
+            if left_char in target and window[left_char] < target[left_char]:
+                formed -= 1
+
+            left += 1
+
+    return result
+
+print(min_window_substring("ADOBECODEBANC", "ABC"))  # BANC
+```
+
+---
+
+#### 11.3 Kth largest element using Quickselect
+
+##### Idea
+
+Convert kth largest to `(n-k)`th smallest.
+
+```python
+import random
+
+def find_kth_largest(nums, k):
+    target = len(nums) - k
+
+    def quickselect(left, right):
+        pivot_index = random.randint(left, right)
+        nums[pivot_index], nums[right] = nums[right], nums[pivot_index]
+        pivot = nums[right]
+
+        p = left
+        for i in range(left, right):
+            if nums[i] <= pivot:
+                nums[p], nums[i] = nums[i], nums[p]
+                p += 1
+
+        nums[p], nums[right] = nums[right], nums[p]
+
+        if p == target:
+            return nums[p]
+        if p < target:
+            return quickselect(p + 1, right)
+        return quickselect(left, p - 1)
+
+    return quickselect(0, len(nums) - 1)
+
+print(find_kth_largest([3, 2, 1, 5, 6, 4], 2))  # 5
+```
+
+##### Complexity
+
+- Average: `O(n)`
+- Worst: `O(n²)`
+
+---
+
+#### 11.4 Reverse Polish Notation evaluation
+
+```python
+def eval_rpn(tokens):
+    stack = []
+
+    for token in tokens:
+        if token in "+-*/":
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == "+":
+                stack.append(a + b)
+            elif token == "-":
+                stack.append(a - b)
+            elif token == "*":
+                stack.append(a * b)
+            else:
+                stack.append(int(a / b))  # truncate toward zero
+        else:
+            stack.append(int(token))
+
+    return stack[0]
+
+print(eval_rpn("2 1 + 3 *".split()))  # 9
+```
+
+##### Important division note
+
+Use `int(a / b)` instead of `a // b` when truncation toward zero is required.
+
+---
+
+#### 11.5 Combination calculation with memoization
+
+##### Problem
+
+Naive recursion recalculates same subproblems.
+
+##### Improved solution
+
+```python
+def compute_combinations(n, k, memo=None):
+    if memo is None:
+        memo = {}
+
+    if k == 0 or k == n:
+        return 1
+
+    if (n, k) in memo:
+        return memo[(n, k)]
+
+    memo[(n, k)] = (
+        compute_combinations(n - 1, k - 1, memo)
+        + compute_combinations(n - 1, k, memo)
+    )
+
+    return memo[(n, k)]
+
+print(compute_combinations(5, 3))  # 10
+```
+
+##### Complexity
+
+- Naive: exponential.
+- Memoized: `O(n*k)`.
+
+---
+
+#### 11.6 Even number function
+
+```python
+def is_even(number):
+    return number % 2 == 0
+```
+
+---
+
+#### 11.7 Merge dictionaries
+
+##### Original issue
+
+Mutating `dict1` may cause side effects.
+
+##### Better solution
+
+```python
+def merge_dictionaries(dict1, dict2):
+    return {**dict1, **dict2}
+```
+
+Or:
+
+```python
+def merge_dictionaries(dict1, dict2):
+    merged = dict1.copy()
+    merged.update(dict2)
+    return merged
+```
+
+Overlapping keys from `dict2` overwrite `dict1`.
+
+---
+
+#### 11.8 Print queue / priority order without heapq
+
+##### Problem summary
+
+Jobs are printed by highest priority. If same priority, preserve original order.
+
+```python
+def print_order(priorities):
+    jobs = [(priority, index) for index, priority in enumerate(priorities)]
+    result = []
+
+    while jobs:
+        max_priority = max(priority for priority, _ in jobs)
+
+        for _ in range(len(jobs)):
+            priority, index = jobs.pop(0)
+
+            if priority == max_priority:
+                result.append(index)
+                break
+            else:
+                jobs.append((priority, index))
+
+    return result
+
+print(print_order([3, 1, 4, 2]))  # [2, 0, 3, 1]
+print(print_order([2, 2, 2]))     # [0, 1, 2]
+```
+
+##### Complexity
+
+`O(n²)` because of repeated `max()` and queue rotations.
+
+---
+
+### Python
+
+> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
+
+Python is likely to come up because it is central to AI/ML, backend development, data processing, and automation.
+
+---
+
+#### Python GIL
+
+##### Interview Question
+
+**What is the Python GIL?**
+
+##### Answer
+
+The **Global Interpreter Lock (GIL)** is a lock in CPython that allows only one thread to execute Python bytecode at a time.
+
+This means Python threads are not ideal for CPU-heavy parallel computation, because multiple threads cannot truly execute Python bytecode in parallel.
+
+##### When It Matters
+
+| Task Type            | Best Approach                                                 |
+| -------------------- | ------------------------------------------------------------- |
+| CPU-bound tasks      | Multiprocessing                                               |
+| I/O-bound tasks      | Threading or AsyncIO                                          |
+| Network calls        | AsyncIO                                                       |
+| File/database calls  | Threading or AsyncIO                                          |
+| Heavy ML computation | NumPy/PyTorch/TensorFlow native operations or multiprocessing |
+
+##### Sample Answer
+
+```text
+The GIL prevents multiple native Python threads from executing Python bytecode simultaneously. For I/O-bound tasks, threading can still help because threads release the GIL while waiting for external operations. But for CPU-bound workloads, multiprocessing is usually better because each process has its own Python interpreter and memory space.
+```
+
+---
+
+#### Threading vs Multiprocessing vs AsyncIO
+
+##### Interview Question
+
+**When would you use threading, multiprocessing, or AsyncIO?**
+
+##### Comparison Table
+
+| Approach        | Best For             | Example                                   |
+| --------------- | -------------------- | ----------------------------------------- |
+| Threading       | I/O-bound tasks      | Reading files, calling APIs               |
+| Multiprocessing | CPU-bound tasks      | Image processing, heavy computation       |
+| AsyncIO         | High-concurrency I/O | Thousands of API calls, async web servers |
+
+##### Threading Example
+
+```python
+import threading
+import requests
+
+def fetch_url(url: str) -> None:
+    response = requests.get(url, timeout=10)
+    print(url, response.status_code)
+
+urls = [
+    "https://example.com",
+    "https://example.org",
+]
+
+threads = []
+
+for url in urls:
+    thread = threading.Thread(target=fetch_url, args=(url,))
+    threads.append(thread)
+    thread.start()
+
+for thread in threads:
+    thread.join()
+```
+
+##### Multiprocessing Example
+
+```python
+from multiprocessing import Pool
+
+def square(number: int) -> int:
+    return number * number
+
+if __name__ == "__main__":
+    numbers = [1, 2, 3, 4, 5]
+
+    with Pool(processes=4) as pool:
+        results = pool.map(square, numbers)
+
+    print(results)
+```
+
+##### AsyncIO Example
+
+```python
+import asyncio
+import aiohttp
+
+async def fetch(session: aiohttp.ClientSession, url: str) -> str:
+    async with session.get(url) as response:
+        return await response.text()
+
+async def main() -> None:
+    urls = [
+        "https://example.com",
+        "https://example.org",
+    ]
+
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch(session, url) for url in urls]
+        results = await asyncio.gather(*tasks)
+
+    print(len(results))
+
+asyncio.run(main())
+```
+
+---
+
+#### Decorators
+
+##### Interview Question
+
+**What is a decorator in Python?**
+
+##### Answer
+
+A decorator is a function that wraps another function to extend or modify its behavior without changing the original function code.
+
+##### Common Uses
+
+- Logging
+- Authentication
+- Authorization
+- Caching
+- Timing
+- Retry logic
+- Monitoring
+
+##### Code Example
+
+```python
+from functools import wraps
+from time import perf_counter
+
+def timing_decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = perf_counter()
+        result = func(*args, **kwargs)
+        end = perf_counter()
+        print(f"{func.__name__} took {end - start:.4f} seconds")
+        return result
+    return wrapper
+
+@timing_decorator
+def process_data():
+    return sum(range(1_000_000))
+
+print(process_data())
+```
+
+##### Interview Tip
+
+Mention `functools.wraps` because it preserves the original function's metadata.
+
+---
+
+#### Generators
+
+##### Interview Question
+
+**What is a generator in Python?**
+
+##### Answer
+
+A generator is a function that uses `yield` to return values lazily one at a time instead of storing everything in memory.
+
+##### Why Generators Are Useful
+
+- Memory efficient
+- Good for streaming data
+- Useful for large files
+- Helpful in data pipelines
+
+##### Code Example
+
+```python
+def read_large_file(file_path: str):
+    with open(file_path, "r", encoding="utf-8") as file:
+        for line in file:
+            yield line.strip()
+
+for row in read_large_file("data.txt"):
+    print(row)
+```
+
+##### `yield` vs `return`
+
+| Keyword  | Behavior                                |
+| -------- | --------------------------------------- |
+| `return` | Ends the function and returns one value |
+| `yield`  | Pauses the function and resumes later   |
+
+---
+
+#### Try, Except, Finally
+
+##### Interview Question
+
+**When does the finally block execute?**
+
+##### Answer
+
+The `finally` block executes regardless of whether an exception occurs or not. It is commonly used for cleanup operations.
+
+##### Code Example
+
+```python
+def read_file(path: str) -> None:
+    file = None
+
+    try:
+        file = open(path, "r", encoding="utf-8")
+        print(file.read())
+    except FileNotFoundError:
+        print("File not found")
+    finally:
+        if file:
+            file.close()
+        print("Cleanup completed")
+```
+
+##### Important Point
+
+Even if there is a `return` inside `try` or `except`, `finally` usually still executes before the function exits.
+
+---
+
+#### Python Memory and Performance
+
+##### Interview Question
+
+**How would you improve Python performance?**
+
+##### Answer
+
+Possible approaches:
+
+- Use efficient data structures
+- Avoid unnecessary loops
+- Use generators for large data
+- Use NumPy/Pandas vectorization
+- Use multiprocessing for CPU-bound tasks
+- Cache repeated computations
+- Profile before optimizing
+
+##### Example: Caching
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def fibonacci(n: int) -> int:
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(35))
+```
+
+---
+
+### 4. Python Engineering
+
+> Source: `Interview_Topics_and_Technical_Prep.md`
+
+#### Likely Questions
+
+- How strong is your Python experience?
+- What Python frameworks have you used?
+- How do you structure a Python backend project?
+- How do you handle errors in Python services?
+- How do you write maintainable Python code?
+- What are decorators?
+- What are generators?
+- What is the difference between list, tuple, set, and dictionary?
+- What is the difference between shallow copy and deep copy?
+- What is the Python GIL?
+- How do you manage dependencies in Python?
+- How do you handle environment variables and secrets?
+
+---
+
+#### Python Error Handling Example
+
+```python
+def get_order(order_id: int) -> dict:
+    try:
+        order = order_repository.find_by_id(order_id)
+
+        if order is None:
+            raise ValueError(f"Order {order_id} not found")
+
+        return order
+
+    except ValueError:
+        raise
+
+    except Exception as exc:
+        logger.exception("Unexpected error while fetching order", extra={"order_id": order_id})
+        raise RuntimeError("Unable to fetch order right now") from exc
+```
+
+##### Interview Explanation
+
+- Use specific exceptions for known business cases.
+- Log unexpected errors with context.
+- Do not expose internal errors directly to users.
+- Preserve the original exception using `from exc`.
+
+---
+
+#### Decorator Example
+
+```python
+import time
+from functools import wraps
+
+def measure_time(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        duration = time.time() - start
+        print(f"{func.__name__} took {duration:.2f}s")
+        return result
+    return wrapper
+
+
+@measure_time
+def process_orders():
+    # expensive operation
+    return "done"
+```
+
+##### When to Use Decorators
+
+Use decorators for cross-cutting concerns such as:
+
+- Logging
+- Timing
+- Authentication
+- Authorization
+- Retry logic
+- Caching
+
+---
+
+#### Generator Example
+
+```python
+def stream_order_ids(orders):
+    for order in orders:
+        yield order["id"]
+
+
+orders = [{"id": 1}, {"id": 2}, {"id": 3}]
+
+for order_id in stream_order_ids(orders):
+    print(order_id)
+```
+
+##### Interview Explanation
+
+A generator is useful when:
+
+- Data is large
+- You do not want to load everything into memory
+- You want lazy evaluation
+- You are processing streams or batches
+
+---
+
+#### Python GIL
+
+##### Question
+
+What is the Global Interpreter Lock?
+
+##### Answer
+
+The GIL is a lock in CPython that allows only one thread to execute Python bytecode at a time. This means CPU-bound Python code does not get true parallel execution with threads.
+
+##### Practical Impact
+
+- Use **threading** for I/O-bound work.
+- Use **multiprocessing** for CPU-bound work.
+- Use **asyncio** for high-concurrency I/O workloads.
+
+---
+
+#### Threading vs Multiprocessing vs AsyncIO
+
+| Approach        | Best For             | Example                             |
+| --------------- | -------------------- | ----------------------------------- |
+| Threading       | I/O-bound tasks      | Calling multiple APIs               |
+| Multiprocessing | CPU-bound tasks      | Image processing, heavy computation |
+| AsyncIO         | High-concurrency I/O | WebSocket server, async API calls   |
+
+```python
+import asyncio
+import httpx
+
+async def fetch_url(url: str):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.status_code
+
+async def main():
+    results = await asyncio.gather(
+        fetch_url("https://example.com"),
+        fetch_url("https://example.org"),
+    )
+    print(results)
+
+asyncio.run(main())
+```
+
+---

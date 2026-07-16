@@ -1,4 +1,4 @@
-"""Weekly deployment window problem.
+'''Weekly deployment window problem.
 
 We deploy services throughout the week, but deployments are only allowed during scheduled deployment windows and must be 
 blocked during freeze windows. Time is represented as minute_of_week from 0 to 10079, where 0 is Monday 00:00 and 10079 is 
@@ -12,7 +12,7 @@ utc = local - timezone_offset_minutes, then compute deployable windows using the
 and zero freeze windows. The first input row gives utc_now,lead_time_minutes,min_continuous_minutes,k. A valid deployment start 
 must be at or after utc_now + lead_time_minutes, must remain continuously deployable for at least min_continuous_minutes, and 
 must not go beyond the end of the week. Return the next k valid deployable UTC intervals, or fewer if not enough exist.
-"""
+'''
 
 import os
 

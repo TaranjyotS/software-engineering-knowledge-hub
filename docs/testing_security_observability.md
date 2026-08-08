@@ -26,7 +26,6 @@ This is a new topic file created because the attached repository files did not h
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > Pytest, code quality, QA strategy, AI QA, monitoring, logging, metrics, production reliability, incidents, runbooks, security, privacy, PII, and access control.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -49,9 +48,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 6. Production Monitoring, Usage Tracking & Reliability
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 6.1 Traditional production metrics
 
 - Latency
@@ -82,7 +78,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 #### 6.3 Tracking which user calls which API and token usage
-
 ##### Usage table
 
 ```text
@@ -168,9 +163,6 @@ total_tokens = usage.total_tokens
 ---
 
 ### 13. Testing, Quality Engineering & AI QA
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 13.1 Testing Strategy
 
 **Interview answer:**
@@ -232,15 +224,11 @@ For AI systems, test:
 ---
 
 ### 9. Security for AI Applications
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 9.1 Why Security Matters in AI Agent Development
 
 > "Security is very important because AI agents may connect to APIs, databases, customer records, internal tools, or sensitive business systems. I would not treat it like just a chatbot; I would secure the full flow."
 
 #### 9.2 Security Areas to Mention
-
 ##### Authentication
 
 - JWT
@@ -291,9 +279,6 @@ For AI systems, test:
 ---
 
 ### 21. Testing, Monitoring & Continuous Improvement
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 21.1 Testing AI Agents
 
 Types of tests:
@@ -357,8 +342,6 @@ Steps:
 
 ### 11. Testing & Code Quality
 
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 The role emphasizes high-quality tested code.
 
 #### Topics to revise
@@ -415,9 +398,6 @@ For LLM systems, tests should not only check code paths but also validate prompt
 ---
 
 ### 14. Observability & Production Monitoring
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 #### Topics to revise
 
 - Structured logging.
@@ -465,9 +445,6 @@ def log_llm_request(user_id: str, model: str, tokens: int, latency_ms: float) ->
 ---
 
 ### 15. Security, Privacy, and PII Handling
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 #### Topics to revise
 
 - Secrets management.
@@ -502,9 +479,6 @@ I would avoid sending unnecessary PII to the model, mask or redact sensitive fie
 ---
 
 ### 22. LLM Cost, Latency, and Reliability Optimization
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 #### Topics to revise
 
 - Token usage tracking.
@@ -540,7 +514,6 @@ def estimate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
 ```
 
 #### Common interview question
-
 ##### How do you reduce LLM cost and latency?
 
 **Answer:**
@@ -550,11 +523,7 @@ I would reduce unnecessary context, use efficient chunk retrieval, cache repeate
 ---
 
 ### 10. API Security
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 10.1 How can we secure an API?
-
 ##### Strong Answer
 
 > To secure an API, I would apply security at multiple layers: authentication, authorization, input validation, transport security, rate limiting, proper CORS, secrets management, and monitoring.
@@ -607,11 +576,7 @@ def secure_data(is_auth: bool = Depends(verify_token)):
 ---
 
 ### 12. AI Production Challenges
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 12.1 What is the most challenging problem you faced while working with AI?
-
 ##### Recommended Answer: Hallucinations and response reliability
 
 > One of the biggest challenges I encountered while working with AI systems was ensuring response reliability and reducing hallucinations. Large language models can sometimes generate confident but incorrect information, which becomes a serious issue when the output is used for resumes, recommendations, job applications, or business decisions.
@@ -623,7 +588,6 @@ def secure_data(is_auth: bool = Depends(verify_token)):
 ---
 
 #### 12.2 Other AI challenges to mention
-
 ##### Latency and scalability
 
 Traditional APIs may respond in milliseconds, but LLM calls can take seconds.
@@ -641,7 +605,7 @@ Ways to improve:
 
 ##### Context management
 
-Too little context leads to poor answers.  
+Too little context leads to poor answers.
 Too much context increases cost, latency, and token usage.
 
 Solutions:
@@ -734,11 +698,7 @@ They store embeddings and support similarity search.
 ---
 
 ### 9. Production Reliability, Observability, Incidents, and Runbooks
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 9.1 Diagnosing latency and incorrect predictions in ML API
-
 ##### Step-by-step approach
 
 1. Treat as production incident.
@@ -755,7 +715,6 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.2 Distinguishing infra vs data pipeline vs model degradation
-
 ##### Infrastructure signals
 
 - CPU/GPU/memory saturation.
@@ -782,7 +741,6 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.3 Handling contradictory monitoring data
-
 ##### Decision principle
 
 > Do not force data to fit the first hypothesis. Choose the lowest-risk reversible action that protects users.
@@ -798,7 +756,6 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.4 Alerting without alert fatigue
-
 ##### Principles
 
 - Alert on symptoms, not every metric.
@@ -825,7 +782,6 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.5 Game day / incident readiness testing
-
 ##### Scenarios
 
 - Cache outage.
@@ -847,7 +803,6 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.6 On-call runbooks
-
 ##### Runbook structure
 
 - Service overview.
@@ -871,7 +826,6 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.7 Disaster recovery
-
 ##### Key terms
 
 - **RTO:** how fast service must recover.
@@ -898,11 +852,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 ### 14. Security, Privacy, PII, and Access Control
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 14.1 Handling PII in GenAI systems
-
 ##### Main principle
 
 > Sensitive data should not be sent to the model unless absolutely necessary, and should be masked/tokenized whenever possible.
@@ -929,7 +879,6 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.2 Authentication and authorization for public APIs
-
 ##### First-party web/mobile
 
 - OAuth2/OIDC.
@@ -955,7 +904,6 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.3 Credential and signing key rotation without downtime
-
 ##### JWT signing keys
 
 - Use `kid` header.
@@ -976,7 +924,6 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.4 Internal component access control
-
 ##### Design
 
 - Each service gets identity.
@@ -998,7 +945,6 @@ Admin service → restricted elevated access
 ---
 
 #### 14.5 Auditing permissions over time
-
 ##### Practices
 
 - Central inventory of service identities and permissions.
@@ -1012,7 +958,6 @@ Admin service → restricted elevated access
 ---
 
 #### 14.6 Tamper-resistant audit logs
-
 ##### Requirements
 
 - Append-only logs.
@@ -1038,9 +983,6 @@ Admin service → restricted elevated access
 ---
 
 ### 13. Monitoring, Logging, Reliability & Alerts
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### What to Monitor
 
 | Area                     | Example Metric                              |
@@ -1083,9 +1025,6 @@ ETL Job
 ---
 
 ### 9. Testing With Pytest
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - How do you write tests in Python?
@@ -1183,9 +1122,6 @@ def test_invalid_llm_output_is_rejected():
 ---
 
 ### 14. Monitoring, Logging & Production Support
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - How do you handle production issues?
@@ -1283,3 +1219,58 @@ Due date:
 ```
 
 ---
+
+## Reliability Lessons from an Incident Alert Router
+
+Small control-flow mistakes can create serious operational errors in incident systems.
+
+### Do Not Return Failure Before the Search Is Complete
+
+This implementation is incorrect:
+
+```python
+for alert in alerts:
+    if alert.service == service:
+        return alert.resolved_at is None
+```
+
+A resolved alert may appear before a later open alert for the same service. The correct predicate searches for any matching open alert:
+
+```python
+return any(
+    alert.service == service and alert.resolved_at is None
+    for alert in alerts
+)
+```
+
+### Retry Backoff Validation
+
+For each alert, sort delivery attempts by timestamp and compare adjacent attempts. A pair violates policy only when:
+
+```python
+current.attempted_at - previous.attempted_at < cooldown
+```
+
+A gap exactly equal to the cooldown is compliant.
+
+### High-Value Tests
+
+- Resolved alert followed by an open alert for the same service.
+- Service with no alerts.
+- Unknown alert ID when recording an attempt.
+- Alert with no attempts, which must be omitted from count output.
+- Attempts inserted out of order.
+- Gap one unit below the cooldown.
+- Gap exactly equal to the cooldown.
+- Several violating pairs for one alert, which should produce one alert ID.
+
+### Production Considerations
+
+A list scan is acceptable for an interview exercise. A production router would usually add:
+
+- An index keyed by alert ID for constant-time lookup.
+- An index or query on `(service, resolved_at)` for open-alert checks.
+- Durable storage and transactional updates.
+- Idempotency keys for repeated delivery-attempt events.
+- Metrics for attempts, failures, policy violations, and notification latency.
+- Audit logs showing who was contacted and when.

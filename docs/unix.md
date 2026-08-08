@@ -37,7 +37,6 @@ Unix commands are used to manage files, inspect logs, debug services, automate t
 ---
 
 ## Interview Questions & Answers
-
 ### Q1. How do you find errors in a log file?
 
 ```bash

@@ -38,7 +38,6 @@ This file has been refreshed to keep the original repository topic while merging
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > Python fundamentals, data structures, decorators, generators, exception handling, GIL, threading, multiprocessing, asyncio, performance, and coding exercises.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -60,9 +59,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 4. Python Internals & Concurrency
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 4.1 Python GIL
 
 **Interview answer:**
@@ -173,9 +169,6 @@ For API or LLM failures:
 ---
 
 ### 15. Python Topics
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 15.1 Why Use Generators in AI Pipelines?
 
 > "Generators help process large datasets efficiently by producing one item at a time instead of loading everything into memory."
@@ -227,8 +220,6 @@ def process_documents(documents):
 ---
 
 ### 4. Python Core Topics
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
 
 The role expects strong Python fundamentals.
 
@@ -331,14 +322,10 @@ A decorator wraps a function to add reusable behavior such as logging, timing, a
 ---
 
 ### 1. Python Fundamentals
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 1.1 What is the difference between a tuple and a set?
-
 ##### Interview Answer
 
-A **tuple** is an ordered, immutable collection that allows duplicates.  
+A **tuple** is an ordered, immutable collection that allows duplicates.
 A **set** is an unordered collection that stores only unique elements.
 
 | Feature           | Tuple         | Set                              |
@@ -368,7 +355,7 @@ Possible output:
 
 ##### Key Point
 
-The tuple preserves the order and duplicates.  
+The tuple preserves the order and duplicates.
 The set removes duplicates and does not guarantee insertion order.
 
 ##### Strong One-Liner
@@ -378,7 +365,6 @@ The set removes duplicates and does not guarantee insertion order.
 ---
 
 #### 1.2 Write a list comprehension to find squares from 1 to 5
-
 ##### Code
 
 ```python
@@ -402,11 +388,7 @@ print(squares)
 ---
 
 ### 2. Python Operators & Expressions
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 2.1 What is the output of `2**3**2`?
-
 ##### Code
 
 ```python
@@ -445,7 +427,6 @@ Step-by-step:
 ---
 
 #### 2.2 What is the output of `a | b` when `a = 4` and `b = 11`?
-
 ##### Code
 
 ```python
@@ -486,11 +467,7 @@ Binary `1111` equals decimal `15`.
 ---
 
 ### 3. Lists, Tuples, and Sets
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 3.1 What does `seta ^ setb` mean?
-
 ##### Answer
 
 `^` between two sets means **symmetric difference**.
@@ -526,7 +503,6 @@ Equivalent expression:
 ---
 
 #### 3.2 Different ways to join two lists
-
 ##### Method 1: Using `+`
 
 ```python
@@ -632,7 +608,6 @@ Output:
 ---
 
 #### 3.3 Difference between `append()` and `extend()`
-
 ##### `append()`
 
 Adds the entire object as one element.
@@ -689,7 +664,6 @@ for item in list2:
 ---
 
 #### 3.4 What happens when we multiply a list by 2?
-
 ##### Example
 
 ```python
@@ -711,7 +685,6 @@ Output:
 ---
 
 #### 3.5 Character list multiplication
-
 ##### Example
 
 ```python
@@ -748,7 +721,7 @@ Output:
 [[1], [1], [1]]
 ```
 
-Why?  
+Why?
 All inner lists refer to the same object in memory.
 
 Correct way:
@@ -770,11 +743,7 @@ Output:
 ---
 
 ### 4. Python Functions, Decorators, and Generators
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 4.1 What are decorators in Python?
-
 ##### Interview Answer
 
 A decorator is a function that modifies or extends the behavior of another function without changing its source code.
@@ -887,7 +856,6 @@ It tells FastAPI:
 ---
 
 #### 4.2 What is a generator in Python?
-
 ##### Interview Answer
 
 A generator is a special function that returns values one at a time using `yield`, instead of returning all values at once.
@@ -955,7 +923,6 @@ The values are generated one by one.
 ---
 
 #### 4.4 When should we use `yield` and when should we use `return`?
-
 ##### Use `return` when:
 
 - The dataset is small.
@@ -1021,11 +988,7 @@ This generates values on demand.
 ---
 
 ### 5. Exception Handling
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 5.1 When does the `finally` block execute?
-
 ##### Answer
 
 The `finally` block is executed **always**, whether an exception occurs or not.
@@ -1126,11 +1089,7 @@ Even if reading fails, the file is closed.
 ---
 
 ### 6. Concurrency in Python
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
-
 #### 6.1 What is the GIL?
-
 ##### Answer
 
 GIL stands for **Global Interpreter Lock**.
@@ -1235,8 +1194,6 @@ p.join()
 ---
 
 ### 13. Coding Interview Practice Topics
-
-> Source: `interview_prep_python_rest_fastapi_genai.md`
 
 These topics were discussed as likely coding interview preparation areas.
 
@@ -1461,11 +1418,7 @@ WHERE rn = 1;
 ---
 
 ### 10. Python Core Concepts
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 10.1 Threading, multiprocessing, asyncio, and GIL
-
 ##### GIL
 
 The Global Interpreter Lock allows only one thread to execute Python bytecode at a time in CPython.
@@ -1516,7 +1469,6 @@ asyncio.run(fetch())
 ---
 
 #### 10.2 Mutable vs immutable objects
-
 ##### Mutable
 
 Can be changed after creation.
@@ -1542,7 +1494,6 @@ Examples:
 ---
 
 #### 10.3 List vs tuple
-
 ##### List
 
 - Mutable.
@@ -1651,7 +1602,6 @@ class Example:
 ---
 
 #### 10.7 Decorators and custom decorators
-
 ##### Simple decorator
 
 ```python
@@ -1698,7 +1648,6 @@ Output:
 ---
 
 #### 10.9 `==` vs `is`
-
 ##### `==`
 
 Checks value equality.
@@ -1752,7 +1701,6 @@ def test():
 ---
 
 #### 10.11 Mutable default argument bug
-
 ##### Bad
 
 ```python
@@ -1778,7 +1726,6 @@ Default arguments are evaluated once when the function is defined.
 ---
 
 #### 10.12 Lists, sets, and dicts for membership/deduplication
-
 ##### List
 
 - Ordered.
@@ -1810,11 +1757,7 @@ for item in items:
 ---
 
 ### 11. Python Coding Problems and Algorithms
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 11.1 Longest substring without repeating characters
-
 ##### Sliding window solution
 
 ```python
@@ -1847,7 +1790,6 @@ print(longest_substring("abcabcbb"))  # abc
 ---
 
 #### 11.2 Minimum window substring without Counter
-
 ##### Problem
 
 Find the smallest substring in `s` containing all characters of `t`, including duplicates.
@@ -1896,7 +1838,6 @@ print(min_window_substring("ADOBECODEBANC", "ABC"))  # BANC
 ---
 
 #### 11.3 Kth largest element using Quickselect
-
 ##### Idea
 
 Convert kth largest to `(n-k)`th smallest.
@@ -1972,7 +1913,6 @@ Use `int(a / b)` instead of `a // b` when truncation toward zero is required.
 ---
 
 #### 11.5 Combination calculation with memoization
-
 ##### Problem
 
 Naive recursion recalculates same subproblems.
@@ -2017,7 +1957,6 @@ def is_even(number):
 ---
 
 #### 11.7 Merge dictionaries
-
 ##### Original issue
 
 Mutating `dict1` may cause side effects.
@@ -2043,7 +1982,6 @@ Overlapping keys from `dict2` overwrite `dict1`.
 ---
 
 #### 11.8 Print queue / priority order without heapq
-
 ##### Problem summary
 
 Jobs are printed by highest priority. If same priority, preserve original order.
@@ -2079,14 +2017,11 @@ print(print_order([2, 2, 2]))     # [0, 1, 2]
 
 ### Python
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 Python is likely to come up because it is central to AI/ML, backend development, data processing, and automation.
 
 ---
 
 #### Python GIL
-
 ##### Interview Question
 
 **What is the Python GIL?**
@@ -2116,7 +2051,6 @@ The GIL prevents multiple native Python threads from executing Python bytecode s
 ---
 
 #### Threading vs Multiprocessing vs AsyncIO
-
 ##### Interview Question
 
 **When would you use threading, multiprocessing, or AsyncIO?**
@@ -2200,7 +2134,6 @@ asyncio.run(main())
 ---
 
 #### Decorators
-
 ##### Interview Question
 
 **What is a decorator in Python?**
@@ -2249,7 +2182,6 @@ Mention `functools.wraps` because it preserves the original function's metadata.
 ---
 
 #### Generators
-
 ##### Interview Question
 
 **What is a generator in Python?**
@@ -2287,7 +2219,6 @@ for row in read_large_file("data.txt"):
 ---
 
 #### Try, Except, Finally
-
 ##### Interview Question
 
 **When does the finally block execute?**
@@ -2320,7 +2251,6 @@ Even if there is a `return` inside `try` or `except`, `finally` usually still ex
 ---
 
 #### Python Memory and Performance
-
 ##### Interview Question
 
 **How would you improve Python performance?**
@@ -2354,9 +2284,6 @@ print(fibonacci(35))
 ---
 
 ### 4. Python Engineering
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - How strong is your Python experience?
@@ -2465,7 +2392,6 @@ A generator is useful when:
 ---
 
 #### Python GIL
-
 ##### Question
 
 What is the Global Interpreter Lock?
@@ -2510,3 +2436,309 @@ asyncio.run(main())
 ```
 
 ---
+
+## Focused Python Semantics and Debugging Drills
+
+These short questions test whether a candidate can reason about Python execution rather than only recall syntax.
+
+### Iterator Consumption
+
+An iterator keeps traversal state. Calling `next()` consumes one item, so a later loop starts from the following item.
+
+```python
+values = iter([10, 20, 30])
+
+print(next(values))
+for value in values:
+    print(value)
+```
+
+Output:
+
+```text
+10
+20
+30
+```
+
+The loop does not restart the iterator.
+
+### Generator Exhaustion
+
+A generator expression is also a one-pass iterator.
+
+```python
+gen = (number * number for number in range(3))
+
+print(list(gen))
+print(list(gen))
+```
+
+Output:
+
+```text
+[0, 1, 4]
+[]
+```
+
+Create a new generator when the sequence must be traversed again, or materialize it once into a list when the data is small enough.
+
+### Missing Dictionary Keys
+
+Direct indexing raises `KeyError` when the key is absent:
+
+```python
+role = user_roles[username]
+```
+
+Choose behavior explicitly:
+
+```python
+role = user_roles.get(username)  # returns None when missing
+role = user_roles.get(username, "guest")
+
+if username in user_roles:
+    role = user_roles[username]
+```
+
+Use indexing when absence is an error. Use `.get()` when a default or optional result is part of the contract.
+
+### Stacked Decorator Order
+
+Decorators are applied from the bottom upward but execute from the outer wrapper inward.
+
+```python
+def first(func):
+    def wrapper():
+        print("first")
+        func()
+    return wrapper
+
+
+def second(func):
+    def wrapper():
+        print("second")
+        func()
+    return wrapper
+
+
+@first
+@second
+def greet():
+    print("hello")
+```
+
+The definition is equivalent to:
+
+```python
+greet = first(second(greet))
+```
+
+Calling `greet()` prints:
+
+```text
+first
+second
+hello
+```
+
+### Preserving Decorated Function Metadata
+
+Without `functools.wraps`, the decorated function exposes the wrapper's name and documentation.
+
+```python
+from functools import wraps
+
+
+def log_call(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+```
+
+`@wraps(func)` preserves metadata such as `__name__`, `__doc__`, annotations, and the `__wrapped__` reference used by inspection tools.
+
+### Context Manager Lifecycle
+
+A `with` statement calls `__enter__` before the block and `__exit__` when the block finishes.
+
+```python
+class Resource:
+    def __enter__(self):
+        print("Open")
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("Close")
+
+
+with Resource():
+    print("Working")
+```
+
+Output:
+
+```text
+Open
+Working
+Close
+```
+
+`__exit__` also runs when the block raises an exception. Returning a truthy value from `__exit__` suppresses that exception; returning `False` or `None` allows it to propagate.
+
+### Frozen Dataclasses
+
+A frozen dataclass prevents normal field reassignment after construction.
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class User:
+    name: str
+
+
+user = User("Maya")
+user.name = "Brian"  # dataclasses.FrozenInstanceError
+```
+
+Use frozen dataclasses for value objects whose identity should not change after creation.
+
+### Metaclass Registration Timing
+
+A metaclass can register subclasses when their class bodies are executed.
+
+```python
+class Registry(type):
+    registered: list[str] = []
+
+    def __new__(mcls, name, bases, namespace):
+        cls = super().__new__(mcls, name, bases, namespace)
+        if name != "Plugin":
+            mcls.registered.append(name)
+        return cls
+
+
+class Plugin(metaclass=Registry):
+    pass
+
+
+class Logger(Plugin):
+    pass
+
+
+class Cache(Plugin):
+    pass
+```
+
+`Registry.registered` becomes `['Logger', 'Cache']` at class-definition time. No instances are required. This pattern appears in plugin systems, serializers, command registries, and framework extension points.
+
+### Shared Mutable Class Attributes
+
+A mutable class attribute is shared by every instance:
+
+```python
+class User:
+    active = []
+
+    def __init__(self, name):
+        self.active.append(name)
+```
+
+After creating `User("Maya")` and `User("Ethan")`, both instances observe:
+
+```text
+['Maya', 'Ethan']
+```
+
+Use an instance attribute for per-object state:
+
+```python
+class User:
+    def __init__(self, name):
+        self.active = [name]
+```
+
+### Type Hints Do Not Enforce Runtime Types
+
+Python annotations support readers, IDEs, linters, and static type checkers, but Python does not reject mismatched arguments automatically.
+
+```python
+def add_tax(amount: int) -> int:
+    return amount + 5
+
+
+print(add_tax(True))  # 6
+```
+
+`bool` is a subclass of `int`, so `True` behaves numerically like `1`. Use runtime validation when an API contract must reject such values.
+
+### Tuple Unpacking Arity
+
+The number of targets must match the number of returned values unless starred unpacking is used.
+
+```python
+def profile():
+    return "Alice", 25, "Chicago"
+
+
+name, age = profile()  # ValueError: too many values to unpack
+```
+
+Valid alternatives:
+
+```python
+name, age, city = profile()
+name, *details = profile()
+```
+
+### Restricting Attributes with `__slots__`
+
+`__slots__` declares the allowed instance attributes and can reduce per-object memory overhead when many objects are created.
+
+```python
+class User:
+    __slots__ = ("name",)
+
+    def __init__(self, name):
+        self.name = name
+
+
+user = User("Maya")
+user.email = "maya@example.com"  # AttributeError
+```
+
+Add `email` to `__slots__` or remove slots when dynamic attributes are required.
+
+### Property-Based Validation
+
+A property keeps attribute-style access while centralizing validation.
+
+```python
+class Account:
+    def __init__(self, balance: float):
+        self._balance = balance
+
+    @property
+    def balance(self) -> float:
+        return self._balance
+
+    @balance.setter
+    def balance(self, value: float) -> None:
+        if value < 0:
+            raise ValueError("Balance cannot be negative")
+        self._balance = value
+```
+
+This is useful when an object's invariants must be enforced without exposing internal storage directly.
+
+### Quick Interview Checklist
+
+- State whether an object is reusable or one-shot.
+- Distinguish class-level state from instance-level state.
+- Explain when framework hooks run: definition time, construction time, or call time.
+- Mention the exact exception when the question asks for output or failure behavior.
+- Separate static type checking from runtime validation.

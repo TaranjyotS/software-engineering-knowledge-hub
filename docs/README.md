@@ -1,6 +1,9 @@
 # Documentation Index
 
-This folder contains topic-wise notes used for technical interview preparation and engineering reference.
+> **Purpose:** Provide a topic-wise index of the repository documentation.
+> **Use this file for:** locating technical interview notes and engineering reference material under `docs/`.
+
+---
 
 | Topic                                                  | File                                | Focus                                                                          |
 | ------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------ |
@@ -29,7 +32,7 @@ This folder contains topic-wise notes used for technical interview preparation a
 # Topic
 
 > **Purpose:** What this note is for.
-> **Best for:** Interviews, revision, project reference, or implementation.
+> **Use this file for:** Interviews, revision, project reference, or implementation.
 
 ---
 
@@ -55,4 +58,3 @@ This folder contains topic-wise notes used for technical interview preparation a
 - Add code snippets when they clarify implementation.
 - Keep personal profile details aligned with the latest resume.
 - When adding a new file under `docs/`, run `python confluence_sync/build_page_map.py` before syncing to Confluence.
-- Run `python utils/format_markdown_tables.py docs` to keep Markdown tables aligned.

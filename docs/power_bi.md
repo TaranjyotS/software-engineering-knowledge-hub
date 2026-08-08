@@ -1,7 +1,7 @@
 # Power BI
 
-> **Purpose:** Power BI concepts, DAX basics, data modeling, relationships, slicers, filters, RLS, and dashboard performance.  
-> **Use this file for:** BI analyst, data analyst, reporting, and dashboard interviews  
+> **Purpose:** Power BI concepts, DAX basics, data modeling, relationships, slicers, filters, RLS, and dashboard performance.
+> **Use this file for:** BI analyst, data analyst, reporting, and dashboard interviews
 
 ---
 
@@ -36,7 +36,6 @@ Power BI is used for business intelligence dashboards, data modeling, and intera
 ---
 
 ## Interview Questions & Answers
-
 ### Q1. What is the difference between a slicer and a filter?
 
 **Answer:** A slicer is a visual element on the report page that users can interact with. A filter is configured in the filter pane and can apply to a visual, page, or entire report.

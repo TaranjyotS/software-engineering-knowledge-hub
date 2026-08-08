@@ -60,7 +60,10 @@ def generate() -> str:
 
     return f"""# Documentation Index
 
-This folder contains topic-wise notes used for technical interview preparation and engineering reference.
+> **Purpose:** Provide a topic-wise index of the repository documentation.
+> **Use this file for:** locating technical interview notes and engineering reference material under `docs/`.
+
+---
 
 | Topic | File | Focus |
 |-------|------|-------|
@@ -74,7 +77,7 @@ This folder contains topic-wise notes used for technical interview preparation a
 # Topic
 
 > **Purpose:** What this note is for.
-> **Best for:** Interviews, revision, project reference, or implementation.
+> **Use this file for:** Interviews, revision, project reference, or implementation.
 
 ---
 

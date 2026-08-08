@@ -35,7 +35,6 @@ Tableau is used for visual analytics and dashboarding. For interviews, focus on 
 ---
 
 ## Interview Questions & Answers
-
 ### Q1. How do you create a calculated field?
 
 Right-click in the data pane, select **Create Calculated Field**, enter the formula, and use it in views or filters.

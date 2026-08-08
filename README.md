@@ -58,7 +58,7 @@ The repository now includes both traditional software engineering topics and upd
 ```text
 software-engineering-knowledge-hub/
 ├── .github/workflows/              # GitHub Actions for Confluence sync
-├── coding_questions/               # Python and Java practice examples
+├── coding_questions/               # Runnable solutions and problem explanations
 ├── confluence_sync/                # Docs-as-code automation scripts
 ├── docs/                           # Markdown notes by topic
 ├── interview_questions/            # PDF interview resources
@@ -98,6 +98,23 @@ software-engineering-knowledge-hub/
 | Coding Practice                      | [coding_questions/README.md](coding_questions/README.md)                         |
 
 </div>
+
+---
+
+## 💻 Coding Exercise Index
+
+| Exercise                           | Runnable Source                                            |
+| ---------------------------------- | ---------------------------------------------------------- |
+| Match statistics and head-to-head  | [Python](coding_questions/match_statistics.py)             |
+| Transaction accounting and fees    | [Python](coding_questions/transaction_accounting.py)       |
+| Incident alert routing and backoff | [Python](coding_questions/incident_alert_router.py)        |
+| Weekly deployment windows          | [Python](coding_questions/weekly_deployment_windows.py)    |
+| Duplicate merchant detection       | [Python](coding_questions/duplicate_merchant_detection.py) |
+| General Python coding practice     | [Python](coding_questions/python_coding_questions.py)      |
+| Object-oriented library management | [Python](coding_questions/libraryMngmnt.py)                |
+| General Java coding practice       | [Java](coding_questions/java_coding_questions.java)        |
+
+> Coding-exercise documentation is intentionally kept inside the runnable source files as question and explanation blocks, so each exercise can be reviewed and executed from one file.
 
 ---
 

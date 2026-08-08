@@ -39,7 +39,6 @@ This file has been refreshed to keep the original repository topic while merging
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > Microservices, distributed architecture, service communication, queues, Celery, Redis, RabbitMQ, feature flags, architecture trade-offs, and domain system design.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -52,11 +51,7 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 2. Backend and Microservices Architecture
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 2.1 Pros and cons of microservices
-
 ##### Pros
 
 - Independent deployment.
@@ -80,7 +75,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 #### 2.2 Database ownership in microservices
-
 ##### Topic covered
 
 How services handle data when one service needs user information while another owns transactions.
@@ -108,7 +102,6 @@ Solution → Transaction Service calls User Service API or reads a replicated us
 ---
 
 #### 2.3 Service communication patterns
-
 ##### Synchronous communication
 
 Use when immediate response is required.
@@ -137,7 +130,6 @@ Examples:
 ---
 
 #### 2.4 API Gateway and BFF/API composition
-
 ##### Question covered
 
 How to expose one public API without coupling clients to each microservice.
@@ -170,11 +162,7 @@ Client → API Gateway → BFF/API Composition Layer → Internal Microservices
 ---
 
 ### 6. Caching, Rate Limiting, Abuse Prevention, and Feature Flags
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 6.1 Cache consistency when target URL changes
-
 ##### Approach
 
 - Treat DB as source of truth.
@@ -191,7 +179,6 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.2 Preventing cache stampede
-
 ##### Techniques
 
 - Distributed lock using Redis `SETNX`.
@@ -206,7 +193,6 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.3 Graceful degradation if cache is unavailable
-
 ##### Design
 
 - Cache is optimization, not source of truth.
@@ -219,7 +205,6 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.4 Rate limiting URL/order creation endpoints
-
 ##### Best approach
 
 Use Redis-backed distributed rate limiting at gateway/middleware.
@@ -246,7 +231,6 @@ Retry-After: 60
 ---
 
 #### 6.5 Protecting against automated abuse beyond rate limits
-
 ##### Techniques
 
 - API keys/authentication.
@@ -261,7 +245,6 @@ Retry-After: 60
 ---
 
 #### 6.6 Feature flag system for safe releases
-
 ##### Design principles
 
 - Separate deployment from release.
@@ -283,7 +266,6 @@ internal users → 1% → 5% → 25% → 50% → 100%
 ---
 
 #### 6.7 Fast and reliable runtime flag checks
-
 ##### Best practice
 
 Evaluate flags locally from memory, not by calling the flag service on every request.
@@ -297,9 +279,6 @@ Evaluate flags locally from memory, not by calling the flag service on every req
 ---
 
 ### 7. Distributed Systems: Celery, Redis, RabbitMQ
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - What are background jobs?
@@ -423,9 +402,6 @@ Distributed locks prevent multiple workers from processing the same item at the 
 ---
 
 ### 16. Code Reviews & Architecture Discussions
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - How do you approach code reviews?
@@ -486,8 +462,6 @@ Good strategy:
 ---
 
 ### 17. E-Commerce / Logistics / Fintech Domain Topics
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
 
 These are general domain concepts that may come up in product engineering interviews for commerce, logistics, payments, or ERP-style platforms.
 
@@ -560,7 +534,6 @@ Webhook handlers should:
 ---
 
 #### Inventory Race Condition Example
-
 ##### Problem
 
 Two users buy the last item at the same time.
@@ -598,3 +571,77 @@ If no, process payment and store result
 ```
 
 ---
+
+## AI-Enabled Backend Versus Agentic Architecture
+
+AI integration does not automatically make a product agentic. The distinction affects architecture, testing, cost, and operational risk.
+
+| Architecture      | Control Flow                                      | Typical Use Case                             |
+| ----------------- | ------------------------------------------------- | -------------------------------------------- |
+| AI-enabled        | Application code chooses when and how to call AI  | Summarization, extraction, classification    |
+| Workflow-based AI | Predetermined sequence of model and service steps | RAG, document processing, content generation |
+| Agentic AI        | Model dynamically chooses actions or tools        | Multi-step investigation and task completion |
+
+### AI-Enabled Product Flow
+
+```text
+API request
+  -> deterministic validation
+  -> domain service
+  -> optional model call
+  -> output validation
+  -> persistence
+  -> API response
+```
+
+The application remains responsible for control flow. The model provides a bounded capability inside a normal backend system.
+
+### Agentic Product Flow
+
+```text
+User goal
+  -> planner/model
+  -> select tool
+  -> execute tool
+  -> observe result
+  -> repeat or finish
+```
+
+This requires stronger controls around tool permissions, iteration limits, state, audit trails, and recovery from partial execution.
+
+### Design Principle: Preserve a Stable Backend Core
+
+Keep domain rules independent of the model:
+
+```text
+Routes -> Application Services -> Domain Rules
+                              -> Model Adapter
+                              -> Repositories
+                              -> External Services
+```
+
+Benefits:
+
+- Model vendors can be replaced without rewriting routes.
+- Deterministic business rules remain testable without an LLM.
+- Model failures can use fallback or degraded behavior.
+- Cost, latency, and token usage can be measured at one boundary.
+- AI can be added gradually rather than redesigning the whole platform.
+
+### Backend Engineering Skills That Transfer Across AI Systems
+
+The domain may change, but the production concerns remain familiar:
+
+- API contracts and backward compatibility.
+- Authentication, authorization, and data protection.
+- Database consistency and idempotency.
+- Retries, timeouts, queues, and failure isolation.
+- Horizontal scaling and stateless service design.
+- Structured logs, metrics, traces, and alerts.
+- Deployment safety and rollback.
+
+The added AI concerns are model quality, prompt/version management, retrieval quality, nondeterminism, token cost, and hallucination risk.
+
+### Architecture Tradeoff Answer
+
+> I would start with an AI-enabled deterministic workflow unless the use case genuinely requires dynamic planning. It is easier to test, operate, secure, and explain. I would introduce agentic behavior only where flexible tool selection creates measurable value, and I would bound it with explicit permissions, step limits, validation, and audit logging.

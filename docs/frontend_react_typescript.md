@@ -1,7 +1,7 @@
 # Frontend, React, TypeScript & Product Engineering
 
-> **Purpose:** React, TypeScript, frontend API integration, full-stack development, and product engineering interview preparation.  
-> **Use this file for:** full-stack, frontend-adjacent backend, and product engineering interviews  
+> **Purpose:** React, TypeScript, frontend API integration, full-stack development, and product engineering interview preparation.
+> **Use this file for:** full-stack, frontend-adjacent backend, and product engineering interviews
 
 ---
 
@@ -27,8 +27,6 @@ The section below is merged from the previously organized topic-wise interview-p
 
 > React, TypeScript, frontend API integration, full-stack/product engineering, UI-side concerns, and client-facing product workflows.
 
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
-
 ### Topic Sections
 
 1. ReactJS Interview Topics — `ai_engineer_interview_prep_topics.md`
@@ -38,9 +36,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 11. ReactJS Interview Topics
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 11.1 What Is React?
 
 > "React is a JavaScript library for building user interfaces using reusable components. It allows developers to manage UI state efficiently and build dynamic frontend applications."
@@ -150,9 +145,6 @@ const filteredUsers = useMemo(() => {
 ---
 
 ### 12. TypeScript Interview Topics
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 12.1 Why Use TypeScript?
 
 > "TypeScript adds static typing to JavaScript, helping catch errors earlier, improve maintainability, and provide better IDE support."
@@ -217,9 +209,6 @@ async function askAgent(question: string): Promise<AgentResponse> {
 ---
 
 ### 15. Full-Stack / Product Engineering
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - Have you owned features end-to-end?

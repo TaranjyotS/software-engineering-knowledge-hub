@@ -1,7 +1,7 @@
 # Cloud, DevOps, Docker, Kubernetes & CI/CD
 
-> **Purpose:** AWS, Azure, Terraform, Docker, Kubernetes, Git, Jenkins, GitHub Actions, CI/CD, deployment, and cloud architecture.  
-> **Use this file for:** DevOps, backend platform, cloud engineering, and production deployment interviews  
+> **Purpose:** AWS, Azure, Terraform, Docker, Kubernetes, Git, Jenkins, GitHub Actions, CI/CD, deployment, and cloud architecture.
+> **Use this file for:** DevOps, backend platform, cloud engineering, and production deployment interviews
 
 ---
 
@@ -26,7 +26,6 @@ This is a new topic file created because the attached repository files did not h
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > AWS, Azure, Terraform, Docker, Kubernetes, Git, CI/CD pipelines, deployment patterns, infrastructure, containers, and cloud architecture.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -48,9 +47,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 7. AWS, CI/CD, Docker & Kubernetes
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 7.1 AWS deployment methods
 
 | Service           | Use Case                            |
@@ -166,9 +162,6 @@ Key concepts:
 ---
 
 ### 16. Git / Version Control
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 16.1 Typical Git Workflow
 
 ```bash
@@ -196,11 +189,7 @@ git push origin feature/agent-api
 ---
 
 ### 17. Cloud / AWS Topics
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 17.1 EC2 vs Lambda
-
 ##### When to Use EC2
 
 Use EC2 when you need:
@@ -262,9 +251,6 @@ For scaling a backend/AI application:
 ---
 
 ### 18. Kubernetes / Docker Topics
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 18.1 What Is Kubernetes?
 
 > "Kubernetes is a container orchestration platform used to deploy, manage, scale, and monitor containerized applications. It automates deployment, scaling, load balancing, self-healing, and rolling updates."
@@ -310,9 +296,6 @@ For scaling a backend/AI application:
 ---
 
 ### 20. Azure / Terraform Deployment Question
-
-> Source: `ai_engineer_interview_prep_topics.md`
-
 #### 20.1 Client Question
 
 > "I need to know Azure/Terraform experience — how did you deploy?"
@@ -323,7 +306,7 @@ Be truthful and avoid overstating experience.
 
 A strong answer:
 
-> "My primary hands-on production deployment experience has been with cloud deployments using Docker, Kubernetes, CI/CD, and infrastructure automation concepts. I have worked with Azure Database as part of backend application development and understand Terraform's Infrastructure-as-Code workflow, including declarative infrastructure definitions, state management, variables, modules, and automated provisioning.  
+> "My primary hands-on production deployment experience has been with cloud deployments using Docker, Kubernetes, CI/CD, and infrastructure automation concepts. I have worked with Azure Database as part of backend application development and understand Terraform's Infrastructure-as-Code workflow, including declarative infrastructure definitions, state management, variables, modules, and automated provisioning.
 > Most of my production deployment experience has been on AWS-based environments, but Terraform principles are cloud-agnostic. The same workflow can be adapted to Azure resources such as resource groups, app services, container apps, Azure SQL, storage accounts, virtual networks, and Key Vault. I am comfortable working with Terraform-based Azure deployments and can quickly contribute using my cloud engineering and IaC background."
 
 #### 20.3 Example Terraform Flow for Azure
@@ -377,9 +360,6 @@ resource "azurerm_storage_account" "app_storage" {
 ---
 
 ### 12. CI/CD, Git, and Engineering Workflow
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 #### Topics to revise
 
 - Git branching.
@@ -408,7 +388,6 @@ resource "azurerm_storage_account" "app_storage" {
 ```
 
 #### Common interview question
-
 ##### What should a good CI/CD pipeline include?
 
 **Answer:**
@@ -418,9 +397,6 @@ A good CI/CD pipeline should automatically run linting, formatting checks, type 
 ---
 
 ### 13. Docker, Containers, Kubernetes, and Cloud
-
-> Source: `deloitte_python_genai_interview_prep_topics.md`
-
 #### Docker topics
 
 - Dockerfile basics.
@@ -478,15 +454,8 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ---
 
-
----
-
 ### 7. Cloud, AWS, Kubernetes, and GenAI Deployment
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 7.1 Deploying GenAI applications on cloud/Kubernetes
-
 ##### Typical architecture
 
 ```text
@@ -508,7 +477,6 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.2 Kubernetes deployment components
-
 ##### Common manifests
 
 - Deployment.
@@ -531,7 +499,6 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.3 AWS stack for backend/GenAI apps
-
 ##### Common services
 
 - EKS/ECS for compute.
@@ -547,7 +514,6 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.4 Choosing DynamoDB vs RDS for idempotency
-
 ##### DynamoDB advantages
 
 - Low-latency key-value access.
@@ -568,7 +534,6 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.5 Securing AWS order-create endpoint
-
 ##### Security layers
 
 - OAuth2/OIDC JWT validation.
@@ -584,7 +549,6 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.6 Autoscaling compute while protecting RDS
-
 ##### Compute scaling metrics
 
 - CPU.
@@ -604,15 +568,8 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-
----
-
 ### 8. Docker, Git, and CI/CD
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 8.1 Starting and creating Docker containers
-
 ##### Basic command
 
 ```bash
@@ -655,7 +612,6 @@ docker image inspect <image_name> --format='{{.Size}}'
 ---
 
 #### 8.3 Debugging a crashing Docker container
-
 ##### Commands
 
 ```bash
@@ -680,7 +636,6 @@ docker exec -it <container_id> sh
 ---
 
 #### 8.4 Dockerized CI/CD pipeline
-
 ##### Pipeline flow
 
 ```text
@@ -707,7 +662,6 @@ kubectl rollout undo deployment/app
 ---
 
 #### 8.5 Git: remove file from last commit before push
-
 ##### Keep file locally but remove from commit
 
 ```bash
@@ -726,7 +680,6 @@ git commit --amend
 ---
 
 #### 8.6 Git: remove experimental files from commit history
-
 ##### If only last commit
 
 ```bash
@@ -746,7 +699,6 @@ Then edit commits and remove unwanted files.
 ---
 
 #### 8.7 Git: reconciling long-lived branches after restructuring
-
 ##### Safe process
 
 1. Create backup branch.
@@ -771,12 +723,9 @@ git cherry-pick <commit_hash>
 
 ### Cloud, DevOps & Monitoring
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### AWS Services
-
 ##### Interview Question
 
 **What AWS services have you worked with or would use?**
@@ -798,7 +747,6 @@ git cherry-pick <commit_hash>
 ---
 
 #### EC2 vs Lambda
-
 ##### Interview Question
 
 **What is the difference between EC2 and Lambda?**
@@ -815,7 +763,6 @@ git cherry-pick <commit_hash>
 ---
 
 #### Docker
-
 ##### Interview Question
 
 **What is Docker and why use it?**
@@ -843,7 +790,6 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 ---
 
 #### Kubernetes
-
 ##### Interview Question
 
 **What is Kubernetes used for?**
@@ -865,7 +811,6 @@ Kubernetes is used to orchestrate containers at scale.
 ---
 
 #### CI/CD
-
 ##### Interview Question
 
 **What is CI/CD?**
@@ -895,7 +840,6 @@ Code push
 ---
 
 #### Production Monitoring
-
 ##### Interview Question
 
 **What would you monitor in production?**
@@ -930,9 +874,6 @@ Monitor both application and infrastructure health.
 ---
 
 ### 10. Docker & Containerization
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - What is Docker?
@@ -1017,9 +958,6 @@ services:
 ---
 
 ### 11. Kubernetes & Deployment Basics
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - What is Kubernetes?
@@ -1092,13 +1030,7 @@ spec:
 
 ---
 
-
----
-
 ### 12. CI/CD
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - What is CI/CD?
@@ -1188,13 +1120,7 @@ jobs:
 
 ---
 
-
----
-
 ### 13. Cloud Platforms
-
-> Source: `Interview_Topics_and_Technical_Prep.md`
-
 #### Likely Questions
 
 - What cloud services have you used?

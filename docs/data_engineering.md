@@ -1,7 +1,7 @@
 # Data Engineering, ETL, Big Data & Analytics
 
-> **Purpose:** Transaction datasets, Pandas, ETL pipelines, data quality, batch/streaming, lineage, lakehouse, S3, Delta Lake, PySpark, and analytics architecture.  
-> **Use this file for:** data engineering, backend data pipeline, and analytics engineering interviews  
+> **Purpose:** Transaction datasets, Pandas, ETL pipelines, data quality, batch/streaming, lineage, lakehouse, S3, Delta Lake, PySpark, and analytics architecture.
+> **Use this file for:** data engineering, backend data pipeline, and analytics engineering interviews
 
 ---
 
@@ -26,7 +26,6 @@ This is a new topic file created because the attached repository files did not h
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > Transaction datasets, Pandas, ETL pipelines, data quality, batch/streaming/micro-batch, data lineage, lakehouse, Delta Lake, PySpark, analytics, and reporting architecture.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -50,9 +49,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 10. Big Data, PySpark & Data Engineering
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 10.1 Big data frameworks
 
 **Interview answer:**
@@ -90,7 +86,6 @@ Tasks on Partitions
 ---
 
 #### 10.3 Transformations vs Actions
-
 ##### Transformations are lazy
 
 ```python
@@ -224,9 +219,6 @@ country_gmv = (
 ---
 
 ### 12. Document Parsing, OCR & PDF Processing
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 12.1 Document Parsing
 
 **Interview answer:**
@@ -271,7 +263,6 @@ Do **not** use OCR when the PDF already has selectable text. Direct extraction i
 ---
 
 #### 12.3 How OCR works
-
 ##### OCR pipeline
 
 ```text
@@ -334,9 +325,6 @@ for page in reader.pages:
 ---
 
 ### 14. Data Visualization
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 14.1 What is Data Visualization?
 
 **Interview answer:**
@@ -385,8 +373,6 @@ Tools:
 
 ### 1. Transaction Dataset Schema
 
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 The interview scenario used a transaction dataset with columns similar to the following:
 
 | Column Name        |           Type | Description                                                               |
@@ -429,11 +415,7 @@ For this dataset, the discussion covered:
 ---
 
 ### 2. Python / Pandas Data Handling
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 2.1 Add a New Column
-
 ##### Interview Question
 
 > **“How do you add a new column?”**
@@ -490,7 +472,6 @@ df["is_successful"] = df["status"].eq("SUCCESS")
 ---
 
 #### 2.3 Handling Missing Values
-
 ##### Interview Question
 
 > **“How do you handle missing values in this dataset?”**
@@ -541,7 +522,6 @@ df_clean = df.dropna(subset=[
 ---
 
 #### 2.4 Handling the Discount Column
-
 ##### Interview Question
 
 > **“How do you handle missing values in the discount column?”**
@@ -605,11 +585,7 @@ invalid_dates = df[df["transaction_date"].isnull()]
 ---
 
 ### 4. Data Quality
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 4.1 Data Quality Dimensions
-
 ##### Interview Question
 
 > **“How do you find data quality in this case?”**
@@ -706,11 +682,7 @@ Useful tools/patterns:
 ---
 
 ### 5. Data Engineering / ETL Pipelines
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 5.1 Simple Five-Step Data Quality Pipeline
-
 ##### Interview Question
 
 > **“Can you design a simple five-line pipeline for this system?”**
@@ -731,19 +703,19 @@ Data Warehouse / Analytics / ML
 
 ##### Five Steps
 
-1. **Ingest the Data**  
+1. **Ingest the Data**
    Load transaction data from CSV, database, API, Kafka, or S3.
 
-2. **Validate the Data**  
+2. **Validate the Data**
    Check missing values, duplicates, invalid amount, invalid status, and discount > amount.
 
-3. **Clean or Quarantine Invalid Records**  
+3. **Clean or Quarantine Invalid Records**
    Fill discount with zero if valid, standardize dates, remove duplicates, and quarantine critical bad records.
 
-4. **Generate Data Quality Report**  
+4. **Generate Data Quality Report**
    Report completeness percentage, duplicate count, failed validation count, and overall data quality score.
 
-5. **Store and Monitor**  
+5. **Store and Monitor**
    Load clean data into warehouse/lakehouse and monitor for quality/freshness failures.
 
 ##### Interview Answer
@@ -753,7 +725,6 @@ Data Warehouse / Analytics / ML
 ---
 
 #### 5.2 Cloud-Based ETL Pipeline
-
 ##### Interview Question
 
 > **“How would you design the architecture to ingest data, store it in cloud, clean it, and make it available to reports?”**
@@ -784,7 +755,6 @@ Reports / Dashboards / ML / Downstream Systems
 ---
 
 #### 5.3 Event-Driven Batch ETL From S3
-
 ##### Interview Question
 
 > **“A batch file is dumped into S3. The moment S3 receives the data, the pipeline should trigger. How do you design this ETL pipeline?”**
@@ -862,9 +832,6 @@ s3://data-lake/transactions/quarantine/
 ---
 
 ### 6. Batch, Streaming & Micro-Batch Processing
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 6.1 Batch Processing
 
 Batch processing means collecting data over a period and processing it together.
@@ -1012,7 +979,6 @@ Repeat
 ---
 
 #### 6.5 Lambda vs Kappa Architecture
-
 ##### Lambda Architecture
 
 ```text
@@ -1043,9 +1009,6 @@ Serving Layer
 ---
 
 ### 7. Architecture Design Considerations
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 ##### Interview Question
 
 > **“What do you keep in mind while designing this data architecture?”**
@@ -1074,9 +1037,6 @@ Key factors:
 ---
 
 ### 8. Data Lineage
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 ##### Interview Question
 
 > **“What is data lineage?”**
@@ -1111,16 +1071,16 @@ Lineage answers:
 
 ##### Why Data Lineage Matters
 
-1. **Impact Analysis**  
+1. **Impact Analysis**
    If `amount` column changes, which dashboards or models break?
 
-2. **Root Cause Analysis**  
+2. **Root Cause Analysis**
    If revenue looks wrong, trace back through transformations.
 
-3. **Audit and Compliance**  
+3. **Audit and Compliance**
    Prove where customer/transaction data came from and how it was processed.
 
-4. **Data Trust**  
+4. **Data Trust**
    Users trust reports more when they understand the data journey.
 
 ##### Tools
@@ -1141,11 +1101,7 @@ Lineage answers:
 ---
 
 ### 9. Storage Model Design
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 9.1 Raw, Staging, Curated, Serving Layers
-
 ##### Interview Question
 
 > **“How would you design the storage model?”**
@@ -1183,7 +1139,6 @@ s3://company-data-lake/transactions/quarantine/year=2026/month=06/day=01/
 ---
 
 #### 9.2 Star Schema for Transactions
-
 ##### Fact Table
 
 ```text
@@ -1256,7 +1211,6 @@ GROUP BY r.region_name, d.month;
 ---
 
 #### 9.3 Why Use These Layers?
-
 ##### Interview Question
 
 > **“Why are you using these particular layers or this type of storage model?”**
@@ -1280,9 +1234,6 @@ GROUP BY r.region_name, d.month;
 ---
 
 ### 10. Amazon S3 Performance Optimization
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 ##### Interview Question
 
 > **“How do you improve S3 performance?”**
@@ -1379,11 +1330,7 @@ Benefits:
 ---
 
 ### 11. Delta Lake & Lakehouse Architecture
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 11.1 What is Delta Lake?
-
 ##### Interview Question
 
 > **“What is Delta Lake?”**
@@ -1462,7 +1409,6 @@ WHEN NOT MATCHED THEN
 ---
 
 #### 11.3 What is Lakehouse Architecture?
-
 ##### Definition
 
 > **A Lakehouse combines the low-cost scalability of a data lake with the reliability, governance, and performance features of a data warehouse.**
@@ -1508,11 +1454,7 @@ Dashboards / ML / Reports
 ---
 
 ### 12. Incremental Loads
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### 12.1 What Are Incremental Loads?
-
 ##### Interview Question
 
 > **“What are incremental loads?”**
@@ -1541,7 +1483,6 @@ If there are 100 million transactions:
 ---
 
 #### 12.2 Incremental Load Strategies
-
 ##### 1. Timestamp-Based Loading
 
 Use `updated_at`, `created_at`, or `last_modified_at`.
@@ -1640,7 +1581,6 @@ WHEN NOT MATCHED THEN
 ---
 
 #### 12.3 Managing Incremental Loads
-
 ##### Interview Question
 
 > **“How do you manage incremental loads?”**
@@ -1680,7 +1620,6 @@ WHERE pipeline_name = 'transaction_etl';
 ---
 
 #### 12.4 Failure Handling and Idempotency
-
 ##### Important Interview Point
 
 > **Only update the watermark after the full pipeline succeeds.**
@@ -1711,9 +1650,6 @@ Then use `MERGE` to prevent duplicates.
 ---
 
 ### 14. Common Interview Follow-Ups
-
-> Source: `transaction_etl_sql_data_engineering_interview_handbook.md`
-
 #### Q1. Why fill missing discount with zero?
 
 > “Because discount is optional. If business confirms that missing means no discount was applied, zero is the correct business-driven imputation. Mean or median could distort revenue.”
@@ -1823,12 +1759,9 @@ A simple professional response:
 
 ### Data Engineering & Large Datasets
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### Handling Large Datasets
-
 ##### Interview Question
 
 **How do you work with large datasets?**
@@ -1853,7 +1786,6 @@ For large datasets, avoid loading everything into memory. Use distributed proces
 ---
 
 #### PySpark
-
 ##### Interview Question
 
 **What is PySpark used for?**
@@ -1882,7 +1814,6 @@ result.show()
 ---
 
 #### ETL Pipeline
-
 ##### Interview Question
 
 **How would you design a simple ETL pipeline?**
@@ -1913,7 +1844,6 @@ Source data
 ---
 
 #### Incremental Loads
-
 ##### Interview Question
 
 **How do you manage incremental loads?**

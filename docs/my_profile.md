@@ -1,6 +1,7 @@
 # My Profile
 
 > **Purpose:** Resume-aligned personal profile, experience summary, knowledge areas, and interview positioning.
+> **Use this file for:** technical project context, resume-aligned interview preparation, and engineering profile reference.
 
 ---
 
@@ -44,7 +45,6 @@ Recent work includes evaluating LLM and agentic AI workflows for reasoning quali
 ---
 
 ## Core Skills
-
 ### Languages
 
 - Python
@@ -126,11 +126,10 @@ Recent work includes evaluating LLM and agentic AI workflows for reasoning quali
 ---
 
 ## Work Experience Summary
-
 ### Generative AI Associate — Innodata
 
-**Period:** Aug 2025 - Present  
-**Domain:** AI Data Engineering & Generative AI Services  
+**Period:** Aug 2025 - Present
+**Domain:** AI Data Engineering & Generative AI Services
 **Location:** Remote, Canada
 
 Key experience:
@@ -149,8 +148,8 @@ Key experience:
 
 ### Software Engineer - AI Training — Outlier AI
 
-**Period:** Nov 2024 - Aug 2025  
-**Domain:** Generative AI & RLHF Platform  
+**Period:** Nov 2024 - Aug 2025
+**Domain:** Generative AI & RLHF Platform
 **Location:** Remote, Canada
 
 Key experience:
@@ -167,8 +166,8 @@ Key experience:
 
 ### Software Development Engineer — Anuvu
 
-**Period:** Jun 2022 - May 2024  
-**Domain:** Aviation Connectivity & In-Flight Entertainment Platform  
+**Period:** Jun 2022 - May 2024
+**Domain:** Aviation Connectivity & In-Flight Entertainment Platform
 **Location:** Remote, Canada
 
 Key experience:
@@ -188,8 +187,8 @@ Key experience:
 
 ### Software Development Engineer — Solut Pvt. Ltd
 
-**Period:** Oct 2021 - May 2022  
-**Domain:** Financial Technology & Business Analytics Solutions  
+**Period:** Oct 2021 - May 2022
+**Domain:** Financial Technology & Business Analytics Solutions
 **Location:** Remote, Canada
 
 Key experience:
@@ -207,8 +206,8 @@ Key experience:
 
 ### Software Development Intern — Kyrion Technologies
 
-**Period:** May 2018 - Dec 2018  
-**Domain:** AI & Computer Vision  
+**Period:** May 2018 - Dec 2018
+**Domain:** AI & Computer Vision
 **Location:** New Delhi, India
 
 Key experience:
@@ -223,8 +222,8 @@ Key experience:
 
 ### Software Development Intern — Trip String
 
-**Period:** Jun 2017 - Jan 2018  
-**Domain:** Travel Technology & Recommendation Platform  
+**Period:** Jun 2017 - Jan 2018
+**Domain:** Travel Technology & Recommendation Platform
 **Location:** New Delhi, India
 
 Key experience:
@@ -238,45 +237,43 @@ Key experience:
 ---
 
 ## Education
-
 ### Master of Engineering - Quality Systems Engineering
 
-**Concordia University**, Montreal, QC, Canada  
+**Concordia University**, Montreal, QC, Canada
 GPA: 3.3 / 4.3
 
 ### Bachelor of Technology - Computer Science and Engineering
 
-**Guru Gobind Singh Indraprastha University**, Delhi, India  
+**Guru Gobind Singh Indraprastha University**, Delhi, India
 GPA: 7.8 / 9 - First Division with Distinction
 
 ---
 
 ## Projects
-
 ### Resume AI Platform
 
-**Stack:** FastAPI, React, Ollama, RAG, JWT  
+**Stack:** FastAPI, React, Ollama, RAG, JWT
 **Repository:** `TaranjyotS/resume-api`
 
 AI-powered full-stack platform using RAG-based retrieval and LLM orchestration to generate ATS-optimized resumes, cover letters, recruiter emails, and interview-prep content.
 
 ### Smart Budget Allocator
 
-**Stack:** FastAPI, React, Financial Planning Engine  
+**Stack:** FastAPI, React, Financial Planning Engine
 **Repository:** `TaranjyotS/smart-budget-allocator`
 
 Full-stack personal finance and Canadian tax planning platform for income, expenses, budgeting, goals, asset allocation, and TFSA/FHSA/RRSP planning.
 
 ### MLOps CI/CD Platform
 
-**Stack:** MLflow, DVC, FastAPI, GitHub Actions  
+**Stack:** MLflow, DVC, FastAPI, GitHub Actions
 **Repository:** `TaranjyotS/mlops-ci-cd`
 
 Production-ready MLOps framework for data validation, model training, experiment tracking, versioned pipelines, Docker, and GitHub Actions.
 
 ### Web Security Auditor
 
-**Stack:** .NET 8, Blazor, OWASP, TLS Analysis  
+**Stack:** .NET 8, Blazor, OWASP, TLS Analysis
 **Repository:** `TaranjyotS/web-security-auditor`
 
 Security assessment platform that analyzes websites for security headers, SSL/TLS configuration, certificate validation, and OWASP-related risks.
@@ -284,7 +281,6 @@ Security assessment platform that analyzes websites for security headers, SSL/TL
 ---
 
 ## Publications
-
 ### RDBMS Analysis for Big Data using Elasticsearch
 
 **Publication:** IJRECE, Vol. 7, Issue 2, 2019
@@ -303,7 +299,6 @@ Research focused on Elasticsearch-based search architectures for big data analyt
 ---
 
 ## Interview Positioning by Role
-
 ### Backend / Python Engineer
 
 > Emphasize Python, FastAPI, Flask, REST APIs, microservices, PostgreSQL, AWS, Docker, Kubernetes, CI/CD, testing, and production support.

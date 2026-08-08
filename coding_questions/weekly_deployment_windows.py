@@ -236,3 +236,19 @@ if __name__ == "__main__":
     fptr.write("\n")
 
     fptr.close()
+
+'''
+Explanation:
+1. Weekly intervals are represented as half-open ranges [start, end). Any interval that wraps across the end of the week is
+   split into two non-wrapping intervals so the rest of the algorithm can use ordinary range processing.
+2. Allowed and freeze intervals are converted into difference arrays. A minute is deployable when at least one allowed window
+   is active and no freeze window is active. Consecutive deployable minutes are merged back into continuous intervals.
+3. Part 2 converts each local window to UTC using utc = local - timezone_offset_minutes, handles week wraparound, applies the
+   same allowed-minus-freeze logic, then enforces lead time, minimum continuous duration, and the requested result count k.
+
+Summary:
+- Normalize wrapping intervals before combining them.
+- Difference arrays make overlapping allowed/freeze windows easy to aggregate over a fixed-size week.
+- Convert all time-zone inputs to one common time base before applying scheduling rules.
+- Half-open interval semantics avoid double counting at shared boundaries.
+'''

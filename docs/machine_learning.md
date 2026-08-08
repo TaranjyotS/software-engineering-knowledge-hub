@@ -1,7 +1,7 @@
 # Machine Learning, Deep Learning, Modeling & Validation
 
-> **Purpose:** ML fundamentals, model lifecycle, model evaluation, MLOps, deep learning, TensorFlow, PyTorch, and validation workflows.  
-> **Use this file for:** ML/AI system interviews and AI engineering interviews  
+> **Purpose:** ML fundamentals, model lifecycle, model evaluation, MLOps, deep learning, TensorFlow, PyTorch, and validation workflows.
+> **Use this file for:** ML/AI system interviews and AI engineering interviews
 
 ---
 
@@ -38,7 +38,6 @@ This file has been refreshed to keep the original repository topic while merging
 The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
 
 > ML fundamentals, classification, model-building workflow, evaluation metrics, overfitting, bias/variance, deep learning, TensorFlow, PyTorch, scikit-learn, and model validation.
-> Consolidated from the uploaded Markdown interview-prep files and reorganized by reusable topic. Source labels are retained for traceability.
 
 ### Topic Sections
 
@@ -53,9 +52,6 @@ The section below is merged from the previously organized topic-wise interview-p
 ---
 
 ### 8. Machine Learning Fundamentals
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 8.1 How to build ML models
 
 **Interview answer:**
@@ -91,7 +87,6 @@ Monitoring
 ---
 
 #### 8.2 Classification Models
-
 ##### Logistic Regression
 
 - Good baseline
@@ -152,9 +147,6 @@ Monitoring
 ---
 
 ### 9. TensorFlow, PyTorch & Scikit-learn
-
-> Source: `Interview_Prep_Topics_and_Questions.md`
-
 #### 9.1 TensorFlow
 
 **Interview answer:**
@@ -218,11 +210,7 @@ Deploy Model
 ---
 
 ### 12. Machine Learning, Data Pipelines, and Model Serving
-
-> Source: `interview_questions_topics_technical_prep.md`
-
 #### 12.1 ML data pipeline design
-
 ##### Stages covered
 
 - Data ingestion.
@@ -248,7 +236,6 @@ Deploy Model
 ---
 
 #### 12.2 Data quality issues in ML pipelines
-
 ##### Issues
 
 - Missing/null values.
@@ -271,7 +258,6 @@ Deploy Model
 ---
 
 #### 12.3 ML API latency vs accuracy trade-off
-
 ##### Topic covered
 
 How to maintain low-latency predictions while preserving accuracy.
@@ -293,7 +279,6 @@ How to maintain low-latency predictions while preserving accuracy.
 ---
 
 #### 12.4 Evaluating AI/ML system in production
-
 ##### Dimensions
 
 - Model quality.
@@ -315,7 +300,6 @@ How to maintain low-latency predictions while preserving accuracy.
 ---
 
 #### 12.5 Precision and recall explained intuitively
-
 ##### Precision
 
 > Of everything the model predicted as positive/correct, how much was actually correct?
@@ -349,12 +333,9 @@ Recall focuses on how many true fraud cases were found.
 
 ### Machine Learning Fundamentals
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### What Is Machine Learning?
-
 ##### Interview Question
 
 **Explain machine learning in simple terms.**
@@ -374,7 +355,6 @@ Machine learning is a field where systems learn patterns from data and use those
 ---
 
 #### Classification Models
-
 ##### Interview Question
 
 **What are common classification models?**
@@ -416,7 +396,6 @@ print(classification_report(y_test, predictions))
 ---
 
 #### How to Build an ML Model
-
 ##### Interview Question
 
 **Walk me through how you would build a machine learning model.**
@@ -467,7 +446,6 @@ print("Accuracy:", accuracy_score(y_test, predictions))
 ---
 
 #### Overfitting
-
 ##### Interview Question
 
 **What is overfitting?**
@@ -497,14 +475,13 @@ Overfitting happens when a model learns the training data too well, including no
 ---
 
 #### Bias vs Variance
-
 ##### Interview Question
 
 **Explain bias and variance.**
 
 ##### Answer
 
-Bias is error from overly simplistic assumptions.  
+Bias is error from overly simplistic assumptions.
 Variance is error from excessive sensitivity to training data.
 
 | Problem       | Description       | Example                                 |
@@ -521,7 +498,6 @@ A good model balances bias and variance. If both training and test error are hig
 ---
 
 #### Precision, Recall, F1 Score
-
 ##### Interview Question
 
 **What is the difference between precision and recall?**
@@ -554,7 +530,6 @@ If missing a positive case is costly, prioritize recall. If false positives are 
 ---
 
 #### Accuracy: “2 out of 5 Correct”
-
 ##### Interview Question
 
 **If 2 out of 5 predictions are correct, what is the metric called?**
@@ -581,7 +556,6 @@ print(f"Accuracy: {accuracy:.2%}")
 ---
 
 #### Cross Validation
-
 ##### Interview Question
 
 **What is cross-validation?**
@@ -612,7 +586,6 @@ print("Mean accuracy:", scores.mean())
 ---
 
 #### Feature Engineering
-
 ##### Interview Question
 
 **What is feature engineering?**
@@ -634,12 +607,9 @@ Feature engineering is the process of transforming raw data into useful input va
 
 ### Deep Learning
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### Neural Networks
-
 ##### Interview Question
 
 **What is a neural network?**
@@ -685,7 +655,6 @@ print(output.shape)
 ---
 
 #### Backpropagation
-
 ##### Interview Question
 
 **How does backpropagation work?**
@@ -728,7 +697,6 @@ print("Loss:", loss.item())
 ---
 
 #### Gradient Descent
-
 ##### Interview Question
 
 **What is gradient descent?**
@@ -754,7 +722,6 @@ New weight = Old weight - Learning rate × Gradient
 ---
 
 #### TensorFlow vs PyTorch
-
 ##### Interview Question
 
 **What is the difference between TensorFlow and PyTorch?**
@@ -779,12 +746,9 @@ I generally prefer PyTorch for experimentation and model development because it 
 
 ### AI/ML Validation
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### Model Validation
-
 ##### Interview Question
 
 **How do you validate an AI/ML model?**
@@ -809,7 +773,6 @@ Validation should happen across the full lifecycle.
 ---
 
 #### Data Validation
-
 ##### Checks
 
 - Missing values
@@ -838,7 +801,6 @@ def validate_dataset(df: pd.DataFrame) -> dict:
 ---
 
 #### Model Drift
-
 ##### Interview Question
 
 **What is model drift?**
@@ -862,7 +824,6 @@ A fraud detection model trained on last year's fraud patterns may perform poorly
 ---
 
 #### Performance Monitoring
-
 ##### What to Monitor
 
 - Accuracy
@@ -879,12 +840,9 @@ A fraud detection model trained on last year's fraud patterns may perform poorly
 
 ### System Design for AI/ML Platforms
 
-> Source: `ML_AI_Systems_Interview_Prep_Handbook.md`
-
 ---
 
 #### Design an AI Validation Platform
-
 ##### Interview Question
 
 **Design a platform to validate AI/ML models at scale.**
@@ -962,7 +920,6 @@ User uploads model
 ---
 
 #### Scalability Considerations
-
 ##### Questions to Address
 
 - How much data?

@@ -266,3 +266,17 @@ def run_examples():
 
 if __name__ == "__main__":
     run_examples()
+
+'''
+Explanation:
+1. Part 1 first locates the merchant of interest, then compares every other merchant against its non-empty attributes. A single
+   identical attribute value is enough to create a direct link, so comparison can stop as soon as one field matches.
+2. The confidence-based version checks only fields present in confidence_levels. Matching fields contribute their configured
+   score, and the merchant is linked once the running score reaches the required threshold.
+3. Empty or missing values are ignored so incomplete data does not accidentally create a relationship.
+
+Summary:
+- Direct matching can short-circuit after the first qualifying field.
+- Weighted matching turns multiple weaker signals into one confidence score.
+- Ignore identifiers and missing values when comparing descriptive merchant attributes.
+'''

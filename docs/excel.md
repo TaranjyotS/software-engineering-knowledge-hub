@@ -1,7 +1,7 @@
 # Excel
 
-> **Purpose:** Excel formulas, lookup functions, pivot tables, conditional formatting, and spreadsheet interview preparation.  
-> **Use this file for:** data analyst, business analyst, QA/data validation, and reporting interviews  
+> **Purpose:** Excel formulas, lookup functions, pivot tables, conditional formatting, and spreadsheet interview preparation.
+> **Use this file for:** data analyst, business analyst, QA/data validation, and reporting interviews
 
 ---
 
@@ -36,7 +36,6 @@ Excel is commonly used for data cleaning, reporting, reconciliation, and quick a
 ---
 
 ## Interview Questions & Answers
-
 ### Q1. What is the difference between VLOOKUP and XLOOKUP?
 
 **Answer:** VLOOKUP searches the first column of a range and returns a value from a specified column index. XLOOKUP is more flexible because it can search left or right, does not require a column index, and has better default exact-match behavior.

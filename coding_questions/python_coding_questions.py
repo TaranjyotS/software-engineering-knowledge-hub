@@ -1,3 +1,10 @@
+'''General Python Coding Practice
+
+This file is a collection of independent Python interview exercises. Each exercise follows the same lightweight structure used
+throughout this folder: a triple-quoted question statement appears immediately before the implementation, followed by example
+usage or expected output where useful. The long separator lines visually divide one exercise from the next.
+'''
+
 ##################################################################################################################################
 
 '''Check if 2 strings are anagram.'''

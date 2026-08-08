@@ -23,28 +23,7 @@ This is a new topic file created because the attached repository files did not h
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Transaction datasets, Pandas, ETL pipelines, data quality, batch/streaming/micro-batch, data lineage, lakehouse, Delta Lake, PySpark, analytics, and reporting architecture.
-
-### Topic Sections
-
-1. Big Data, PySpark & Data Engineering — `Interview_Prep_Topics_and_Questions.md`
-2. Document Parsing, OCR & PDF Processing — `Interview_Prep_Topics_and_Questions.md`
-3. Data Visualization — `Interview_Prep_Topics_and_Questions.md`
-4. Transaction Dataset Schema — `transaction_etl_sql_data_engineering_interview_handbook.md`
-5. Python / Pandas Data Handling — `transaction_etl_sql_data_engineering_interview_handbook.md`
-6. Data Quality — `transaction_etl_sql_data_engineering_interview_handbook.md`
-7. Data Engineering / ETL Pipelines — `transaction_etl_sql_data_engineering_interview_handbook.md`
-8. Batch, Streaming & Micro-Batch Processing — `transaction_etl_sql_data_engineering_interview_handbook.md`
-9. Architecture Design Considerations — `transaction_etl_sql_data_engineering_interview_handbook.md`
-10. Data Lineage — `transaction_etl_sql_data_engineering_interview_handbook.md`
-11. Storage Model Design — `transaction_etl_sql_data_engineering_interview_handbook.md`
-12. Amazon S3 Performance Optimization — `transaction_etl_sql_data_engineering_interview_handbook.md`
-13. Delta Lake & Lakehouse Architecture — `transaction_etl_sql_data_engineering_interview_handbook.md`
-14. Incremental Loads — `transaction_etl_sql_data_engineering_interview_handbook.md`
-15. Common Interview Follow-Ups — `transaction_etl_sql_data_engineering_interview_handbook.md`
-16. Data Engineering & Large Datasets — `ML_AI_Systems_Interview_Prep_Handbook.md`
 
 ---
 
@@ -107,7 +86,7 @@ df.write.parquet(...)
 
 #### 10.4 Narrow vs Wide Transformations
 
-| Narrow                    | Wide                                     |
+|          Narrow           |                   Wide                   |
 | ------------------------- | ---------------------------------------- |
 | No shuffle                | Requires shuffle                         |
 | `select`, `filter`, `map` | `groupBy`, `join`, `distinct`, `orderBy` |
@@ -121,7 +100,7 @@ df.write.parquet(...)
 
 #### 10.5 Repartition vs Coalesce
 
-| Method          | Meaning                                        |
+|     Method      |                    Meaning                     |
 | --------------- | ---------------------------------------------- |
 | `repartition()` | Increase/decrease partitions with shuffle      |
 | `coalesce()`    | Usually reduce partitions without full shuffle |
@@ -335,7 +314,7 @@ for page in reader.pages:
 
 #### 14.2 Common visualization types
 
-| Chart Type   | Use Case                       |
+|  Chart Type  |            Use Case            |
 | ------------ | ------------------------------ |
 | Bar chart    | Compare categories             |
 | Line chart   | Show trends over time          |
@@ -375,7 +354,7 @@ Tools:
 
 The interview scenario used a transaction dataset with columns similar to the following:
 
-| Column Name        |           Type | Description                                                               |
+|    Column Name     |      Type      |                                Description                                |
 | ------------------ | -------------: | ------------------------------------------------------------------------- |
 | `transaction_id`   |         string | Unique transaction identifier                                             |
 | `customer_id`      |         string | Customer identifier                                                       |
@@ -391,7 +370,7 @@ The interview scenario used a transaction dataset with columns similar to the fo
 
 #### Sample Records
 
-| transaction_id | customer_id | product_id | category    | amount | quantity | discount | payment_method | transaction_date | region | status  |
+| transaction_id | customer_id | product_id |  category   | amount | quantity | discount | payment_method | transaction_date | region | status  |
 | -------------- | ----------- | ---------- | ----------- | -----: | -------: | -------: | -------------- | ---------------- | ------ | ------- |
 | T001           | C01         | P101       | Electronics |   1000 |        1 |      100 | Card           | 2026-06-01       | Mumbai | SUCCESS |
 | T002           | C02         | P102       | Fashion     |   2000 |        2 |      150 | UPI            | 2026-06-01       | Delhi  | SUCCESS |
@@ -455,7 +434,7 @@ df["purchase_day"] = df["transaction_date"].dt.day
 
 Useful derived columns:
 
-| New Column       | Purpose                      |
+|    New Column    |           Purpose            |
 | ---------------- | ---------------------------- |
 | `final_amount`   | Actual amount after discount |
 | `purchase_year`  | Year-level reporting         |
@@ -485,7 +464,7 @@ print(missing_summary)
 
 #### Column-Level Missing Value Strategy
 
-| Column             | Handling Strategy                                                                                 |
+|       Column       |                                         Handling Strategy                                         |
 | ------------------ | ------------------------------------------------------------------------------------------------- |
 | `transaction_id`   | Critical. Drop/reject/quarantine because it should be unique and mandatory.                       |
 | `customer_id`      | Important. Retrieve from source if possible; otherwise mark as `Unknown` only if business allows. |
@@ -592,7 +571,7 @@ invalid_dates = df[df["transaction_date"].isnull()]
 
 A strong answer uses these dimensions:
 
-| Dimension            | Meaning                            | Example                                               |
+|      Dimension       |              Meaning               |                        Example                        |
 | -------------------- | ---------------------------------- | ----------------------------------------------------- |
 | Completeness         | Required fields are populated      | `transaction_id`, `amount`, `date` should not be null |
 | Uniqueness           | No duplicate business keys         | `transaction_id` should be unique                     |
@@ -606,7 +585,7 @@ A strong answer uses these dimensions:
 
 #### 4.2 Column-Level Data Quality Rules
 
-| Column             | Data Quality Rule                                                     |
+|       Column       |                           Data Quality Rule                           |
 | ------------------ | --------------------------------------------------------------------- |
 | `transaction_id`   | Not null, unique                                                      |
 | `customer_id`      | Not null, exists in customer master                                   |
@@ -779,7 +758,7 @@ Reports / Dashboards / Downstream Systems
 
 ##### AWS-Oriented Design
 
-| Stage         | AWS Service Example                      | Purpose                      |
+|     Stage     |           AWS Service Example            |           Purpose            |
 | ------------- | ---------------------------------------- | ---------------------------- |
 | Ingestion     | S3                                       | Store raw batch files        |
 | Trigger       | S3 Event Notification                    | Detect new file arrival      |
@@ -963,7 +942,7 @@ Repeat
 
 #### 6.4 When to Use Which
 
-| Requirement                     | Recommended Approach |
+|           Requirement           | Recommended Approach |
 | ------------------------------- | -------------------- |
 | Daily finance report            | Batch                |
 | Real-time fraud detection       | Streaming            |
@@ -1015,7 +994,7 @@ Serving Layer
 
 Key factors:
 
-| Factor              | What to Think About                                |
+|       Factor        |                What to Think About                 |
 | ------------------- | -------------------------------------------------- |
 | Data Volume         | How much data is processed daily/hourly?           |
 | Data Velocity       | How fast is data arriving?                         |
@@ -1061,7 +1040,7 @@ Power BI / Tableau Dashboard
 
 Lineage answers:
 
-| Question                                | Example                                            |
+|                Question                 |                      Example                       |
 | --------------------------------------- | -------------------------------------------------- |
 | Where did data originate?               | Transaction database                               |
 | What transformations happened?          | Deduplication, discount fill, date standardization |
@@ -1120,7 +1099,7 @@ Serving / Analytics Layer
 
 ##### Layer Explanation
 
-| Layer   | Purpose                                     |
+|  Layer  |                   Purpose                   |
 | ------- | ------------------------------------------- |
 | Raw     | Store original data unchanged               |
 | Staging | Validate, clean, standardize                |
@@ -1217,7 +1196,7 @@ GROUP BY r.region_name, d.month;
 
 ##### Answer
 
-| Component     | Why It Is Used                                         |
+|   Component   |                     Why It Is Used                     |
 | ------------- | ------------------------------------------------------ |
 | Raw Layer     | Auditability, reprocessing, original data preservation |
 | Staging Layer | Data quality, cleaning, standardization                |
@@ -1240,7 +1219,7 @@ GROUP BY r.region_name, d.month;
 
 ##### Key Techniques
 
-| Optimization           | Benefit                         |
+|      Optimization      |             Benefit             |
 | ---------------------- | ------------------------------- |
 | Prefix parallelization | Higher request throughput       |
 | Multipart upload       | Faster large file uploads       |
@@ -1375,7 +1354,7 @@ The `_delta_log` tracks transaction metadata.
 
 #### 11.2 Key Delta Lake Features
 
-| Feature            | Why It Matters                         |
+|      Feature       |             Why It Matters             |
 | ------------------ | -------------------------------------- |
 | ACID Transactions  | Reliable concurrent reads/writes       |
 | Schema Enforcement | Prevents bad schema from being written |
@@ -1427,7 +1406,7 @@ SQL / BI / ML / AI Workloads
 
 #### 11.4 Bronze, Silver, Gold Layers
 
-| Layer  | Purpose                    | Example                   |
+| Layer  |          Purpose           |          Example          |
 | ------ | -------------------------- | ------------------------- |
 | Bronze | Raw data                   | `transactions_raw`        |
 | Silver | Cleaned and validated data | `transactions_clean`      |
@@ -1467,7 +1446,7 @@ Dashboards / ML / Reports
 
 If there are 100 million transactions:
 
-| Approach         |        Records Processed |
+|     Approach     |    Records Processed     |
 | ---------------- | -----------------------: |
 | Full Load        |          All 100 million |
 | Incremental Load | Only new/changed records |
@@ -1591,7 +1570,7 @@ WHEN NOT MATCHED THEN
 
 #### Control Table Example
 
-| pipeline_name   | last_successful_load | status  |
+|  pipeline_name  | last_successful_load | status  |
 | --------------- | -------------------- | ------- |
 | transaction_etl | 2026-06-10 01:00:00  | SUCCESS |
 
@@ -1706,7 +1685,7 @@ Then choose a rule:
 
 #### Q8. What is the difference between `WHERE` and `HAVING`?
 
-| Clause   | Used For                         |
+|  Clause  |             Used For             |
 | -------- | -------------------------------- |
 | `WHERE`  | Filters rows before grouping     |
 | `HAVING` | Filters groups after aggregation |
@@ -1725,7 +1704,7 @@ HAVING COUNT(*) > 1;
 
 #### Q9. What is the difference between `ROW_NUMBER`, `RANK`, and `DENSE_RANK`?
 
-| Function       | Behavior                           |
+|    Function    |              Behavior              |
 | -------------- | ---------------------------------- |
 | `ROW_NUMBER()` | Unique sequence even if values tie |
 | `RANK()`       | Same rank for ties, leaves gaps    |
@@ -1735,7 +1714,7 @@ HAVING COUNT(*) > 1;
 
 #### Q10. What is the difference between full load and incremental load?
 
-| Full Load             | Incremental Load                   |
+|       Full Load       |          Incremental Load          |
 | --------------------- | ---------------------------------- |
 | Processes all records | Processes only new/changed records |
 | Simpler               | More complex                       |
@@ -1832,7 +1811,7 @@ Source data
 
 ##### Example Architecture
 
-| Stage         | Example Tool              |
+|     Stage     |       Example Tool        |
 | ------------- | ------------------------- |
 | Ingestion     | S3, API, Kafka            |
 | Processing    | Python, Spark             |

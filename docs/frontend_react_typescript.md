@@ -23,15 +23,7 @@ This is a new topic file created because the attached repository files did not h
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > React, TypeScript, frontend API integration, full-stack/product engineering, UI-side concerns, and client-facing product workflows.
-
-### Topic Sections
-
-1. ReactJS Interview Topics — `ai_engineer_interview_prep_topics.md`
-2. TypeScript Interview Topics — `ai_engineer_interview_prep_topics.md`
-3. Full-Stack / Product Engineering — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -42,7 +34,7 @@ The section below is merged from the previously organized topic-wise interview-p
 
 #### 11.2 State vs Props
 
-| Concept | Meaning                          |
+| Concept |             Meaning              |
 | ------- | -------------------------------- |
 | State   | Data managed inside a component  |
 | Props   | Data passed from parent to child |
@@ -129,7 +121,7 @@ const filteredUsers = useMemo(() => {
 
 #### 11.6 useEffect vs useMemo
 
-| Hook      | Used For                                     |
+|   Hook    |                   Used For                   |
 | --------- | -------------------------------------------- |
 | useEffect | Side effects like API calls                  |
 | useMemo   | Performance optimization for computed values |
@@ -160,7 +152,7 @@ const filteredUsers = useMemo(() => {
 
 #### 12.3 Interface vs Type
 
-| Interface                 | Type                          |
+|         Interface         |             Type              |
 | ------------------------- | ----------------------------- |
 | Best for object contracts | More flexible                 |
 | Can be extended           | Supports unions/intersections |

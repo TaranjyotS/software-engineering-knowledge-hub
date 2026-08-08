@@ -23,37 +23,7 @@ This is a new topic file created because the attached repository files did not h
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Generative AI, LLMs, prompt engineering, AI agents, tool calling, RAG, embeddings, vector databases, hallucination, guardrails, model comparison, and LLM evaluation.
-
-### Topic Sections
-
-1. Core GenAI & Agentic AI — `Interview_Prep_Topics_and_Questions.md`
-2. RAG, Retrieval, Chunking & Vector Search — `Interview_Prep_Topics_and_Questions.md`
-3. LLM Evaluation, Hallucination & Model Comparison — `Interview_Prep_Topics_and_Questions.md`
-4. System Design for AI Assistants — `Interview_Prep_Topics_and_Questions.md`
-5. AI Agents — `ai_engineer_interview_prep_topics.md`
-6. RAG Systems — `ai_engineer_interview_prep_topics.md`
-7. LLM Evaluation & Metadata — `ai_engineer_interview_prep_topics.md`
-8. Prompt Engineering — `ai_engineer_interview_prep_topics.md`
-9. Productionizing AI Agents — `ai_engineer_interview_prep_topics.md`
-10. Current GenAI Role Explanation — `ai_engineer_interview_prep_topics.md`
-11. LLM / GenAI Application Development — `deloitte_python_genai_interview_prep_topics.md`
-12. Prompt Engineering & Context Construction — `deloitte_python_genai_interview_prep_topics.md`
-13. RAG: Retrieval-Augmented Generation — `deloitte_python_genai_interview_prep_topics.md`
-14. Embeddings & Vector Databases — `deloitte_python_genai_interview_prep_topics.md`
-15. LLM Evaluation, Guardrails, and Safety — `deloitte_python_genai_interview_prep_topics.md`
-16. Model Selection, Fine-Tuning, LoRA/QLoRA — `deloitte_python_genai_interview_prep_topics.md`
-17. Multimodal AI Familiarity — `deloitte_python_genai_interview_prep_topics.md`
-18. GenAI, ChatGPT API, and Prompt Engineering — `interview_prep_python_rest_fastapi_genai.md`
-19. LLMs, RAG, Prompt Engineering, and GenAI Evaluation — `interview_questions_topics_technical_prep.md`
-20. LLMs & Generative AI — `ML_AI_Systems_Interview_Prep_Handbook.md`
-21. RAG: Retrieval-Augmented Generation — `ML_AI_Systems_Interview_Prep_Handbook.md`
-22. AI Agents & Tool Calling — `ML_AI_Systems_Interview_Prep_Handbook.md`
-23. Embeddings, Vector Databases & Indexing — `ML_AI_Systems_Interview_Prep_Handbook.md`
-24. LLM Evaluation & Hallucination Reduction — `ML_AI_Systems_Interview_Prep_Handbook.md`
-25. AI / LLM / GenAI Integration — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -100,7 +70,7 @@ Next Action or Final Answer
 
 #### 1.3 Agentic AI vs Generative AI
 
-| Generative AI                      | Agentic AI                                     |
+|           Generative AI            |                   Agentic AI                   |
 | ---------------------------------- | ---------------------------------------------- |
 | Generates content                  | Completes tasks                                |
 | Single prompt → response           | Multi-step workflow                            |
@@ -230,7 +200,7 @@ Grounded Answer + Sources
 
 #### 2.2 RAG vs Fine-Tuning
 
-| RAG                           | Fine-tuning                          |
+|              RAG              |             Fine-tuning              |
 | ----------------------------- | ------------------------------------ |
 | Best for changing knowledge   | Best for changing behavior/style     |
 | Uses latest documents         | Knowledge can become stale           |
@@ -315,7 +285,7 @@ Examples:
 - Slight loss in accuracy
 - Useful for very large-scale retrieval
 
-| Index |     Speed |    Recall | Memory | Best Use               |
+| Index |   Speed   |  Recall   | Memory |        Best Use        |
 | ----- | --------: | --------: | -----: | ---------------------- |
 | Flat  |      Slow | Excellent |   High | Small datasets/testing |
 | HNSW  | Very fast | Excellent |   High | Production RAG         |
@@ -404,7 +374,7 @@ Preserves fields such as:
 
 A production RAG backend can expose:
 
-| Endpoint                 | Purpose                             |
+|         Endpoint         |               Purpose               |
 | ------------------------ | ----------------------------------- |
 | `POST /upload`           | Upload document                     |
 | `POST /parse`            | Extract text from uploaded document |
@@ -531,7 +501,7 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100):
 
 #### 3.3 Offline vs Online Evaluation
 
-| Offline Evaluation             | Online Evaluation             |
+|       Offline Evaluation       |       Online Evaluation       |
 | ------------------------------ | ----------------------------- |
 | Before deployment              | In production                 |
 | Uses benchmark/golden datasets | Uses real user traffic        |
@@ -654,7 +624,7 @@ Metrics:
 - Often used in summarization
 - Measures how much reference content is captured
 
-| BLEU                    | ROUGE                      |
+|          BLEU           |           ROUGE            |
 | ----------------------- | -------------------------- |
 | Precision-oriented      | Recall-oriented            |
 | Translation             | Summarization              |
@@ -674,7 +644,7 @@ Metrics:
 
 ##### Model comparison dimensions
 
-| Dimension    | Why it matters                        |
+|  Dimension   |            Why it matters             |
 | ------------ | ------------------------------------- |
 | Accuracy     | Correctness of answer                 |
 | Faithfulness | Whether answer is grounded in context |
@@ -821,7 +791,7 @@ Use cases:
 
 #### 4.2 Chatbot vs AI Agent
 
-| Chatbot                    | AI Agent                 |
+|          Chatbot           |         AI Agent         |
 | -------------------------- | ------------------------ |
 | Mostly answers questions   | Can perform actions      |
 | Usually conversation-based | Workflow/task-based      |
@@ -931,7 +901,7 @@ Final Answer
 
 ##### Improvement Areas
 
-| Area       | Improvement                           |
+|    Area    |              Improvement              |
 | ---------- | ------------------------------------- |
 | Chunking   | Adjust chunk size and overlap         |
 | Embeddings | Use domain-suitable embedding model   |
@@ -1084,7 +1054,7 @@ Answer:
 
 > "Temperature controls randomness in model responses. Lower temperature makes answers more deterministic and consistent. Higher temperature makes answers more creative but less predictable."
 
-| Temperature | Behavior                  |
+| Temperature |         Behavior          |
 | ----------- | ------------------------- |
 | 0.0 - 0.2   | Deterministic, consistent |
 | 0.3 - 0.7   | Balanced                  |
@@ -1352,7 +1322,7 @@ class RAGService:
 
 #### Chunking strategies
 
-| Strategy                 | Use case                                           |
+|         Strategy         |                      Use case                      |
 | ------------------------ | -------------------------------------------------- |
 | Fixed-size chunks        | Simple documents, fast baseline                    |
 | Sliding window           | Preserves context across chunk boundaries          |
@@ -1565,7 +1535,7 @@ Application UI
 
 #### 11.4 Pros of ChatGPT API
 
-| Advantage                       | Explanation                           |
+|            Advantage            |              Explanation              |
 | ------------------------------- | ------------------------------------- |
 | Easy integration                | Can be used from backend services     |
 | Powerful language understanding | Handles natural language well         |
@@ -1578,7 +1548,7 @@ Application UI
 
 #### 11.5 Cons of ChatGPT API
 
-| Limitation            | Explanation                                        |
+|      Limitation       |                    Explanation                     |
 | --------------------- | -------------------------------------------------- |
 | Hallucinations        | Model can generate confident but incorrect answers |
 | Cost                  | Token usage can become expensive                   |
@@ -1953,7 +1923,7 @@ A good prompt is clear, specific, contextual, and testable.
 
 ##### Good Prompt Characteristics
 
-| Characteristic      | Meaning                       |
+|   Characteristic    |            Meaning            |
 | ------------------- | ----------------------------- |
 | Clear goal          | The model knows what to do    |
 | Context             | Provides necessary background |
@@ -2085,7 +2055,7 @@ for idx in indices[0]:
 
 ##### Types of Chunking
 
-| Strategy            | Description                    | Best For            |
+|      Strategy       |          Description           |      Best For       |
 | ------------------- | ------------------------------ | ------------------- |
 | Fixed-size chunking | Split by token/character count | Simple documents    |
 | Sliding window      | Overlapping chunks             | Preserving context  |
@@ -2123,7 +2093,7 @@ print(len(chunks))
 
 ##### Evaluation Areas
 
-| Area               | Question                                       |
+|        Area        |                    Question                    |
 | ------------------ | ---------------------------------------------- |
 | Retrieval quality  | Did we retrieve the right context?             |
 | Generation quality | Did the answer use the context correctly?      |
@@ -2180,7 +2150,7 @@ User goal
 
 ##### Answer
 
-| Generative AI                       | Agentic AI                                      |
+|            Generative AI            |                   Agentic AI                    |
 | ----------------------------------- | ----------------------------------------------- |
 | Generates content                   | Takes actions toward a goal                     |
 | Usually single-turn or prompt-based | Multi-step workflow                             |
@@ -2280,7 +2250,7 @@ A vector database stores embeddings and supports similarity search. It is common
 #### Similarity Search
 ##### Common Similarity Metrics
 
-| Metric             | Use                           |
+|       Metric       |              Use              |
 | ------------------ | ----------------------------- |
 | Cosine similarity  | Measures angle/direction      |
 | Dot product        | Common in embedding retrieval |
@@ -2314,7 +2284,7 @@ print(cosine_similarity(vector_1, vector_2))
 
 Indexing strategies improve retrieval speed and scalability.
 
-| Strategy      | Description                                     |
+|   Strategy    |                   Description                   |
 | ------------- | ----------------------------------------------- |
 | Flat index    | Exact search, slower at scale                   |
 | HNSW          | Graph-based approximate nearest neighbor search |
@@ -2372,7 +2342,7 @@ Answer only using the provided context. If the context does not contain the answ
 
 ##### Evaluation Dimensions
 
-| Dimension    | Meaning                               |
+|  Dimension   |                Meaning                |
 | ------------ | ------------------------------------- |
 | Accuracy     | Is the answer correct?                |
 | Relevance    | Does it answer the question?          |
@@ -2403,7 +2373,7 @@ Answer only using the provided context. If the context does not contain the answ
 
 BLEU and ROUGE are text evaluation metrics.
 
-| Metric | Common Use          |
+| Metric |     Common Use      |
 | ------ | ------------------- |
 | BLEU   | Machine translation |
 | ROUGE  | Summarization       |
@@ -2636,7 +2606,7 @@ A credible explanation can state an approximate split only when it reflects the 
 
 These are different levels of ownership:
 
-| Level                    | Typical Responsibility                                                          |
+|          Level           |                             Typical Responsibility                              |
 | ------------------------ | ------------------------------------------------------------------------------- |
 | Model evaluation         | Rubrics, test cases, output analysis, regression findings                       |
 | Evaluation engineering   | Python harnesses, datasets, scoring, automation, reporting                      |
@@ -2665,3 +2635,282 @@ The platform-specific refresh should focus on the team's current web framework, 
 A useful positioning statement is:
 
 > My backend foundation remains the core. Recent AI work added experience with model behavior, evaluation, prompt workflows, retrieval, and AI reliability. I can apply those capabilities inside a conventional production platform without assuming every workflow should become agentic.
+
+---
+
+## Safe Tool-Using Agents: Orchestration, State, Cost, and Evaluation
+
+A production agent should not let model-generated text directly execute arbitrary code or business actions. A safer design separates model decisions from trusted orchestration and tool execution.
+
+### Production Agent Architecture
+
+```text
+Client
+  -> API / authentication layer
+  -> agent orchestrator / task state
+  -> policy and authorization engine
+  -> model gateway ---------> retrieval service
+  -> validated tool registry
+  -> domain services / external systems
+  -> audit logs, traces, metrics, evaluations
+```
+
+Core rule: the model proposes what to do, while trusted application code decides whether that action is valid and authorized. This keeps authentication, business invariants, financial rules, and tenant isolation outside nondeterministic model output.
+
+### ReAct-Style Agent Loop From Scratch
+
+A simple ReAct-style engineering loop is:
+
+```text
+User goal
+  -> model decides: final answer or tool call
+  -> orchestrator validates decision
+  -> authorized tool executes
+  -> structured observation is returned to model
+  -> repeat until complete or bounded limit is reached
+```
+
+The important part is not exposing hidden reasoning. The important engineering behavior is the repeated **decision -> action -> observation** cycle with explicit validation and termination.
+
+Pseudo-code:
+
+```python
+for step in range(MAX_TOOL_STEPS):
+    decision = model.decide(messages, tool_schemas)
+
+    if decision.type == "final":
+        return decision.answer
+
+    tool = registry.get(decision.tool_name)
+    validate_tool_call(tool, decision.arguments)
+    enforce_permissions(tool, context)
+    result = tool.execute(**decision.arguments)
+    messages.append(structured_observation(result))
+
+return escalate_to_human("Tool-call limit reached")
+```
+
+### Structured Tool Contracts
+
+A strong tool contract should define:
+
+- A precise, action-oriented name.
+- A description explaining when the tool should be used.
+- Structured input parameters and required fields.
+- Predictable success and error output.
+- Read-only versus state-changing classification.
+- Authentication and authorization requirements.
+- Idempotency expectations.
+- Timeout and retry behavior.
+- Audit metadata.
+
+Example OpenAI-compatible schema:
+
+```python
+CHECK_STOCK_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "check_realtime_stock",
+        "description": "Check current warehouse quantity for a known SKU.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "sku": {"type": "string"},
+            },
+            "required": ["sku"],
+            "additionalProperties": False,
+        },
+    },
+}
+```
+
+Purpose-built business tools are usually safer than exposing every low-level API endpoint to a model. They reduce ambiguity, centralize domain validation, and make authorization and evaluation easier.
+
+### Bounded Execution and Cost Ceilings
+
+Agent loops must have hard limits. Useful limits include:
+
+- Maximum tool-call iterations.
+- Maximum wall-clock duration.
+- Token budget.
+- Per-tool timeout.
+- Per-user or per-tenant quotas.
+
+A simple cost ceiling is:
+
+```text
+maximum tool cost per task
+    = maximum tool calls per task
+    x average or worst-case cost per tool call
+```
+
+For example, if a workflow allows at most five tool-call iterations, the orchestrator has a predictable upper bound even if the model keeps asking for more actions. When the limit is reached, stop safely and hand off rather than looping indefinitely.
+
+### Avoiding Duplicate Calls Without Using Stale State
+
+Within one active task, repeated read-only lookups can be cached. A useful cache key is:
+
+```text
+(order_id, intent)
+```
+
+This distinguishes different tasks for the same entity:
+
+```text
+(123, "tracking") != (123, "refund_eligibility")
+```
+
+Clear task-local cached state when any of these change:
+
+- Order or entity ID.
+- Intent.
+- Authentication state.
+- User cancels or contradicts the request.
+- A final answer or human handoff completes the task.
+
+The key rule is: **cache only within the active task, and never let cost optimization override correctness.**
+
+### Fresh Revalidation Before High-Impact Actions
+
+Time-sensitive or financial decisions should bypass stale cached eligibility. Immediately before a protected action:
+
+1. Re-check authentication/authorization.
+2. Re-read the latest authoritative state.
+3. Re-run eligibility or invariant checks.
+4. Enforce approval thresholds.
+5. Require explicit user confirmation where appropriate.
+6. Use an idempotency key for the write.
+
+This protects against stale-state bugs such as a second refund occurring between the original eligibility check and the final action.
+
+### Human-in-the-Loop Boundaries
+
+A useful action classification is:
+
+|        Risk level         |                           Example                            |             Typical policy             |
+| ------------------------- | ------------------------------------------------------------ | -------------------------------------- |
+| Read-only                 | Search catalog, retrieve status                              | Allow after required authorization     |
+| Reversible low-risk write | Create a draft or internal note                              | Validate, log, possibly confirm        |
+| High-impact write         | Send money, change address, cancel order, change permissions | Human approval or human-only execution |
+
+The model may recommend an action, but trusted application code should enforce the policy independently of the prompt.
+
+### Guardrails for Infrastructure and Operations Agents
+
+Infrastructure agents can have a much larger blast radius than ordinary conversational agents, so permissions and execution paths should be designed around failure rather than assuming the model will always choose correctly.
+
+A practical risk policy is:
+
+|         Action class         |                                    Example                                    |                           Default policy                           |
+| ---------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Read-only analysis           | Inspect metrics, logs, deployment status, or Terraform plan                   | Allow within scoped permissions and audit every call               |
+| Reversible low-risk action   | Restart one non-critical workload or create a draft change                    | Allow only inside tight policy bounds with validation and rollback |
+| High-impact production write | Delete infrastructure, change IAM, major scale action, irreversible DB change | Require explicit human approval or keep the action human-only      |
+
+Additional controls should include:
+
+- Task-scoped and least-privilege credentials rather than broad cloud administrator access.
+- Tool allowlists and resource allowlists.
+- Quotas and concurrency limits.
+- Dry-run/plan modes before mutation where the underlying tool supports them.
+- Policy-as-code validation independent of the LLM.
+- Structured change requests instead of free-form shell execution.
+- Full audit logs containing actor, tool, arguments, target resource, result, and approval identity.
+- Post-change health validation.
+- Deterministic rollback or recovery procedures.
+- Automatic stop conditions when telemetry becomes ambiguous or the requested action exceeds policy.
+
+**Interview answer:**
+
+> I would not give an infrastructure agent broad credentials and trust the prompt to keep it safe. Read-only analysis can often run automatically, low-risk reversible actions can execute inside narrow policy boundaries, and high-impact actions such as privilege changes, production deletion, major scaling, or irreversible database operations should require explicit approval. Trusted code should enforce permissions, quotas, policy checks, audit logging, validation, and rollback independently of the model.
+
+### Robust Structured-Output Parsing
+
+Models sometimes return structured data surrounded by prose or Markdown fences. The orchestrator should not blindly call `json.loads()` on the entire response and should not use `eval()`.
+
+A safer approach:
+
+1. Prefer native structured-output/tool-call APIs when available.
+2. Otherwise strip code fences and scan for candidate JSON objects.
+3. Parse with `json.JSONDecoder().raw_decode()` or an equivalent strict parser.
+4. Validate the parsed object against the expected schema.
+5. Reject malformed or ambiguous output rather than guessing.
+
+```python
+import json
+
+
+def first_json_object(text: str) -> dict | None:
+    decoder = json.JSONDecoder()
+
+    for index, char in enumerate(text):
+        if char != "{":
+            continue
+
+        try:
+            value, _ = decoder.raw_decode(text[index:])
+        except json.JSONDecodeError:
+            continue
+
+        if isinstance(value, dict):
+            return value
+
+    return None
+```
+
+### Model-Provider Abstraction
+
+Wrap provider SDKs behind a small internal interface so orchestration code does not depend on one vendor's response format.
+
+Useful responsibilities for the adapter layer:
+
+- Normalize messages and structured outputs.
+- Map provider-specific errors.
+- Apply retries and timeouts.
+- Track latency, tokens, and cost.
+- Support fallback or routing policies.
+- Record model and prompt versions.
+
+This makes it easier to switch models without rewriting domain services or tool authorization.
+
+### MCP and Tool Surfaces
+
+Model Context Protocol-style tool exposure is most useful when the tool layer remains a deliberate business interface rather than a raw mirror of internal APIs. The same production rules still apply:
+
+- Authenticate the caller independently of model text.
+- Apply tenant and object-level authorization at execution time.
+- Validate every argument.
+- Keep high-risk actions behind approval boundaries.
+- Emit audit events for reads and writes.
+
+### Agent Evaluation Beyond Answer Quality
+
+Evaluate an agent at several layers:
+
+|      Dimension       |                            Question                            |
+| -------------------- | -------------------------------------------------------------- |
+| Task success         | Did the workflow achieve the requested business outcome?       |
+| Tool selection       | Did the agent choose the correct tool?                         |
+| Argument correctness | Were tool arguments complete and valid?                        |
+| Groundedness         | Is the final response supported by tool/retrieval evidence?    |
+| Safety               | Were permissions, escalation, and protected actions respected? |
+| Efficiency           | Did it avoid unnecessary calls and loops?                      |
+| Recovery             | Did it handle timeouts, malformed output, and tool failures?   |
+| Cost/latency         | Was the workflow operationally acceptable?                     |
+
+A strong evaluation suite includes golden scenarios, adversarial inputs, malformed tool outputs, permission failures, stale-state scenarios, prompt-injection attempts, and regression tests over complete tool traces.
+
+### High-Stakes RAG and Financial Data
+
+For financial or other high-stakes workflows:
+
+- Enforce tenant permissions before retrieval, not after generation.
+- Preserve source IDs and citations.
+- Separate retrieval quality from generation quality in evaluation.
+- Prefer deterministic services/queries for balances, totals, dates, and eligibility calculations.
+- Use the LLM for interpretation and communication rather than asking it to invent authoritative numeric state.
+- Abstain or escalate when evidence is insufficient.
+
+**Interview answer:**
+
+> I treat an agent as a distributed application with an LLM inside it, not as a prompt that can directly perform actions. The model can choose a proposed tool call, but trusted code validates the schema, checks permissions, executes the tool, records the result, and enforces step and cost limits. I cache safe read results only within the active `(entity_id, intent)` task, clear that state when intent changes, and always revalidate authoritative state before financial or other high-impact actions.

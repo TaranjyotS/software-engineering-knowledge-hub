@@ -1,7 +1,6 @@
 """Format Markdown pipe tables in-place.
 
-This utility scans Markdown files and aligns pipe-table columns so header,
-separator dashes, and row cells line up consistently in VS Code/GitHub.
+This utility scans Markdown files, centers header labels in the source and aligns separator dashes and row cells consistently in VS Code/GitHub.
 
 Examples:
     python utils/format_markdown_tables.py docs
@@ -14,6 +13,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -112,22 +112,112 @@ def pad_cells(cells: Sequence[str], count: int) -> list[str]:
     return padded[:count]
 
 
+def _codepoint_width(char: str) -> int:
+    """Return an approximate terminal/editor cell width for one code point.
+
+    Markdown tables in this repository contain emoji and other wide Unicode
+    symbols. ``len()`` counts code points, not visual columns, so using it for
+    padding makes separator pipes appear shifted in monospaced editors such as
+    VS Code. This helper keeps the formatter dependency-free while following
+    the width rules that matter for the symbols used in the notes.
+    """
+    codepoint = ord(char)
+
+    if (
+        unicodedata.combining(char)
+        or codepoint in {0x200D, 0xFE0E, 0xFE0F}
+        or 0x1F3FB <= codepoint <= 0x1F3FF
+    ):
+        return 0
+
+    if unicodedata.category(char) in {"Cc", "Cf"}:
+        return 0
+
+    if unicodedata.east_asian_width(char) in {"W", "F"}:
+        return 2
+    return 1
+
+
+def display_width(text: str) -> int:
+    """Return the visual width of *text* in monospaced editor cells.
+
+    Emoji sequences that explicitly request emoji presentation (VS16) are
+    treated as two cells even when the base Unicode symbol is normally narrow.
+    ZWJ-linked emoji sequences are treated as one glyph rather than summing the
+    widths of every component.
+    """
+    total = 0
+    index = 0
+
+    while index < len(text):
+        char = text[index]
+        codepoint = ord(char)
+
+        if (
+            unicodedata.combining(char)
+            or codepoint in {0x200D, 0xFE0E, 0xFE0F}
+            or 0x1F3FB <= codepoint <= 0x1F3FF
+        ):
+            index += 1
+            continue
+
+        cluster_width = _codepoint_width(char)
+
+        if index + 1 < len(text) and ord(text[index + 1]) == 0xFE0F:
+            cluster_width = max(cluster_width, 2)
+            index += 1
+
+        while index + 1 < len(text) and ord(text[index + 1]) == 0x200D:
+            index += 2
+            if index >= len(text):
+                break
+
+            component_width = _codepoint_width(text[index])
+            if index + 1 < len(text) and ord(text[index + 1]) == 0xFE0F:
+                component_width = max(component_width, 2)
+                index += 1
+            if index + 1 < len(text) and 0x1F3FB <= ord(text[index + 1]) <= 0x1F3FF:
+                index += 1
+
+            cluster_width = max(cluster_width, component_width)
+
+        total += cluster_width
+        index += 1
+
+    return total
+
+
 def align_text(text: str, width: int, alignment: str) -> str:
+    """Pad text to *width* visual cells rather than Python character count."""
+    padding = max(0, width - display_width(text))
+
     if alignment == "right":
-        return text.rjust(width)
+        return " " * padding + text
     if alignment == "center":
-        return text.center(width)
-    return text.ljust(width)
+        left_padding = padding // 2
+        right_padding = padding - left_padding
+        return " " * left_padding + text + " " * right_padding
+    return text + " " * padding
+
+
+def minimum_separator_width(alignment: str) -> int:
+    """Return the minimum visible width for a valid Markdown separator cell."""
+    if alignment == "center":
+        # Center syntax is :---: (three dashes plus two colons).
+        return 5
+    if alignment in {"left", "right"}:
+        # Left/right syntax is :--- or ---: (three dashes plus one colon).
+        return 4
+    return 3
 
 
 def separator_text(width: int, alignment: str) -> str:
-    width = max(width, 3)
+    """Build a separator cell whose visible width exactly matches the column."""
+    width = max(width, minimum_separator_width(alignment))
 
     if alignment == "right":
         return "-" * (width - 1) + ":"
     if alignment == "center":
-        if width < 4:
-            width = 4
         return ":" + "-" * (width - 2) + ":"
     if alignment == "left":
         return ":" + "-" * (width - 1)
@@ -164,16 +254,23 @@ def format_table_block(lines: Sequence[str]) -> list[str]:
     widths: list[int] = []
     for column in range(column_count):
         content_width = max(
-            len(row[column])
+            display_width(row[column])
             for index, row in enumerate(rows)
             if index != separator_index
         )
-        widths.append(max(content_width, 3))
+        widths.append(
+            max(content_width, minimum_separator_width(alignments[column]))
+        )
+
+    header_index = separator_index - 1
+    header_alignments = ["center"] * column_count
 
     formatted_lines: list[str] = []
     for index, row in enumerate(rows):
         if index == separator_index:
             formatted_lines.append(format_separator(widths, alignments))
+        elif index == header_index:
+            formatted_lines.append(format_row(row, widths, header_alignments))
         else:
             formatted_lines.append(format_row(row, widths, alignments))
 
@@ -262,7 +359,7 @@ def process_file(path: Path, *, check: bool, dry_run: bool, backup: bool) -> boo
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Align Markdown pipe tables across Markdown files.",
+        description="Center headers and align Markdown pipe tables across files.",
     )
     parser.add_argument(
         "paths",

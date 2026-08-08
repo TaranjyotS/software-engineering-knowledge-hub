@@ -35,19 +35,7 @@ This file has been refreshed to keep the original repository topic while merging
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > ML fundamentals, classification, model-building workflow, evaluation metrics, overfitting, bias/variance, deep learning, TensorFlow, PyTorch, scikit-learn, and model validation.
-
-### Topic Sections
-
-1. Machine Learning Fundamentals — `Interview_Prep_Topics_and_Questions.md`
-2. TensorFlow, PyTorch & Scikit-learn — `Interview_Prep_Topics_and_Questions.md`
-3. Machine Learning, Data Pipelines, and Model Serving — `interview_questions_topics_technical_prep.md`
-4. Machine Learning Fundamentals — `ML_AI_Systems_Interview_Prep_Handbook.md`
-5. Deep Learning — `ML_AI_Systems_Interview_Prep_Handbook.md`
-6. AI/ML Validation — `ML_AI_Systems_Interview_Prep_Handbook.md`
-7. System Design for AI/ML Platforms — `ML_AI_Systems_Interview_Prep_Handbook.md`
 
 ---
 
@@ -132,7 +120,7 @@ Monitoring
 
 #### 8.3 Classification metrics
 
-| Metric    | Meaning                                   | Use Case              |
+|  Metric   |                  Meaning                  |       Use Case        |
 | --------- | ----------------------------------------- | --------------------- |
 | Accuracy  | Overall correctness                       | Balanced datasets     |
 | Precision | How many predicted positives were correct | Avoid false positives |
@@ -173,7 +161,7 @@ Deploy Model
 
 ##### TensorFlow vs PyTorch
 
-| TensorFlow                         | PyTorch                                |
+|             TensorFlow             |                PyTorch                 |
 | ---------------------------------- | -------------------------------------- |
 | Strong production ecosystem        | Pythonic and research-friendly         |
 | TensorFlow Serving / Lite          | Dynamic graph, easy debugging          |
@@ -200,7 +188,7 @@ Deploy Model
 
 ##### Scikit-learn vs TensorFlow
 
-| Scikit-learn                    | TensorFlow                 |
+|          Scikit-learn           |         TensorFlow         |
 | ------------------------------- | -------------------------- |
 | Classical ML                    | Deep learning              |
 | Tabular/smaller data            | Neural networks/large data |
@@ -346,7 +334,7 @@ Machine learning is a field where systems learn patterns from data and use those
 
 ##### Types of Machine Learning
 
-| Type                   | Meaning                             | Example             |
+|          Type          |               Meaning               |       Example       |
 | ---------------------- | ----------------------------------- | ------------------- |
 | Supervised Learning    | Learn from labeled data             | Fraud detection     |
 | Unsupervised Learning  | Find patterns in unlabeled data     | Customer clustering |
@@ -361,7 +349,7 @@ Machine learning is a field where systems learn patterns from data and use those
 
 ##### Common Models
 
-| Model               | Good For                        |
+|        Model        |            Good For             |
 | ------------------- | ------------------------------- |
 | Logistic Regression | Baseline binary classification  |
 | Decision Tree       | Explainable rules               |
@@ -456,7 +444,7 @@ Overfitting happens when a model learns the training data too well, including no
 
 ##### Signs of Overfitting
 
-| Training Performance | Test Performance | Meaning      |
+| Training Performance | Test Performance |   Meaning    |
 | -------------------- | ---------------- | ------------ |
 | High                 | Low              | Overfitting  |
 | Low                  | Low              | Underfitting |
@@ -484,7 +472,7 @@ Overfitting happens when a model learns the training data too well, including no
 Bias is error from overly simplistic assumptions.
 Variance is error from excessive sensitivity to training data.
 
-| Problem       | Description       | Example                                 |
+|    Problem    |    Description    |                 Example                 |
 | ------------- | ----------------- | --------------------------------------- |
 | High Bias     | Model too simple  | Linear model for complex nonlinear data |
 | High Variance | Model too complex | Deep tree memorizing training data      |
@@ -508,7 +496,7 @@ Precision tells us how many predicted positives were actually correct.
 
 Recall tells us how many actual positives were successfully found.
 
-| Metric    | Formula        | Meaning                              |
+|  Metric   |    Formula     |               Meaning                |
 | --------- | -------------- | ------------------------------------ |
 | Precision | TP / (TP + FP) | Correctness of positive predictions  |
 | Recall    | TP / (TP + FN) | Coverage of actual positives         |
@@ -596,7 +584,7 @@ Feature engineering is the process of transforming raw data into useful input va
 
 ##### Examples
 
-| Raw Data      | Engineered Feature              |
+|   Raw Data    |       Engineered Feature        |
 | ------------- | ------------------------------- |
 | Timestamp     | Day of week, hour, month        |
 | Text          | TF-IDF, embeddings              |
@@ -713,7 +701,7 @@ New weight = Old weight - Learning rate × Gradient
 
 ##### Learning Rate
 
-| Learning Rate | Result               |
+| Learning Rate |        Result        |
 | ------------- | -------------------- |
 | Too high      | Training may diverge |
 | Too low       | Training is slow     |
@@ -728,7 +716,7 @@ New weight = Old weight - Learning rate × Gradient
 
 ##### Answer
 
-| Area        | PyTorch                    | TensorFlow                          |
+|    Area     |          PyTorch           |             TensorFlow              |
 | ----------- | -------------------------- | ----------------------------------- |
 | Ease of Use | More Pythonic              | More framework-heavy                |
 | Debugging   | Easier dynamic graphs      | Improved with eager execution       |
@@ -811,7 +799,7 @@ Model drift occurs when model performance degrades over time because real-world 
 
 ##### Types
 
-| Type          | Meaning                                       |
+|     Type      |                    Meaning                    |
 | ------------- | --------------------------------------------- |
 | Data drift    | Input distribution changes                    |
 | Concept drift | Relationship between input and output changes |
@@ -863,7 +851,7 @@ Data Sources
 
 ##### Components
 
-| Component          | Purpose                             |
+|     Component      |               Purpose               |
 | ------------------ | ----------------------------------- |
 | Data ingestion     | Collect data from APIs, logs, files |
 | Storage            | Store raw and processed data        |

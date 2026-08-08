@@ -23,7 +23,7 @@ Power BI is used for business intelligence dashboards, data modeling, and intera
 
 ## Key Concepts
 
-| Concept           | Explanation                                           |
+|      Concept      |                      Explanation                      |
 | ----------------- | ----------------------------------------------------- |
 | Calculated column | Computed during data refresh and stored in the model  |
 | Measure           | Computed dynamically based on filter context          |

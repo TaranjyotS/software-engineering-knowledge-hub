@@ -5,7 +5,7 @@
 
 ---
 
-| Topic                                                  | File                                | Focus                                                                          |
+|                         Topic                          |                File                 |                                     Focus                                      |
 | ------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------ |
 | My Profile                                             | `my_profile.md`                     | Resume-aligned profile, experience, positioning, and knowledge summary         |
 | Interview Questions                                    | `interview_questions.md`            | Behavioral, HR, resume-based, and general interview questions                  |

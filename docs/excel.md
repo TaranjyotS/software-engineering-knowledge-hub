@@ -23,7 +23,7 @@ Excel is commonly used for data cleaning, reporting, reconciliation, and quick a
 
 ## Key Concepts
 
-| Concept                | What to Know                                                                            |
+|        Concept         |                                      What to Know                                       |
 | ---------------------- | --------------------------------------------------------------------------------------- |
 | VLOOKUP                | Looks up a value in the first column of a range and returns a value from another column |
 | XLOOKUP                | Modern replacement for VLOOKUP with flexible lookup and return arrays                   |

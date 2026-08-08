@@ -36,20 +36,7 @@ This file has been refreshed to keep the original repository topic while merging
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > SQL patterns, joins, window functions, relational modeling, ORM performance, Django/SQLAlchemy, caching, idempotency, transactions, and data consistency.
-
-### Topic Sections
-
-1. SQL Interview Patterns — `Interview_Prep_Topics_and_Questions.md`
-2. Databases, ORM, and Data Modeling — `deloitte_python_genai_interview_prep_topics.md`
-3. Databases, Caching, and Messaging Systems — `deloitte_python_genai_interview_prep_topics.md`
-4. REST API Design and Idempotency — `interview_questions_topics_technical_prep.md`
-5. Django and ORM Performance — `interview_questions_topics_technical_prep.md`
-6. Databases and Data Modeling — `interview_questions_topics_technical_prep.md`
-7. SQL Interview Questions — `transaction_etl_sql_data_engineering_interview_handbook.md`
-8. Databases, ORMs & PostgreSQL — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -890,7 +877,7 @@ WHERE rn = 1;
 
 ##### Explanation
 
-| SQL Part                   | Meaning                                  |
+|          SQL Part          |                 Meaning                  |
 | -------------------------- | ---------------------------------------- |
 | `PARTITION BY customer_id` | Creates separate ranking per customer    |
 | `ORDER BY amount DESC`     | Highest transaction comes first          |
@@ -931,7 +918,7 @@ WHERE rnk = 1;
 
 ##### Difference
 
-| Function       | Behavior                                        |
+|    Function    |                    Behavior                     |
 | -------------- | ----------------------------------------------- |
 | `ROW_NUMBER()` | Returns exactly one row per customer            |
 | `RANK()`       | Returns all tied top rows, but leaves rank gaps |
@@ -1174,3 +1161,65 @@ def create_order_with_payment(session, order_data, payment_data):
 Use transactions when multiple database changes must either all succeed or all fail.
 
 ---
+
+## Relational Versus NoSQL Databases and ACID
+
+### Relational Databases
+
+Relational databases such as PostgreSQL and MySQL are a strong fit when the application needs structured relationships, transactions, joins, constraints, and strong consistency.
+
+Typical strengths:
+
+- Primary and foreign keys.
+- Referential integrity.
+- Transactions.
+- Complex joins and reporting.
+- Mature indexing and query optimization.
+
+### NoSQL Databases
+
+NoSQL is a broad category rather than one database model. Common forms include document stores, key-value stores, wide-column databases, and graph databases.
+
+Use a NoSQL database when its access pattern or data model provides a concrete advantage, for example:
+
+- Flexible document-shaped data.
+- Extremely high-scale key-based access.
+- Specialized graph relationships.
+- Simple horizontally distributed lookups.
+
+The choice should be based on access patterns, consistency needs, relationships, scale, and operational requirements rather than choosing SQL or NoSQL by default.
+
+### ACID Transactions
+
+|  Property   |                                                  Meaning                                                   |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| Atomicity   | All operations in a transaction succeed or all are rolled back.                                            |
+| Consistency | A committed transaction preserves database rules and invariants.                                           |
+| Isolation   | Concurrent transactions do not expose unsafe intermediate state to one another.                            |
+| Durability  | Once committed, data survives process or machine failures according to the database durability guarantees. |
+
+Example transfer:
+
+```sql
+BEGIN;
+
+UPDATE accounts
+SET balance = balance - 100
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 100
+WHERE id = 2;
+
+COMMIT;
+```
+
+If the second update cannot complete, the transaction should roll back rather than leaving only the debit applied.
+
+### Database Ownership in Microservices
+
+Prefer each service to own its persistence boundary. Other services should use an API, event, or replicated read model instead of directly querying another service's private tables. This reduces coupling but introduces eventual-consistency and distributed-workflow considerations.
+
+**Interview answer:**
+
+> I prefer a relational database when relationships, transactions, constraints, and reporting are central to the workload. I consider NoSQL when a document, key-value, graph, or horizontally distributed access pattern fits better. In microservices I also try to keep clear data ownership so one service does not depend directly on another service's internal schema.

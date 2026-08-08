@@ -36,27 +36,7 @@ This file has been refreshed to keep the original repository topic while merging
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Backend API design, FastAPI, Flask, REST, gRPC, GraphQL, request validation, API security, pagination, scaling APIs, and clean architecture.
-
-### Topic Sections
-
-1. FastAPI & Backend API Design — `Interview_Prep_Topics_and_Questions.md`
-2. API Integration Topics — `ai_engineer_interview_prep_topics.md`
-3. FastAPI Topics — `ai_engineer_interview_prep_topics.md`
-4. Scaling FastAPI Applications — `ai_engineer_interview_prep_topics.md`
-5. Backend API Development — `deloitte_python_genai_interview_prep_topics.md`
-6. FastAPI — `deloitte_python_genai_interview_prep_topics.md`
-7. Flask — `deloitte_python_genai_interview_prep_topics.md`
-8. REST, gRPC, and API Design — `deloitte_python_genai_interview_prep_topics.md`
-9. Clean Architecture & Code Organization — `deloitte_python_genai_interview_prep_topics.md`
-10. REST API Fundamentals — `interview_prep_python_rest_fastapi_genai.md`
-11. FastAPI and Flask — `interview_prep_python_rest_fastapi_genai.md`
-12. Async APIs and Concurrent Requests — `interview_prep_python_rest_fastapi_genai.md`
-13. Code Review and API Fix Case Topics — `interview_questions_topics_technical_prep.md`
-14. Backend Engineering & FastAPI — `ML_AI_Systems_Interview_Prep_Handbook.md`
-15. Backend APIs: REST, GraphQL, FastAPI, Flask — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -83,7 +63,7 @@ The section below is merged from the previously organized topic-wise interview-p
 
 #### 5.3 FastAPI vs Flask
 
-| Flask                  | FastAPI                |
+|         Flask          |        FastAPI         |
 | ---------------------- | ---------------------- |
 | WSGI                   | ASGI                   |
 | Mostly sync            | Native async           |
@@ -169,7 +149,7 @@ async def get_items(db=Depends(get_db)):
 ### 13. API Integration Topics
 #### 13.1 REST vs GraphQL
 
-| REST                          | GraphQL                      |
+|             REST              |           GraphQL            |
 | ----------------------------- | ---------------------------- |
 | Multiple endpoints            | Single endpoint              |
 | Server defines response shape | Client requests exact fields |
@@ -498,7 +478,7 @@ Flask may be discussed because the role mentioned FastAPI/Flask.
 
 #### FastAPI vs Flask
 
-| Area          | FastAPI                                      | Flask                                          |
+|     Area      |                   FastAPI                    |                     Flask                      |
 | ------------- | -------------------------------------------- | ---------------------------------------------- |
 | Async support | Built-in and modern                          | Possible, but not the main design focus        |
 | Validation    | Pydantic-based                               | Usually manual or with extensions              |
@@ -526,7 +506,7 @@ gRPC is often used for internal service-to-service communication where performan
 
 #### REST vs gRPC
 
-| Area              | REST                     | gRPC                                        |
+|       Area        |           REST           |                    gRPC                     |
 | ----------------- | ------------------------ | ------------------------------------------- |
 | Transport         | HTTP/JSON                | HTTP/2 + Protocol Buffers                   |
 | Human readability | High                     | Lower                                       |
@@ -620,7 +600,7 @@ Response:
 
 #### 7.2 REST API characteristics
 
-| Characteristic       | Explanation                        |
+|    Characteristic    |            Explanation             |
 | -------------------- | ---------------------------------- |
 | Stateless            | Each request is independent        |
 | Resource-based       | Uses URLs like `/users`, `/orders` |
@@ -632,7 +612,7 @@ Response:
 
 #### 7.3 Common HTTP methods
 
-| Method | Purpose                     |
+| Method |           Purpose           |
 | ------ | --------------------------- |
 | GET    | Fetch data                  |
 | POST   | Create/send/upload data     |
@@ -840,7 +820,7 @@ def get_car(price: int):
 
 #### 7.9 GET vs POST
 
-| GET                           | POST                         |
+|              GET              |             POST             |
 | ----------------------------- | ---------------------------- |
 | Fetches data                  | Sends/creates/uploads data   |
 | Parameters usually in URL     | Data usually in request body |
@@ -852,7 +832,7 @@ def get_car(price: int):
 
 #### 7.10 Common HTTP status codes
 
-| Code | Meaning               |
+| Code |        Meaning        |
 | ---- | --------------------- |
 | 200  | Success               |
 | 201  | Created               |
@@ -875,7 +855,7 @@ def get_car(price: int):
 
 #### 8.2 Major differences between Flask and FastAPI
 
-| Flask                                   | FastAPI                                  |
+|                  Flask                  |                 FastAPI                  |
 | --------------------------------------- | ---------------------------------------- |
 | Older, mature framework                 | Newer, modern API-first framework        |
 | Mostly synchronous by default           | Native async/await support               |
@@ -1416,7 +1396,7 @@ This demonstrates:
 
 #### REST vs GraphQL
 
-| Topic          | REST               | GraphQL                       |
+|     Topic      |        REST        |            GraphQL            |
 | -------------- | ------------------ | ----------------------------- |
 | Data fetching  | Multiple endpoints | Single endpoint               |
 | Response shape | Server-defined     | Client-defined                |
@@ -1615,3 +1595,152 @@ The main ramp-up should be project-specific rather than a relearning of backend 
 - Review current framework, dependency, security, and deployment conventions.
 
 The transferable foundation is Python, HTTP semantics, data modeling, testing, observability, and production debugging.
+
+---
+
+## Create-Endpoint Debugging: Persistence, Nested Resources & Business Identifiers
+
+A create endpoint can look superficially correct because it parses JSON and returns `201 Created`, while still failing its actual contract if nothing is persisted or the response body is incomplete.
+
+### Trace the Complete Request Path
+
+For a broken create API, trace the full path rather than editing the first suspicious line:
+
+```text
+route
+  ↓
+authentication / middleware
+  ↓
+request parsing and validation
+  ↓
+foreign-key / related-object lookups
+  ↓
+business identifier generation
+  ↓
+persistence
+  ↓
+secondary side effects / audit activity
+  ↓
+serialization
+  ↓
+status code + response body
+```
+
+A useful debugging comparison is a nearby working read/update handler because it often shows the repository's established lookup, `select_related`, error, and serialization patterns.
+
+### Validate Before Mutating
+
+For a typical issue/task create endpoint:
+
+1. Require authentication.
+2. Validate non-blank `title`.
+3. Resolve `teamId`; return `404` if the team does not exist.
+4. Resolve optional assignee.
+5. Resolve optional parent item and validate relationship invariants.
+6. Generate the team-local business identifier.
+7. Set creator from the authenticated principal.
+8. Persist the record.
+9. Create audit/activity data if required.
+10. Serialize the persisted object and return `201`.
+
+Do not return success before step 8.
+
+### Use Authenticated Identity for Audit Fields
+
+Do not trust request-body fields such as `creator` when the authenticated principal already establishes identity.
+
+```python
+issue = Issue.objects.create(
+    ...,
+    creator=request.user,
+)
+```
+
+This prevents callers from spoofing ownership/audit metadata.
+
+### Nested Resources Through the Same Create Endpoint
+
+A sub-item can use the same endpoint with an optional `parentIssue` field rather than requiring a second create route.
+
+Validate:
+
+- Parent exists.
+- Parent and child belong to the expected scope/team.
+- Parent relationship is persisted.
+- The response exposes the parent identifier in the contract's expected shape.
+
+The UI is not an integrity boundary; parent-child rules should be enforced in the backend as well.
+
+### Sequential Business Identifiers
+
+A business identifier such as:
+
+```text
+TEAM-1
+TEAM-2
+TEAM-3
+```
+
+must be independent per team.
+
+Avoid:
+
+```python
+number = Issue.objects.count() + 1
+```
+
+Problems:
+
+- It is global rather than team-local.
+- Deletions can cause reused numbers.
+- Concurrent requests can compute the same next value.
+
+A production-safe design typically uses a serialized per-team sequence source, for example:
+
+```text
+transaction.atomic()
+  ↓
+lock team-sequence row with SELECT ... FOR UPDATE
+  ↓
+read and increment next_number
+  ↓
+create issue with TEAM_KEY-number
+  ↓
+commit
+```
+
+Keep a database uniqueness constraint on the final identifier as a last line of defense. A simpler `MAX(suffix) + 1` query may be enough for a coding exercise but is still not concurrency-safe without serialization/retry.
+
+### Error Shape Is Part of the API Contract
+
+These are not equivalent contracts:
+
+```json
+{}
+```
+
+and:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+Even if both return `401`, clients and tests may depend on the documented body shape. Avoid route-specific middleware exceptions unless the API explicitly requires them.
+
+### Success Response Should Reflect Persisted State
+
+Prefer returning the canonical serializer representation of the saved entity:
+
+```python
+return JsonResponse({"issue": issue.to_dict()}, status=201)
+```
+
+If relationships are required by the serializer, reload with `select_related(...)` or otherwise ensure the returned object contains the expected data.
+
+**Interview answer:**
+
+> For a broken create endpoint, I trace route, auth, validation, lookups, persistence, side effects, and serialization as one flow. A `201` response is meaningless if the write never happened. I validate required fields and relationships first, derive creator from the authenticated user, allocate any business identifier safely, persist the entity, record audit activity, then return the canonical serialized representation. I also verify error body shape, because status code alone is not the full API contract.
+
+See `coding_questions/issue_creation_workflow.py` for a runnable generalized version of this debugging exercise.

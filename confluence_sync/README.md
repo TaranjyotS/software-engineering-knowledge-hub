@@ -4,7 +4,7 @@ This folder contains scripts for syncing Markdown notes in `docs/` with Confluen
 
 ## Scripts
 
-| Script                     | Purpose                                                                                                          |
+|           Script           |                                                     Purpose                                                      |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `health_check.py`          | Validates Confluence credentials and optional space access.                                                      |
 | `build_page_map.py`        | Fetches existing Confluence pages, creates missing pages for every `docs/*.md` file, and writes `page_map.json`. |

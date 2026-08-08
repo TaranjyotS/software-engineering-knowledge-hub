@@ -23,7 +23,7 @@ Unix commands are used to manage files, inspect logs, debug services, automate t
 
 ## Command Categories
 
-| Category          | Commands                                              |
+|     Category      |                       Commands                        |
 | ----------------- | ----------------------------------------------------- |
 | Files/directories | `ls`, `cd`, `pwd`, `mkdir`, `cp`, `mv`, `rm`, `touch` |
 | File content      | `cat`, `less`, `head`, `tail`, `grep`, `sed`, `awk`   |

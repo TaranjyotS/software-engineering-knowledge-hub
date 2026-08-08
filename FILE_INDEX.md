@@ -6,7 +6,7 @@ This repository contains topic-wise notes for software engineering, backend deve
 
 ## Repository Map
 
-| Category                         | File                                     | What It Covers                                                                                  |
+|             Category             |                   File                   |                                         What It Covers                                          |
 | -------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Personal Profile                 | `docs/my_profile.md`                     | Resume-aligned summary, experience, skills, projects, domain positioning, interview pitch       |
 | Technical Interview Positioning  | `docs/interview_questions.md`            | Technical ownership, project walkthroughs, incidents, architecture tradeoffs, career transition |
@@ -29,13 +29,18 @@ This repository contains topic-wise notes for software engineering, backend deve
 
 ## Coding Exercise Map
 
-| Exercise                           | File                                               | What It Covers                                      |
+|              Exercise              |                        File                        |                   What It Covers                    |
 | ---------------------------------- | -------------------------------------------------- | --------------------------------------------------- |
 | Match statistics and head-to-head  | `coding_questions/match_statistics.py`             | Aggregation, validation, mirrored match records     |
+| Priority inventory allocation      | `coding_questions/inventory_bid_allocation.py`     | Priority groups, round-robin allocation, complexity |
+| Top-k frequent paths               | `coding_questions/top_k_frequent_paths.py`         | Heaps, frequency ranking, dynamic-k and streaming   |
+| Issue creation workflow            | `coding_questions/issue_creation_workflow.py`      | Create-endpoint debugging, auth, nested persistence |
 | Transaction accounting and fees    | `coding_questions/transaction_accounting.py`       | Balances, grouped averages, chronological fee rules |
 | Incident alert routing and backoff | `coding_questions/incident_alert_router.py`        | Open-alert debugging, attempt state, retry cooldown |
 | Weekly deployment windows          | `coding_questions/weekly_deployment_windows.py`    | Weekly interval and boundary processing             |
 | Duplicate merchant detection       | `coding_questions/duplicate_merchant_detection.py` | Merchant matching and confidence thresholds         |
+| Commerce support tools             | `coding_questions/commerce_support_tools.py`       | SQLite tools, refund rules, CLI parsing, schemas    |
+| Safe agent orchestrator            | `coding_questions/safe_agent_orchestrator.py`      | Bounded agent loop, cache, guardrails, revalidation |
 | General Python coding practice     | `coding_questions/python_coding_questions.py`      | General Python coding patterns                      |
 | Library management                 | `coding_questions/libraryMngmnt.py`                | Object-oriented modeling                            |
 | General Java coding practice       | `coding_questions/java_coding_questions.java`      | General Java coding patterns                        |

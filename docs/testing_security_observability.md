@@ -23,27 +23,7 @@ This is a new topic file created because the attached repository files did not h
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Pytest, code quality, QA strategy, AI QA, monitoring, logging, metrics, production reliability, incidents, runbooks, security, privacy, PII, and access control.
-
-### Topic Sections
-
-1. Production Monitoring, Usage Tracking & Reliability — `Interview_Prep_Topics_and_Questions.md`
-2. Testing, Quality Engineering & AI QA — `Interview_Prep_Topics_and_Questions.md`
-3. Security for AI Applications — `ai_engineer_interview_prep_topics.md`
-4. Testing, Monitoring & Continuous Improvement — `ai_engineer_interview_prep_topics.md`
-5. Testing & Code Quality — `deloitte_python_genai_interview_prep_topics.md`
-6. Observability & Production Monitoring — `deloitte_python_genai_interview_prep_topics.md`
-7. Security, Privacy, and PII Handling — `deloitte_python_genai_interview_prep_topics.md`
-8. LLM Cost, Latency, and Reliability Optimization — `deloitte_python_genai_interview_prep_topics.md`
-9. API Security — `interview_prep_python_rest_fastapi_genai.md`
-10. AI Production Challenges — `interview_prep_python_rest_fastapi_genai.md`
-11. Production Reliability, Observability, Incidents, and Runbooks — `interview_questions_topics_technical_prep.md`
-12. Security, Privacy, PII, and Access Control — `interview_questions_topics_technical_prep.md`
-13. Monitoring, Logging, Reliability & Alerts — `transaction_etl_sql_data_engineering_interview_handbook.md`
-14. Testing With Pytest — `Interview_Topics_and_Technical_Prep.md`
-15. Monitoring, Logging & Production Support — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -185,7 +165,7 @@ Most tests should be unit tests because they are fast and reliable.
 
 #### 13.3 Software testing types
 
-| Test Type   | Purpose                                       |
+|  Test Type  |                    Purpose                    |
 | ----------- | --------------------------------------------- |
 | Unit        | Test individual functions/classes             |
 | Integration | Test component interactions                   |
@@ -434,7 +414,7 @@ def log_llm_request(user_id: str, model: str, tokens: int, latency_ms: float) ->
 
 #### Useful production metrics
 
-| Area     | Metrics                                                      |
+|   Area   |                           Metrics                            |
 | -------- | ------------------------------------------------------------ |
 | API      | request count, error rate, p95 latency, p99 latency          |
 | Database | slow queries, connection pool usage, lock waits              |
@@ -532,7 +512,7 @@ I would reduce unnecessary context, use efficient chunk retrieval, cache repeate
 
 #### 10.2 Common API security methods
 
-| Area                     | How to secure                              |
+|           Area           |               How to secure                |
 | ------------------------ | ------------------------------------------ |
 | Authentication           | JWT, OAuth2, API keys                      |
 | Authorization            | RBAC, permissions, scopes                  |
@@ -985,7 +965,7 @@ Admin service → restricted elevated access
 ### 13. Monitoring, Logging, Reliability & Alerts
 #### What to Monitor
 
-| Area                     | Example Metric                              |
+|           Area           |               Example Metric                |
 | ------------------------ | ------------------------------------------- |
 | Pipeline success/failure | Job status                                  |
 | Freshness                | Latest transaction date                     |
@@ -998,7 +978,7 @@ Admin service → restricted elevated access
 
 #### Reliability Patterns
 
-| Pattern           | Purpose                    |
+|      Pattern      |          Purpose           |
 | ----------------- | -------------------------- |
 | Retries           | Handle transient failures  |
 | Dead-letter queue | Store failed events        |
@@ -1274,3 +1254,314 @@ A list scan is acceptable for an interview exercise. A production router would u
 - Idempotency keys for repeated delivery-attempt events.
 - Metrics for attempts, failures, policy violations, and notification latency.
 - Audit logs showing who was contacted and when.
+
+---
+
+## Security and Escalation Guardrails for Customer-Support Agents
+
+Customer-support agents often combine public information with sensitive account data. The safest design is to define a hard verification boundary and enforce it in application code rather than relying only on prompt instructions.
+
+### Verification Boundary
+
+For an order-specific workflow:
+
+1. Customer provides an order identifier plus the email address or phone number already on file.
+2. The system returns the same generic response whether those details match or not, so it does not confirm account existence.
+3. Send a one-time code only to the contact already stored on the account/order.
+4. Rate-limit verification attempts.
+5. Only after successful verification may order-specific tools be used.
+
+Never ask for:
+
+- Passwords.
+- Full payment-card numbers.
+- Security answers that the support system does not genuinely require.
+- A new email or phone number as the destination for the verification code.
+
+### Zero Order-Specific Disclosure Before Verification
+
+Before verification, do not reveal or confirm:
+
+- Whether the order exists.
+- Order status.
+- Products or quantities.
+- Prices or totals.
+- Tracking number or carrier tied to that order.
+- Shipping or billing address.
+- Refund history or eligibility.
+
+Generic policies, product descriptions, and public catalog information can remain available without account verification.
+
+### Minimize Disclosure After Verification
+
+Successful verification does not mean every field should be shown. Return only what is necessary for the active task and mask sensitive fields where possible.
+
+### High-Risk Actions and Warm Handoffs
+
+Some workflows should remain human-controlled even after authentication. Examples include:
+
+- Shipping-address changes.
+- Order cancellation.
+- Executing a refund.
+- Policy exceptions for final-sale items.
+- Fraud or account-takeover concerns.
+
+The agent can still reduce support effort by collecting the relevant order number, requested change, reason, supporting evidence, and current state, then creating a warm handoff so the human does not need to repeat discovery.
+
+### Damage, Defect, or Wrong-Item Reports
+
+A support agent may request photos through a secure upload flow when they help a human reviewer. Photos should be optional supporting evidence rather than a reason to deny escalation when the customer cannot provide them.
+
+Useful handoff fields:
+
+- Affected item.
+- Issue type: damaged, defective, or wrong item.
+- Description.
+- Photos when available.
+- Preferred resolution.
+- Verified order context.
+
+### Escalation Triggers
+
+Immediately route to a human when the conversation involves:
+
+- Legal threats or requests for legal interpretation.
+- Chargebacks or regulator complaints.
+- Fraud or account-takeover concerns.
+- Safety issues.
+- Explicit request for a human.
+- Severe anger or abuse where continued automation is unlikely to help.
+
+The bot should remain calm, avoid arguing, avoid making legal admissions, and preserve the relevant conversation context for the reviewer.
+
+### Multi-Tenant AI Data Isolation
+
+For SaaS or financial systems with multiple organizations:
+
+- Derive tenant identity from the authenticated session/token, never from model-generated arguments.
+- Apply tenant and object-level authorization again when each tool executes.
+- Filter vector/keyword retrieval by tenant before documents are returned to the LLM.
+- Use least-privilege service credentials for external tools.
+- Prevent one tenant's cache entries, embeddings, traces, or conversation state from being visible to another.
+- Redact unnecessary PII and secrets from logs and model context.
+- Keep auditable records of sensitive reads, writes, approvals, and escalations.
+
+Prompt instructions are not an authorization mechanism. Even if a prompt-injection attempt asks the model to ignore tenant boundaries, the data and tool layers should make cross-tenant access impossible.
+
+### Fresh-State and Audit Requirements
+
+For any financial eligibility check or other time-sensitive decision:
+
+- Re-read the authoritative record before handoff/action.
+- Log who/what initiated the check.
+- Record the policy result and source data version/timestamp where practical.
+- Do not reuse cached eligibility from a different intent or earlier task.
+- Clear task-local state when the order, intent, or authentication state changes.
+
+### High-Value Security Tests
+
+Test at least these cases:
+
+1. Valid order ID but wrong email/phone does not reveal whether the order exists.
+2. OTP is sent only to the stored contact destination.
+3. Order tools are blocked before verification.
+4. Authentication for one order cannot unlock a different order.
+5. Intent change clears task-local sensitive cache.
+6. Address change, cancellation, and refund execution always escalate when configured as human-only.
+7. Final-sale exception requests route to a human.
+8. Legal/fraud/chargeback language triggers immediate escalation.
+9. Repeated OTP attempts are rate-limited.
+10. Logs do not contain full OTPs, card numbers, or unnecessary PII.
+
+**Interview answer:**
+
+> I separate public support from account-specific support with a hard authentication boundary. Before verification, the agent cannot even confirm that an order exists. After order-plus-contact verification and an OTP sent only to the stored contact, it can access only the data needed for the active task. High-risk actions remain human-controlled, and legal, fraud, chargeback, or safety concerns escalate immediately with a context-rich handoff.
+
+---
+
+## Reliability Lessons from Load-Related Application Crashes
+
+When an overloaded application is actively failing for customers, separate **incident mitigation** from **long-term remediation**.
+
+### Mitigation vs Remediation
+
+|    Phase    |                         Goal                         |                                         Examples                                         |
+| ----------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Mitigation  | Restore acceptable service with the lowest-risk move | Rollback, restart unhealthy instances, add temporary capacity, shed non-critical load    |
+| Remediation | Remove the underlying failure mode                   | Horizontal scaling, caching, query optimization, autoscaling changes, architecture fixes |
+
+Do not attempt a large redesign while the service is unavailable. First stabilize the customer-facing path, preserve evidence, and reduce the blast radius.
+
+### Immediate Response to a Load-Related Crash
+
+A safe sequence is:
+
+1. Confirm the scope and customer impact.
+2. Check CPU, memory, OOM events, restarts, latency, error rate, DB connections, queue depth, and dependency health.
+3. Check recent deployments/configuration changes so a bad release is not mistaken for pure capacity pressure.
+4. Apply the smallest reversible mitigation likely to restore service.
+5. Preserve logs, traces, metrics, and timestamps for root-cause analysis.
+6. Monitor closely while the service recovers.
+7. Implement and validate the durable fix after stability is restored.
+
+Possible short-term mitigations, depending on the system, include:
+
+- Restart or replace unhealthy instances.
+- Temporarily increase CPU/memory capacity.
+- Add replicas if dependencies can safely absorb the load.
+- Disable or defer non-essential background work.
+- Rate-limit or shed expensive non-critical traffic.
+- Disable a problematic feature with a feature flag.
+- Roll back a recent change if it is contributing to the failure.
+
+The correct action depends on evidence. Adding replicas blindly can worsen an already saturated database.
+
+**Interview answer:**
+
+> During an active incident, I separate mitigation from remediation. My first goal is to restore the core customer journey with the lowest-risk reversible action, while preserving enough telemetry for diagnosis. That may mean replacing unhealthy instances, adding temporary capacity, shedding non-critical work, or rolling back. Once the system is stable, I address the root cause through scaling, caching, query or connection-pool optimization, autoscaling changes, and stronger load testing.
+
+### Observe the User Journey, Not Only Infrastructure
+
+For overload incidents, correlate infrastructure metrics with user-facing service-level indicators:
+
+- Request success rate.
+- p95/p99 latency.
+- Timeout and retry rate.
+- Transaction completion rate.
+- Stage-level latency for critical workflow steps.
+- CPU/memory saturation.
+- DB query latency and connection-pool exhaustion.
+- Cache hit/miss ratio.
+- Autoscaling activity.
+
+A service that returns slowly enough to cause customer timeouts is functionally degraded even if every process is still running.
+
+### Preventing the Repeat Incident
+
+Post-incident actions should convert the lesson into engineering controls:
+
+- Update capacity assumptions using measured peak behavior.
+- Add missing load/stress tests.
+- Define saturation indicators and alert thresholds.
+- Tune autoscaling before saturation rather than after failure.
+- Add dependency backpressure and rate limits.
+- Reduce retry storms with bounded retries and jitter.
+- Optimize slow queries and connection pools.
+- Add cache where correctness permits.
+- Update runbooks with tested recovery actions.
+- Validate the fix above expected peak load and during dependency degradation.
+
+A recurring incident should be treated as a prompt to remove the failure mode, not simply to make the on-call response faster.
+
+---
+
+## Repository Debugging Under Time Pressure
+
+When a repository-level assessment has several failing tests, the fastest reliable path is usually to turn the tests into an executable specification before changing code.
+
+### Start With the First Failing Test
+
+Run the narrowest useful command first:
+
+```bash
+pytest -q test/test_app.py -x
+```
+
+`-x` stops on the first failure so one root cause is not hidden behind a long list of downstream failures. After fixing that failure class, run the full target file and finally the broader suite.
+
+### Extract the Contract From Tests
+
+For each failing test, write down:
+
+- Endpoint and HTTP method.
+- Authentication precondition.
+- Required request fields.
+- Expected status code.
+- Required response keys and nested fields.
+- Expected persistence side effects.
+- Expected relationship or identifier behavior.
+
+A failure such as:
+
+```text
+assert "issue" in {}
+```
+
+is more informative than just "test failed": it says the route returned a success status with the wrong response shape, so trace how the handler can reach an early success return.
+
+### Trace by Layer
+
+Use a consistent order:
+
+```text
+1. URL/route mapping
+2. authentication decorator or middleware
+3. handler/view
+4. model/schema fields
+5. serializer/to_dict response shape
+6. related side effects such as activity/audit rows
+```
+
+This prevents random editing across the repository.
+
+### Compare Broken and Working Paths
+
+If `create_*` is broken but `update_*` or `get_*` works, compare them for established patterns:
+
+- `DoesNotExist` handling.
+- Foreign-key assignment.
+- `select_related(...)` before serialization.
+- Activity/audit creation.
+- Error response conventions.
+- Field naming differences between request JSON and model attributes.
+
+The goal is not to copy the function blindly; it is to reuse repository conventions already proven by nearby code.
+
+### High-Signal Failure Patterns
+
+Common repository-repair failures include:
+
+- Early `return` before `save()`/`objects.create()`.
+- Parsed fields that are never used.
+- Request field name differs from model field name.
+- Auth wrapper returns a route-specific response body that violates tests.
+- Required relation is never looked up.
+- Business identifier is derived from the wrong scope.
+- Broad `except Exception` converts a precise validation error into a generic `500`.
+- A response is generated from stale/unpopulated relationships.
+
+### Use AI as a Diagnostic Copilot, Not a Source of Unverified Patches
+
+When an assessment permits an assistant for explanation but not direct implementation, use it to accelerate repository navigation and hypothesis testing.
+
+Good diagnostic prompts are narrow and evidence-based:
+
+```text
+From these tests, summarize the exact POST contract: required fields, status codes,
+response keys, identifier rules, and parent-child behavior. Cite the relevant test lines.
+```
+
+```text
+Trace POST /api/issues from this URL file to the handler. Tell me which middleware runs first,
+where persistence should happen, and any early return that can bypass it.
+```
+
+```text
+Compare the broken create path with the working update path. Identify reusable patterns for
+lookups, serialization, assignee handling, and activity creation. Do not modify unrelated files.
+```
+
+Then verify every suggestion against source and tests. The assistant is useful for search and comparison; the repository remains the source of truth.
+
+### Final Validation Sequence
+
+1. Focused first failure with `-x`.
+2. Entire affected test module.
+3. Static/syntax validation.
+4. Full relevant suite.
+5. Inspect changed files for accidental unrelated edits.
+6. If there is a UI reproduction path, verify the customer-visible workflow after backend tests pass.
+
+**Interview answer:**
+
+> In an unfamiliar repository I start from the failing tests, extract the exact contract, and trace one request through route, auth, handler, model, and serializer. I compare the broken path with nearby working code rather than redesigning the repository. I fix one root cause at a time, rerun the narrow test, then expand to the full suite. That keeps the debugging loop evidence-driven and minimizes unrelated changes.

@@ -32,7 +32,7 @@ The repository now includes both traditional software engineering topics and upd
 
 <div align="center">
 
-|                 Area                  |                               What You’ll Find                                        |
+|                 Area                  |                                   What You’ll Find                                    |
 | ------------------------------------- | ------------------------------------------------------------------------------------- |
 | 🐍 Python                             | Core concepts, advanced Python, concurrency, decorators, generators, coding patterns  |
 | 🌐 Backend APIs                       | REST, FastAPI, Flask, gRPC, GraphQL, validation, versioning, idempotency              |
@@ -77,7 +77,7 @@ software-engineering-knowledge-hub/
 
 <div align="center">
 
-| Topic                                | Link                                                                             |
+|                Topic                 |                                       Link                                       |
 | ------------------------------------ | -------------------------------------------------------------------------------- |
 | My Profile                           | [docs/my_profile.md](docs/my_profile.md)                                         |
 | Interview Questions                  | [docs/interview_questions.md](docs/interview_questions.md)                       |
@@ -103,13 +103,18 @@ software-engineering-knowledge-hub/
 
 ## 💻 Coding Exercise Index
 
-| Exercise                           | Runnable Source                                            |
+|              Exercise              |                      Runnable Source                       |
 | ---------------------------------- | ---------------------------------------------------------- |
 | Match statistics and head-to-head  | [Python](coding_questions/match_statistics.py)             |
+| Priority inventory allocation      | [Python](coding_questions/inventory_bid_allocation.py)     |
+| Top-k frequent paths               | [Python](coding_questions/top_k_frequent_paths.py)         |
+| Issue creation workflow            | [Python](coding_questions/issue_creation_workflow.py)      |
 | Transaction accounting and fees    | [Python](coding_questions/transaction_accounting.py)       |
 | Incident alert routing and backoff | [Python](coding_questions/incident_alert_router.py)        |
 | Weekly deployment windows          | [Python](coding_questions/weekly_deployment_windows.py)    |
 | Duplicate merchant detection       | [Python](coding_questions/duplicate_merchant_detection.py) |
+| Commerce support tools             | [Python](coding_questions/commerce_support_tools.py)       |
+| Safe agent orchestrator            | [Python](coding_questions/safe_agent_orchestrator.py)      |
 | General Python coding practice     | [Python](coding_questions/python_coding_questions.py)      |
 | Object-oriented library management | [Python](coding_questions/libraryMngmnt.py)                |
 | General Java coding practice       | [Java](coding_questions/java_coding_questions.java)        |
@@ -137,7 +142,7 @@ Versioned Engineering Notes
 
 ### Included automation scripts
 
-| Script                                     | Purpose                                                                                    |
+|                   Script                   |                                          Purpose                                           |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `confluence_sync/health_check.py`          | Validates Confluence credentials and space access                                          |
 | `confluence_sync/build_page_map.py`        | Builds or refreshes the local page mapping file and creates missing pages from `docs/*.md` |
@@ -145,7 +150,7 @@ Versioned Engineering Notes
 | `confluence_sync/push_to_confluence.py`    | Pushes Markdown documentation back to Confluence                                           |
 | `utils/generate_pdf_links.py`              | Regenerates PDF links for the README                                                       |
 | `utils/generate_docs_index.py`             | Regenerates `docs/README.md` from the current `docs/*.md` files                            |
-| `utils/format_markdown_tables.py`          | Aligns Markdown pipe tables across files or folders                                        |
+| `utils/format_markdown_tables.py`          | Centers table headers and aligns Markdown pipe tables across files or folders              |
 
 ---
 
@@ -238,7 +243,7 @@ The following interview resources are included in the repository:
 
 ## 📝 Helpful Reference Links
 
-| Resource                                                                                     | Use Case                         |
+|                                           Resource                                           |             Use Case             |
 | -------------------------------------------------------------------------------------------- | -------------------------------- |
 | [QuickRef](https://quickref.me/)                                                             | Fast syntax references           |
 | [Python Guides](https://pythonguides.com/python-interview-questions-and-answers/)            | Python interview preparation     |

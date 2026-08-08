@@ -96,28 +96,7 @@ This file is resume-aligned and should be used to answer non-coding interview qu
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Tell-me-about-yourself, current-role positioning, career transition answers, screening prep, leadership stories, communication, and interview strategy.
-
-### Topic Sections
-
-1. Behavioral / Communication Answers — `Interview_Prep_Topics_and_Questions.md`
-2. Interview Positioning & Core Pitch — `ai_engineer_interview_prep_topics.md`
-3. Behavioral / HR Questions — `ai_engineer_interview_prep_topics.md`
-4. Client-Facing Communication — `ai_engineer_interview_prep_topics.md`
-5. First-Round Screening Preparation — `deloitte_python_genai_interview_prep_topics.md`
-6. Behavioral & Career-Motivation Questions — `deloitte_python_genai_interview_prep_topics.md`
-7. Current Role: GenAI Associate / LLM Evaluation — `deloitte_python_genai_interview_prep_topics.md`
-8. Live Technical Interview Strategy — `interview_prep_python_rest_fastapi_genai.md`
-9. Behavioral and Leadership Questions — `interview_questions_topics_technical_prep.md`
-10. How to Use This Guide — `ML_AI_Systems_Interview_Prep_Handbook.md`
-11. Interview Positioning — `ML_AI_Systems_Interview_Prep_Handbook.md`
-12. Behavioral & Profile-Based Questions — `ML_AI_Systems_Interview_Prep_Handbook.md`
-13. Documentation & Cross-Functional Collaboration — `ML_AI_Systems_Interview_Prep_Handbook.md`
-14. Core Interview Narrative — `Interview_Topics_and_Technical_Prep.md`
-15. Behavioral / HR Questions — `Interview_Topics_and_Technical_Prep.md`
-16. Current Role & Career Transition Questions — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -676,7 +655,7 @@ I am grateful for what I have learned, but I am looking for a broader engineerin
 #### 1. Tell Me About a Challenging Project
 ##### STAR Structure
 
-| Part      | Meaning                        |
+|   Part    |            Meaning             |
 | --------- | ------------------------------ |
 | Situation | What was the context?          |
 | Task      | What were you responsible for? |
@@ -937,36 +916,7 @@ Mention:
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Curated interviewer questions, rapid revision checklists, final interview reminders, 30-minute game plans, and last-minute cheat sheets.
-
-### Topic Sections
-
-1. Questions to Ask Interviewers — `Interview_Prep_Topics_and_Questions.md`
-2. Quick Revision Cheat Sheet — `Interview_Prep_Topics_and_Questions.md`
-3. Final Interview Mindset — `Interview_Prep_Topics_and_Questions.md`
-4. Questions to Ask the Interview Panel — `ai_engineer_interview_prep_topics.md`
-5. Quick Revision Cheat Sheet — `ai_engineer_interview_prep_topics.md`
-6. Final Interview Reminder — `ai_engineer_interview_prep_topics.md`
-7. Questions to Ask the Interviewer — `deloitte_python_genai_interview_prep_topics.md`
-8. Final Revision Checklist — `deloitte_python_genai_interview_prep_topics.md`
-9. One-Line Positioning Statement — `deloitte_python_genai_interview_prep_topics.md`
-10. 30-Second Closing Pitch — `deloitte_python_genai_interview_prep_topics.md`
-11. Quick Revision Cheat Sheet — `interview_prep_python_rest_fastapi_genai.md`
-12. Final Review Checklist Before Interview — `interview_prep_python_rest_fastapi_genai.md`
-13. Quick Revision Cheat Sheet — `interview_questions_topics_technical_prep.md`
-14. Final Interview Reminder — `interview_questions_topics_technical_prep.md`
-15. Quick Revision Cheat Sheet — `transaction_etl_sql_data_engineering_interview_handbook.md`
-16. Final Coverage Checklist — `transaction_etl_sql_data_engineering_interview_handbook.md`
-17. Questions to Ask the Interviewer — `ML_AI_Systems_Interview_Prep_Handbook.md`
-18. 30-Minute Interview Game Plan — `ML_AI_Systems_Interview_Prep_Handbook.md`
-19. Rapid Revision Checklist — `ML_AI_Systems_Interview_Prep_Handbook.md`
-20. High-Probability Interview Questions — `ML_AI_Systems_Interview_Prep_Handbook.md`
-21. Final Interview Mindset — `ML_AI_Systems_Interview_Prep_Handbook.md`
-22. End of Handbook — `ML_AI_Systems_Interview_Prep_Handbook.md`
-23. Questions to Ask the Interviewer — `Interview_Topics_and_Technical_Prep.md`
-24. Quick Revision Checklist — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -1309,7 +1259,7 @@ Overall, I believe my background is a strong match because I bring both producti
 ### 15. Quick Revision Cheat Sheet
 #### Python
 
-| Question                 | Quick Answer                                                        |            |
+|         Question         |                            Quick Answer                             |            |
 | ------------------------ | ------------------------------------------------------------------- | ---------- |
 | Tuple vs set             | Tuple is ordered and allows duplicates; set is unordered and unique |            |
 | `2**3**2`                | `512`, because exponentiation is right-associative                  |            |
@@ -1327,7 +1277,7 @@ Overall, I believe my background is a strong match because I bring both producti
 
 #### Concurrency
 
-| Topic           | Best Use         |
+|      Topic      |     Best Use     |
 | --------------- | ---------------- |
 | Multithreading  | I/O-bound tasks  |
 | Multiprocessing | CPU-bound tasks  |
@@ -1338,7 +1288,7 @@ Overall, I believe my background is a strong match because I bring both producti
 
 #### REST APIs
 
-| Method | Use                |
+| Method |        Use         |
 | ------ | ------------------ |
 | GET    | Fetch data         |
 | POST   | Create/upload data |
@@ -1784,7 +1734,7 @@ A short interview moves quickly. Be concise.
 
 #### Expected Flow
 
-| Time      | Topic                               |
+|   Time    |                Topic                |
 | --------- | ----------------------------------- |
 | 0–3 min   | Greeting and intro                  |
 | 3–8 min   | Tell me about yourself/current role |

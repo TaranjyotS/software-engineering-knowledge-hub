@@ -23,7 +23,7 @@ Tableau is used for visual analytics and dashboarding. For interviews, focus on 
 
 ## Key Concepts
 
-| Concept          | Explanation                                                   |
+|     Concept      |                          Explanation                          |
 | ---------------- | ------------------------------------------------------------- |
 | Calculated field | Custom logic built from fields and functions                  |
 | Parameter        | User-controlled value that can drive filters or calculations  |

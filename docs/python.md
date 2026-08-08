@@ -35,26 +35,7 @@ This file has been refreshed to keep the original repository topic while merging
 
 ## Consolidated Interview Questions & Technical Notes
 
-The section below is merged from the previously organized topic-wise interview-prep pack so the repository keeps the detailed technical Q&A in one place.
-
 > Python fundamentals, data structures, decorators, generators, exception handling, GIL, threading, multiprocessing, asyncio, performance, and coding exercises.
-
-### Topic Sections
-
-1. Python Internals & Concurrency — `Interview_Prep_Topics_and_Questions.md`
-2. Python Topics — `ai_engineer_interview_prep_topics.md`
-3. Python Core Topics — `deloitte_python_genai_interview_prep_topics.md`
-4. Python Fundamentals — `interview_prep_python_rest_fastapi_genai.md`
-5. Python Operators & Expressions — `interview_prep_python_rest_fastapi_genai.md`
-6. Lists, Tuples, and Sets — `interview_prep_python_rest_fastapi_genai.md`
-7. Python Functions, Decorators, and Generators — `interview_prep_python_rest_fastapi_genai.md`
-8. Exception Handling — `interview_prep_python_rest_fastapi_genai.md`
-9. Concurrency in Python — `interview_prep_python_rest_fastapi_genai.md`
-10. Coding Interview Practice Topics — `interview_prep_python_rest_fastapi_genai.md`
-11. Python Core Concepts — `interview_questions_topics_technical_prep.md`
-12. Python Coding Problems and Algorithms — `interview_questions_topics_technical_prep.md`
-13. Python — `ML_AI_Systems_Interview_Prep_Handbook.md`
-14. Python Engineering — `Interview_Topics_and_Technical_Prep.md`
 
 ---
 
@@ -69,7 +50,7 @@ The section below is merged from the previously organized topic-wise interview-p
 
 #### 4.2 Threading vs Multiprocessing vs AsyncIO
 
-| Approach        | Best For              | Notes                                                        |
+|    Approach     |       Best For        |                            Notes                             |
 | --------------- | --------------------- | ------------------------------------------------------------ |
 | Threading       | Simple I/O-bound work | Shared memory, affected by GIL for CPU work                  |
 | Multiprocessing | CPU-bound work        | Separate processes, avoids GIL limits                        |
@@ -328,7 +309,7 @@ A decorator wraps a function to add reusable behavior such as logging, timing, a
 A **tuple** is an ordered, immutable collection that allows duplicates.
 A **set** is an unordered collection that stores only unique elements.
 
-| Feature           | Tuple         | Set                              |
+|      Feature      |     Tuple     |               Set                |
 | ----------------- | ------------- | -------------------------------- |
 | Ordered           | Yes           | No guaranteed order              |
 | Mutable           | No            | Yes                              |
@@ -913,7 +894,7 @@ The values are generated one by one.
 
 #### 4.3 Difference between `yield` and `return`
 
-| `return`                         | `yield`                      |
+|             `return`             |           `yield`            |
 | -------------------------------- | ---------------------------- |
 | Ends function execution          | Pauses function execution    |
 | Returns full result at once      | Produces one value at a time |
@@ -1147,7 +1128,7 @@ Multiprocessing creates separate processes with separate Python interpreters, so
 
 #### 6.4 Multithreading vs Multiprocessing
 
-| Multithreading                  | Multiprocessing                |
+|         Multithreading          |        Multiprocessing         |
 | ------------------------------- | ------------------------------ |
 | Multiple threads in one process | Multiple independent processes |
 | Shared memory                   | Separate memory                |
@@ -2034,7 +2015,7 @@ This means Python threads are not ideal for CPU-heavy parallel computation, beca
 
 ##### When It Matters
 
-| Task Type            | Best Approach                                                 |
+|      Task Type       |                         Best Approach                         |
 | -------------------- | ------------------------------------------------------------- |
 | CPU-bound tasks      | Multiprocessing                                               |
 | I/O-bound tasks      | Threading or AsyncIO                                          |
@@ -2057,7 +2038,7 @@ The GIL prevents multiple native Python threads from executing Python bytecode s
 
 ##### Comparison Table
 
-| Approach        | Best For             | Example                                   |
+|    Approach     |       Best For       |                  Example                  |
 | --------------- | -------------------- | ----------------------------------------- |
 | Threading       | I/O-bound tasks      | Reading files, calling APIs               |
 | Multiprocessing | CPU-bound tasks      | Image processing, heavy computation       |
@@ -2211,7 +2192,7 @@ for row in read_large_file("data.txt"):
 
 ##### `yield` vs `return`
 
-| Keyword  | Behavior                                |
+| Keyword  |                Behavior                 |
 | -------- | --------------------------------------- |
 | `return` | Ends the function and returns one value |
 | `yield`  | Pauses the function and resumes later   |
@@ -2410,7 +2391,7 @@ The GIL is a lock in CPython that allows only one thread to execute Python bytec
 
 #### Threading vs Multiprocessing vs AsyncIO
 
-| Approach        | Best For             | Example                             |
+|    Approach     |       Best For       |               Example               |
 | --------------- | -------------------- | ----------------------------------- |
 | Threading       | I/O-bound tasks      | Calling multiple APIs               |
 | Multiprocessing | CPU-bound tasks      | Image processing, heavy computation |
@@ -2742,3 +2723,171 @@ This is useful when an object's invariants must be enforced without exposing int
 - Explain when framework hooks run: definition time, construction time, or call time.
 - Mention the exact exception when the question asks for output or failure behavior.
 - Separate static type checking from runtime validation.
+
+---
+
+## Frequency Aggregation, Top-K Selection & Streaming Follow-Ups
+
+A common interview progression is to start with a frequency map, then ask whether sorting every unique value is still appropriate when only a very small top-k result is required.
+
+### Baseline: Count Then Sort
+
+For `n` total events and `u` unique values:
+
+```python
+def top_k_by_sort(values, k):
+    counts = {}
+    for value in values:
+        counts[value] = counts.get(value, 0) + 1
+
+    ranked = sorted(counts, key=lambda value: (-counts[value], value))
+    return ranked[:k]
+```
+
+Complexity:
+
+- Counting: `O(n)`.
+- Sorting unique values: `O(u log u)`.
+- Total: `O(n + u log u)`.
+- Frequency storage: `O(u)`.
+
+The important interview distinction is that `n`, `u`, and `k` can be very different orders of magnitude. If millions of events collapse to a few unique values, sorting is cheap. If `u` is huge and `k` is tiny, sorting every unique value does unnecessary work.
+
+### Small `k`: Min-Heap of Size `k`
+
+After counting, keep only the best `k` candidates in a min-heap. The root represents the weakest retained candidate.
+
+```text
+count all events        O(n)
+scan u unique values    O(u log k)
+final ordering          O(k log k)
+```
+
+Overall:
+
+```text
+O(n + u log k)
+```
+
+This is better than `O(n + u log u)` when `k << u`.
+
+**Why `heapq`?**
+
+> A min-heap of size `k` keeps the weakest current top-k candidate at the root. For each new unique value, I either ignore it or replace that root in `O(log k)`. That avoids sorting all `u` unique values when I only need a small prefix.
+
+### Special Case: `k = 1`
+
+A heap is unnecessary. After counting, scan the frequency map once and keep the current maximum.
+
+```text
+O(n + u) time
+O(u) frequency storage
+```
+
+This is a useful follow-up because it shows that the data structure should match the requested result size rather than being applied mechanically.
+
+### Dynamic `k`
+
+A fixed size-`k` heap discards candidates. If a later query asks for a larger `k`, those discarded values are no longer available in the heap.
+
+Choose based on the query pattern:
+
+|                         Situation                          |                         Better Approach                         |
+| ---------------------------------------------------------- | --------------------------------------------------------------- |
+| One query with small fixed `k`                             | Frequency map + size-`k` min-heap                               |
+| Many queries over the same static data with changing `k`   | Count once, sort all unique values once, return cached prefixes |
+| Stream of updates with occasional arbitrary `k` queries    | Maintain running counts; build size-`k` heap at query time      |
+| Stream with very frequent top-k reads                      | Maintain counts plus an ordered ranking index                   |
+| Unique cardinality is too large for exact in-memory counts | Approximate heavy hitters such as Count-Min Sketch              |
+
+### Streaming Variant
+
+For an unbounded stream, the original input list is unavailable. The minimum exact state is a running frequency map:
+
+```python
+counts[path] = counts.get(path, 0) + 1
+```
+
+At any point, an arbitrary `top_k(k)` query can scan the current `u` counts and keep a size-`k` heap. That gives:
+
+- Update: `O(1)` average per event.
+- Query: `O(u log k)`.
+- Exact state: `O(u)`.
+
+If top-k queries are very frequent, maintain a secondary ordered index keyed by frequency and deterministic tie-break. That makes updates more expensive, typically `O(log u)`, but can make top-k reads close to `O(k)`.
+
+For distributed streams:
+
+- Partition by a stable hash of the key/path.
+- Maintain local counts/state.
+- Checkpoint consumer offsets and state.
+- Make replay idempotent.
+- Define window semantics explicitly: all-time, tumbling, sliding, or session window.
+- Merge partition-level candidates or counts at the aggregation layer.
+
+If exact `O(u)` state is not feasible, use an approximate heavy-hitter algorithm and state the accuracy/memory trade-off explicitly.
+
+**Interview answer:**
+
+> I would separate total events `n`, unique values `u`, and requested results `k`. The simple solution is a frequency map plus sorting, which is `O(n + u log u)`. If `u` is large and `k` is small, I would keep a min-heap of size `k`, reducing selection to `O(u log k)`. If `k` changes dynamically, a fixed heap is not enough because it discarded candidates, so for static data I would sort once and reuse the ranking, while for a stream I would keep running counts and compute or maintain the ranking based on query frequency.
+
+See `coding_questions/top_k_frequent_paths.py` for runnable batch, heap, dynamic-k, and streaming examples.
+
+---
+
+## Loop Progress Invariants in Grouped Simulations
+
+Nested loops over sorted groups are easy to make accidentally non-terminating. This came up in a priority-allocation exercise where records were grouped by bid and processed in timestamp order.
+
+### The Core Invariant
+
+Every loop must make measurable progress toward its exit condition.
+
+Bad pattern:
+
+```python
+group_end = index
+
+while group_end < index and rows[group_end].bid == bid:
+    ...
+```
+
+`group_end < index` is false immediately because both variables start equal. A different typo can be worse: the loop condition may remain true while the variable used in that condition never changes, causing a timeout.
+
+Safer grouped scan:
+
+```python
+group_end = group_start
+
+while group_end < len(rows) and rows[group_end].bid == bid:
+    group_end += 1
+
+# Outer pointer advances exactly once after the group is complete.
+group_start = group_end
+```
+
+Keep responsibilities separate:
+
+- `group_start` identifies the beginning of the current group.
+- `group_end` discovers the first record after that group.
+- The inner loop advances `group_end` only.
+- The outer loop advances `group_start` only after the group decision is complete.
+- Prefer descriptive state names such as `group_start`, `group_end`, and `remaining_inventory` when several indices or counters coexist; short names are fine only when the scope and role are obvious.
+
+### Optimize for the Required Output
+
+If the question asks only which customers received **zero** items, a literal one-item-per-round simulation may be unnecessary. After sorting by priority, group-level arithmetic can often determine who receives at least one item without iterating once per allocated item.
+
+That changes a potentially inventory-dependent simulation into a sort-and-scan solution:
+
+```text
+O(total_inventory) style simulation
+        ↓
+O(n log n) sort + O(n) group scan
+```
+
+**Interview answer:**
+
+> When I use multiple pointers, I define the progress invariant explicitly before coding: which pointer each loop owns, what must change on every iteration, and what state transition advances the outer loop. For large-quantity simulations I also ask whether the requested output can be derived at group level so runtime depends on the number of records rather than the number of individual units processed.
+
+See `coding_questions/inventory_bid_allocation.py` for the optimized allocation exercise.

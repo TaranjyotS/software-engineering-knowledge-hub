@@ -320,3 +320,182 @@ Research focused on Elasticsearch-based search architectures for big data analyt
 ## What Drives Me
 
 I enjoy building reliable software systems that solve real-world problems. My strongest motivation is combining backend engineering, cloud-native architecture, data systems, and modern AI capabilities into production-ready platforms that are scalable, secure, measurable, and useful.
+
+---
+
+## Senior Interview Story Bank
+
+These are reusable experience anchors for behavioral and technical-behavioral rounds. They should be adapted to the exact question rather than memorized word-for-word.
+
+### Security / DevSecOps Ownership — Bandit POC to CI
+
+**Use for:** ownership, iterative execution, security vs velocity, stakeholder alignment, developer productivity.
+
+Core story:
+
+- Identified an opportunity to move Python security checks earlier into CI/CD.
+- Evaluated Bandit through a proof of concept rather than immediately making every finding blocking.
+- Reviewed severity/confidence levels and false-positive/noise behavior.
+- Aligned rollout expectations with engineering/product stakeholders.
+- Integrated the scanner into Jenkins and documented how developers could reproduce/remediate findings.
+- Used staged enforcement to create a repeatable security control without unnecessarily disrupting delivery.
+
+Likely technical follow-ups:
+
+- Why Bandit for Python?
+- How did severity/confidence thresholds work?
+- How did you handle false positives?
+- Which stage of Jenkins ran the scan?
+- What should fail the build versus remain informational?
+- How would you roll this out across multiple repositories?
+
+---
+
+### CI/CD Initiative — Jenkins
+
+**Use for:** proactive ownership, developer productivity, one-team collaboration, release reliability.
+
+Core story:
+
+- Led Jenkins CI/CD implementation within a five-engineer team.
+- Structured the pipeline around build/dependency setup, automated tests, quality/security checks, packaging/deployment, and environment verification.
+- Coordinated pipeline behavior with the engineers whose services/framework code it affected.
+- Reduced reliance on manual release steps and created more repeatable delivery controls.
+
+Likely technical follow-ups:
+
+- Exact stages and why that order?
+- Where were unit/integration/security checks run?
+- How were artifacts/images versioned?
+- How did deployment to AWS fit the pipeline?
+- What happened on pipeline/deployment failure?
+- How were secrets handled?
+
+---
+
+### Backward Compatibility — Matrix-Based Traceability
+
+**Use for:** tasteful/simple design, maintainability, quality vs speed, prioritization, architecture trade-offs.
+
+Core story:
+
+- Worked on backward-compatible API/client or framework behavior where multiple consumer/version combinations had to be supported.
+- Avoided growing one-to-one special-case mappings.
+- Represented supported combinations as a compatibility/traceability matrix.
+- Used that matrix as a basis for implementation decisions and regression/contract coverage.
+- Preserved existing consumers while making future compatibility behavior easier to reason about.
+
+Likely technical follow-ups:
+
+- What made one-to-one mapping difficult?
+- What dimensions were represented in the matrix?
+- How did tests derive from supported/unsupported combinations?
+- How would versioning/deprecation work?
+- What happens when the number of versions becomes large?
+
+---
+
+### Shared Engineering Framework Across Three Products
+
+**Use for:** reuse, developer productivity, platform engineering, avoiding waste, architecture boundaries.
+
+Core story:
+
+- Contributed to a shared framework supporting three enterprise products.
+- Identified functionality that was genuinely common rather than forcing product-specific rules into one abstraction.
+- Kept reusable behavior in the framework and consumer-specific behavior at product boundaries.
+- Considered backward compatibility and release coordination across consumers.
+
+Strong trade-off line:
+
+> Shared code is valuable only when the underlying behavior is actually common. If two products merely look similar but evolve under different rules, forcing them into one abstraction can create tighter coupling than duplicated code.
+
+---
+
+### Six Microservices + Release Ownership
+
+**Use for:** backend/platform depth, releases, operational ownership, cross-product coordination.
+
+Experience anchors:
+
+- Helped containerize and deploy six Python/FastAPI microservices.
+- Worked with Docker/Kubernetes and AWS deployment workflows.
+- Oversaw official releases for three live products.
+- Maintained compatibility and validation across shared/consumer components.
+
+Important interview positioning:
+
+> Describe the actual communication/deployment pattern used in the relevant service rather than inventing Kafka, gRPC, or another technology simply because the architecture was microservice-based.
+
+---
+
+### 87% Test Coverage
+
+**Use for:** test strategy, quality, release confidence.
+
+Core points:
+
+- Achieved approximately 87% code coverage through unit testing in the relevant backend/framework work.
+- Do not present the number as equivalent to correctness.
+- Explain the risk-based strategy behind the tests: business logic, edge cases, compatibility, and failure paths.
+
+Strong line:
+
+> Coverage helped identify untested areas, but I cared more about meaningful assertions and high-risk behavior than maximizing the percentage itself.
+
+---
+
+### Financial Platform / Stakeholder Translation
+
+**Use for:** customer focus, requirements ambiguity, data correctness, stakeholder communication.
+
+Core story:
+
+- Worked on a Flask-based financial-services platform and analytics workflows across more than one million records.
+- Worked directly with business stakeholders to translate financial workflows into technical requirements.
+- Treated business definitions and edge cases as part of engineering correctness, not only implementation details.
+- Used backend/data processing, database integrations, and automated testing to support the workflows.
+
+Likely follow-ups:
+
+- How did you clarify ambiguous financial requirements?
+- How did you validate correctness over large datasets?
+- What data-quality checks were important?
+- How did you explain technical trade-offs to non-engineering stakeholders?
+
+---
+
+### Story-to-Question Map
+
+|      Interview theme       |     Primary experience anchor     |             Secondary anchor              |
+| -------------------------- | --------------------------------- | ----------------------------------------- |
+| Ownership                  | Jenkins CI/CD                     | Bandit POC                                |
+| Iterative execution        | Bandit POC → rollout              | Compatibility evolution                   |
+| Speed vs quality           | Release ownership / compatibility | Security enforcement rollout              |
+| Prioritization             | Compatibility matrix              | Multi-product release planning            |
+| Developer productivity     | Shared framework                  | Jenkins CI/CD                             |
+| Security                   | Bandit integration                | CI quality gates                          |
+| One-team collaboration     | Shared framework across products  | Jenkins rollout                           |
+| Customer/stakeholder focus | Financial workflow translation    | Internal developers as platform customers |
+| Technical depth            | FastAPI microservices             | Data pipelines / PostgreSQL               |
+| Testing/quality            | 87% coverage + meaningful tests   | Compatibility contract tests              |
+
+---
+
+### Story Preparation Checklist
+
+For every story, prepare answers to:
+
+```text
+What was the exact problem?
+Why did it matter?
+What was specifically my responsibility?
+What options did I consider?
+Why did I choose this approach?
+What did I personally implement/drive?
+Who did I need to align with?
+What technical risk/trade-off existed?
+How did I test/validate it?
+What changed after rollout?
+What would I do differently today?
+```

@@ -2,7 +2,7 @@
 
 # 📚 Software Engineering Knowledge Hub
 
-### A version-controlled software engineering, AI engineering, and interview preparation knowledge base with Confluence sync automation.
+## A version-controlled software engineering, AI engineering, and interview preparation knowledge base with Confluence sync automation.
 
 This repository keeps technical notes, coding questions, interview resources, downloadable PDFs, and documentation automation in one place. It is designed as a personal learning hub, recruiter-friendly portfolio resource, and docs-as-code workflow for keeping Markdown and Confluence aligned.
 
@@ -35,6 +35,7 @@ The repository now includes both traditional software engineering topics and upd
 |                 Area                  |                                   What You’ll Find                                    |
 | ------------------------------------- | ------------------------------------------------------------------------------------- |
 | 🐍 Python                             | Core concepts, advanced Python, concurrency, decorators, generators, coding patterns  |
+| 🧠 Coding Interviews                  | Progressive optimization, DSA patterns, complexity analysis, concurrency follow-ups   |
 | 🌐 Backend APIs                       | REST, FastAPI, Flask, gRPC, GraphQL, validation, versioning, idempotency              |
 | 🗄️ SQL & Databases                    | Joins, indexes, transactions, ORM, caching, query optimization, data modeling         |
 | 🧱 System Design                      | Scalability, microservices, distributed systems, queues, consistency, caching         |
@@ -81,6 +82,7 @@ software-engineering-knowledge-hub/
 | ------------------------------------ | -------------------------------------------------------------------------------- |
 | My Profile                           | [docs/my_profile.md](docs/my_profile.md)                                         |
 | Interview Questions                  | [docs/interview_questions.md](docs/interview_questions.md)                       |
+| Coding Interview Patterns            | [docs/coding_interview_patterns.md](docs/coding_interview_patterns.md)           |
 | Python                               | [docs/python.md](docs/python.md)                                                 |
 | REST API / Backend APIs              | [docs/rest_api.md](docs/rest_api.md)                                             |
 | SQL / Databases                      | [docs/sql.md](docs/sql.md)                                                       |
@@ -103,21 +105,24 @@ software-engineering-knowledge-hub/
 
 ## 💻 Coding Exercise Index
 
-|              Exercise              |                      Runnable Source                       |
-| ---------------------------------- | ---------------------------------------------------------- |
-| Match statistics and head-to-head  | [Python](coding_questions/match_statistics.py)             |
-| Priority inventory allocation      | [Python](coding_questions/inventory_bid_allocation.py)     |
-| Top-k frequent paths               | [Python](coding_questions/top_k_frequent_paths.py)         |
-| Issue creation workflow            | [Python](coding_questions/issue_creation_workflow.py)      |
-| Transaction accounting and fees    | [Python](coding_questions/transaction_accounting.py)       |
-| Incident alert routing and backoff | [Python](coding_questions/incident_alert_router.py)        |
-| Weekly deployment windows          | [Python](coding_questions/weekly_deployment_windows.py)    |
-| Duplicate merchant detection       | [Python](coding_questions/duplicate_merchant_detection.py) |
-| Commerce support tools             | [Python](coding_questions/commerce_support_tools.py)       |
-| Safe agent orchestrator            | [Python](coding_questions/safe_agent_orchestrator.py)      |
-| General Python coding practice     | [Python](coding_questions/python_coding_questions.py)      |
-| Object-oriented library management | [Python](coding_questions/libraryMngmnt.py)                |
-| General Java coding practice       | [Java](coding_questions/java_coding_questions.java)        |
+|              Exercise              |                       Runnable Source                        |
+| ---------------------------------- | ------------------------------------------------------------ |
+| Match statistics and head-to-head  | [Python](coding_questions/match_statistics.py)               |
+| Priority inventory allocation      | [Python](coding_questions/inventory_bid_allocation.py)       |
+| Top-k frequent paths               | [Python](coding_questions/top_k_frequent_paths.py)           |
+| Issue creation workflow            | [Python](coding_questions/issue_creation_workflow.py)        |
+| Transaction accounting and fees    | [Python](coding_questions/transaction_accounting.py)         |
+| Incident alert routing and backoff | [Python](coding_questions/incident_alert_router.py)          |
+| Weekly deployment windows          | [Python](coding_questions/weekly_deployment_windows.py)      |
+| Duplicate merchant detection       | [Python](coding_questions/duplicate_merchant_detection.py)   |
+| Commerce support tools             | [Python](coding_questions/commerce_support_tools.py)         |
+| Safe agent orchestrator            | [Python](coding_questions/safe_agent_orchestrator.py)        |
+| General Python coding practice     | [Python](coding_questions/python_coding_questions.py)        |
+| Progressive algorithm patterns     | [Python](coding_questions/progressive_algorithm_patterns.py) |
+| Concurrent data structures         | [Python](coding_questions/concurrent_data_structures.py)     |
+| Expiring window map                | [Python](coding_questions/expiring_window_map.py)            |
+| Object-oriented library management | [Python](coding_questions/library_management.py)             |
+| General Java coding practice       | [Java](coding_questions/java_coding_questions.java)          |
 
 > Coding-exercise documentation is intentionally kept inside the runnable source files as question and explanation blocks, so each exercise can be reviewed and executed from one file.
 
@@ -231,13 +236,15 @@ python confluence_sync/fetch_from_confluence.py
 
 ## 📥 Downloadable PDFs
 
-The following interview resources are included in the repository:
+The following interview resources/cheat sheets are included in the repository:
 
 - [Java 1 Interview Questions](interview_questions/Java-1%20Interview%20Questions.pdf)
 - [Java 2 Interview Questions](interview_questions/Java-2%20Interview%20Questions.pdf)
 - [Microservices Interview Questions](interview_questions/Microservices%20Interview%20Questions.pdf)
 - [Rest Api Interview Questions](interview_questions/REST%20API%20Interview%20Questions.pdf)
 - [Spring Boot Interview Questions](interview_questions/Spring%20Boot%20Interview%20Questions.pdf)
+- [Git Cheat Sheet](interview_questions/Git%20Cheat%20Sheet.pdf)
+- [Python Cheat Sheet](interview_questions/Python%20Cheat%20Sheet.pdf)
 
 ---
 

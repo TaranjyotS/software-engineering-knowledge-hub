@@ -14,7 +14,8 @@ DOCS_README = DOCS_DIR / "README.md"
 
 TOPIC_FOCUS = {
     "my_profile.md": "Resume-aligned profile, experience, positioning, and knowledge summary",
-    "interview_questions.md": "Behavioral, HR, resume-based, and general interview questions",
+    "interview_questions.md": "Behavioral, HR, resume-based, senior engineering, and general interview questions",
+    "coding_interview_patterns.md": "Progressive coding interviews, DSA patterns, complexity, testing, optimization",
     "python.md": "Core Python, advanced Python, concurrency, OOP, coding patterns",
     "rest_api.md": "REST, FastAPI, Flask, API contracts, security, pagination, idempotency",
     "sql.md": "SQL fundamentals, joins, indexes, transactions, window functions, optimization",

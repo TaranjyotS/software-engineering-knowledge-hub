@@ -1744,3 +1744,557 @@ If relationships are required by the serializer, reload with `select_related(...
 > For a broken create endpoint, I trace route, auth, validation, lookups, persistence, side effects, and serialization as one flow. A `201` response is meaningless if the write never happened. I validate required fields and relationships first, derive creator from the authenticated user, allocate any business identifier safely, persist the entity, record audit activity, then return the canonical serialized representation. I also verify error body shape, because status code alone is not the full API contract.
 
 See `coding_questions/issue_creation_workflow.py` for a runnable generalized version of this debugging exercise.
+
+---
+
+## Senior Backend API Interview Addendum
+
+This section consolidates reusable API/FastAPI material that commonly appears in senior backend rounds, especially when the interviewer follows a high-level answer with “what exactly happens in the request?”, “how do you persist it?”, “how do you test it?”, or “what happens under concurrency?”
+
+### HTTP Method Semantics
+
+|  Method  | Safe | Idempotent by semantics |                       Typical use                        |
+| -------- | ---- | ----------------------- | -------------------------------------------------------- |
+| `GET`    | Yes  | Yes                     | Read a resource/query.                                   |
+| `POST`   | No   | No                      | Create under server-assigned identity, commands/actions. |
+| `PUT`    | No   | Yes                     | Create/replace resource at a known identity.             |
+| `PATCH`  | No   | Not guaranteed          | Partial update.                                          |
+| `DELETE` | No   | Yes in effect           | Ensure resource is absent.                               |
+
+`DELETE` being idempotent does not mean every repeated response must have the same status code; it means repeating the operation should not create additional state changes after the resource is already absent.
+
+---
+
+### `200` vs `201` vs `202` vs `204`
+
+- `200 OK`: successful request with a response representation.
+- `201 Created`: a resource was created; often include `Location`.
+- `202 Accepted`: request accepted for processing, but the promised operation/resource creation is not yet complete.
+- `204 No Content`: successful request with no response body.
+
+Important long-running-job nuance:
+
+```text
+POST /jobs
+  ↓
+create durable Job(id=123, state=QUEUED)
+  ↓
+commit DB
+  ↓
+201 Created + Location: /jobs/123
+  ↓
+worker executes asynchronously
+```
+
+A long-running job can still return `201` if the job resource itself is durably created synchronously.
+
+---
+
+### Authentication: Do Not Trust `user_id` from the Request Body
+
+Client:
+
+```http
+GET /v1/feed
+Authorization: Bearer <access-token>
+```
+
+Backend flow:
+
+```text
+request
+  ↓
+auth middleware validates token
+  ↓
+trusted identity / user_id in request context
+  ↓
+authorization
+  ↓
+business logic
+```
+
+The caller may submit resource IDs needed for the operation, but the server should derive the caller identity from trusted authentication context when possible.
+
+Authentication answers “who are you?” Authorization answers “are you allowed to do this?”
+
+---
+
+### Cursor Pagination
+
+For fast-changing ordered data, cursor pagination is usually safer than offset pagination.
+
+Example:
+
+```http
+GET /v1/feed?limit=50&cursor=<opaque-token>
+```
+
+Underlying stable ordering might be:
+
+```text
+(created_at, id)
+```
+
+or:
+
+```text
+(published_at, episode_id)
+```
+
+The cursor can encode the last returned ordering tuple. New rows inserted at the top do not shift all later pages the way offsets can.
+
+---
+
+### Optimistic Concurrency with ETag / Version
+
+For update races:
+
+```http
+GET /v1/resources/123
+ETag: "v7"
+```
+
+Client update:
+
+```http
+PUT /v1/resources/123
+If-Match: "v7"
+```
+
+If the resource is now version 8, reject the stale write rather than silently overwriting a newer update.
+
+At the database layer the same concept may be implemented with a version column and conditional `UPDATE`.
+
+---
+
+### REST vs gRPC
+
+Use REST/HTTP+JSON when:
+
+- Broad client/browser interoperability matters.
+- Public APIs need easy debugging/tooling.
+- Human-readable payloads and standard HTTP semantics are valuable.
+
+Use gRPC when:
+
+- Internal service-to-service contracts are strongly typed.
+- Efficient binary serialization matters.
+- Streaming is important.
+- Client/server code generation is useful.
+
+Good interview answer:
+
+> I would not choose gRPC simply because it is faster. I would choose it when the service boundary benefits from strongly typed generated contracts or streaming and all consumers can support the protocol. REST remains a strong default for external/public APIs.
+
+---
+
+### Polling vs SSE vs WebSocket
+
+|     Mechanism      |                       Best fit                        |
+| ------------------ | ----------------------------------------------------- |
+| Polling            | Simple, low-frequency status checks.                  |
+| Server-Sent Events | Server → client streaming over HTTP; one-way updates. |
+| WebSocket          | Bidirectional low-latency messaging.                  |
+
+Choose the simplest communication model that meets the update/interaction requirement.
+
+---
+
+## FastAPI: Interview-Ready Architecture
+
+### Why FastAPI?
+
+Strong answer:
+
+> FastAPI is a good fit for Python APIs because type annotations integrate with Pydantic validation, OpenAPI documentation is generated automatically, dependency injection keeps infrastructure concerns explicit, and async endpoints work well for I/O-bound concurrency when the full dependency chain is async-compatible. I still choose sync versus async from the workload rather than assuming async automatically makes the service faster.
+
+### Where Async Helps
+
+Use async when the endpoint spends meaningful time waiting for async-capable I/O:
+
+- HTTP calls
+- Async database driver calls
+- Object storage/network calls
+- Multiple independent I/O operations that can overlap
+
+Example:
+
+```python
+import asyncio
+
+
+async def build_dashboard(client, urls):
+    results = await asyncio.gather(
+        *(client.get(url) for url in urls)
+    )
+    return results
+```
+
+This can overlap seven independent I/O waits rather than performing them sequentially.
+
+Do **not** use async to make CPU-heavy Python work magically parallel. CPU-heavy work can block the event loop; use process workers/background compute where appropriate.
+
+---
+
+### Pydantic Models
+
+Use Pydantic to define API contracts and validation boundaries.
+
+```python
+from pydantic import BaseModel, Field
+
+
+class CreateUserRequest(BaseModel):
+    email: str
+    age: int = Field(ge=0, le=130)
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+```
+
+Pydantic helps with:
+
+- Parsing and validation
+- Serialization
+- Clear request/response schemas
+- OpenAPI generation
+- Useful validation errors
+
+It does not replace:
+
+- Domain/business validation
+- Authorization
+- Database uniqueness/foreign-key constraints
+- Transactional invariants
+
+---
+
+### SQL Access in FastAPI with SQLAlchemy
+
+A common synchronous pattern is one DB session per request through dependency injection.
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = "postgresql+psycopg://user:pass@db/app"
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+```
+
+Endpoint:
+
+```python
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+app = FastAPI()
+
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+```
+
+For write workflows:
+
+```text
+request
+  ↓
+validate
+  ↓
+start/use transaction
+  ↓
+write all related rows
+  ↓
+commit
+  ↓
+return
+```
+
+On failure, rollback the transaction rather than leaving partially persisted state.
+
+For an async stack, use SQLAlchemy async sessions with an async driver; do not mix blocking DB calls into an async endpoint under the assumption that `async def` alone makes them non-blocking.
+
+---
+
+### Service Layer Function Example
+
+Keep HTTP-specific concerns thin when business logic is reused/tested independently.
+
+```python
+def create_subscription(db, user_id: int, podcast_id: int):
+    existing = (
+        db.query(Subscription)
+        .filter_by(user_id=user_id, podcast_id=podcast_id)
+        .one_or_none()
+    )
+
+    if existing is not None:
+        return existing
+
+    subscription = Subscription(
+        user_id=user_id,
+        podcast_id=podcast_id,
+    )
+    db.add(subscription)
+    db.commit()
+    db.refresh(subscription)
+    return subscription
+```
+
+In a production implementation, a database uniqueness constraint should still enforce `(user_id, podcast_id)` so two concurrent requests cannot create duplicates even if both application checks initially see no row.
+
+---
+
+## Mocking External Services
+
+Suppose the application uses an injected HTTP client abstraction:
+
+```python
+class WeatherClient:
+    def get_weather(self, city: str) -> dict:
+        ...
+```
+
+Service:
+
+```python
+def build_forecast(city: str, client: WeatherClient) -> dict:
+    data = client.get_weather(city)
+    return {"city": city, "temperature": data["temperature"]}
+```
+
+Unit test:
+
+```python
+from unittest.mock import Mock
+
+
+def test_build_forecast():
+    client = Mock()
+    client.get_weather.return_value = {"temperature": 22}
+
+    result = build_forecast("Toronto", client)
+
+    assert result == {"city": "Toronto", "temperature": 22}
+    client.get_weather.assert_called_once_with("Toronto")
+```
+
+Strong interview rule:
+
+> Mock unstable or expensive external boundaries, not every internal method. If the behavior being tested depends on SQL constraints or ORM integration, a real test database is often more valuable than mocking the repository layer into meaninglessness.
+
+---
+
+## Unit Testing FastAPI
+
+### Basic endpoint test
+
+```python
+from fastapi.testclient import TestClient
+
+client = TestClient(app)
+
+
+def test_health():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+```
+
+### Dependency override
+
+For a DB/external client dependency:
+
+```python
+def override_get_db():
+    db = TestSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+app.dependency_overrides[get_db] = override_get_db
+```
+
+This lets the endpoint execute through real routing/validation while controlling infrastructure dependencies.
+
+### What to test
+
+- Happy path
+- Request validation errors
+- Authentication/authorization failures
+- Not-found behavior
+- Conflict/idempotency behavior
+- Database rollback on failure
+- External-service timeout/error mapping
+- Response schema
+- Concurrency-sensitive invariants at an integration level
+
+---
+
+## Request Flow: Explain It Literally
+
+When an interviewer asks what happens when two users call an API, avoid a vague “FastAPI handles concurrency.”
+
+A more precise explanation:
+
+```text
+Client connection
+   ↓
+ASGI server accepts request
+   ↓
+FastAPI/Starlette routing + middleware
+   ↓
+auth/dependencies
+   ↓
+endpoint/service code
+   ↓
+DB / cache / downstream I/O
+   ↓
+response serialization
+```
+
+Multiple requests may overlap depending on worker/process/thread/event-loop configuration and whether operations block. Shared mutable state and database invariants still need explicit correctness mechanisms.
+
+---
+
+## API Race Condition Example
+
+Suppose two callers try to reserve the same seat.
+
+Unsafe pattern:
+
+```text
+SELECT status = AVAILABLE
+   ↓
+request A sees available
+request B sees available
+   ↓
+both write reserved
+```
+
+Safer conditional write:
+
+```sql
+UPDATE seat
+SET status = 'HELD', held_by = :user_id
+WHERE id = :seat_id
+  AND status = 'AVAILABLE';
+```
+
+Check affected-row count to determine which request won.
+
+The database remains the final authority even if the API also performs a preliminary availability read.
+
+---
+
+## Backward-Compatible API Evolution
+
+When one backend/framework version supports multiple client versions, avoid uncontrolled pairwise special cases.
+
+Useful tools:
+
+- Explicit API versioning where contract changes are intentional.
+- Capability flags/feature negotiation where appropriate.
+- Compatibility matrix listing supported client/server combinations.
+- Contract tests derived from supported combinations.
+- Deprecation window and usage monitoring.
+
+A compatibility matrix is especially useful when multiple client and server/framework versions coexist because it turns “which combinations work?” into explicit testable data rather than scattered conditionals.
+
+---
+
+## API Interview Quick Questions
+
+### Why FastAPI over Flask?
+
+FastAPI provides stronger built-in typing/validation/OpenAPI and async-friendly ASGI behavior. Flask is intentionally lighter and can be preferable when a minimal synchronous WSGI stack or a mature existing ecosystem/codebase matters.
+
+### Why dependency injection?
+
+It makes request-scoped dependencies such as DB sessions, auth context, configuration, and external clients explicit and easier to replace in tests.
+
+### How do you secure APIs?
+
+TLS, authentication, authorization, input validation, least-privilege credentials, secrets management, rate limiting, audit logging, and secure error handling. Security depends on the threat model; JWT alone is not “API security.”
+
+### How do you handle external API failures?
+
+Timeouts, retry only transient/idempotent operations with bounded exponential backoff + jitter, circuit breaking where repeated failure would amplify load, and clear mapping to application-level errors/fallbacks.
+
+### How do you version APIs?
+
+Prefer stable contracts and additive changes where possible. When a breaking contract is necessary, expose an explicit version boundary and operate a deprecation/migration window with usage telemetry and compatibility tests.
+
+### How do you cancel a long-running job?
+
+Treat cancellation as a state transition, for example:
+
+```http
+POST /v1/jobs/{job_id}/cancel
+```
+
+rather than deleting the job resource if history/audit/status must remain available.
+
+---
+
+## Quick Backend API Revision Card
+
+```text
+HTTP semantics
+201 vs 202 nuance
+Idempotency-Key
+Trusted auth context, not body user_id
+Cursor pagination
+ETag / optimistic concurrency
+REST vs gRPC
+Polling vs SSE vs WebSocket
+FastAPI request flow
+Pydantic contract vs business/DB validation
+SQLAlchemy session per request
+Transactions + uniqueness constraints
+Mock external boundaries
+FastAPI dependency overrides
+Race conditions resolved at authoritative store
+Backward-compatibility matrix + contract tests
+```
+
+### HTTP/2 vs HTTP/3 Quick Note
+
+#### HTTP/2
+
+- Multiplexes multiple request/response streams over one TCP connection.
+- Header compression reduces repeated metadata overhead.
+- TCP packet loss can still delay progress for streams sharing the same TCP connection because reliability/order is enforced at the transport layer.
+
+#### HTTP/3
+
+- Uses QUIC over UDP.
+- Provides independent transport streams so packet loss affecting one stream does not create the same cross-stream TCP head-of-line behavior.
+- Includes modern connection establishment/migration characteristics.
+
+Interview line:
+
+> HTTP/2 improves connection utilization through multiplexing, while HTTP/3 moves HTTP onto QUIC so streams have more independent transport behavior and can avoid TCP-level head-of-line blocking across streams.
+
+### About the HTTP `QUERY` Method
+
+Some newer specifications/ecosystems discuss a `QUERY` method for safe request-body-based queries. Treat support as ecosystem-dependent. For most public APIs and interviews, conventional `GET` plus query parameters or a carefully designed `POST` search endpoint remains more interoperable unless `QUERY` support is an explicit requirement.

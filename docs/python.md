@@ -2891,3 +2891,580 @@ O(n log n) sort + O(n) group scan
 > When I use multiple pointers, I define the progress invariant explicitly before coding: which pointer each loop owns, what must change on every iteration, and what state transition advances the outer loop. For large-quantity simulations I also ask whether the requested output can be derived at group level so runtime depends on the number of records rather than the number of individual units processed.
 
 See `coding_questions/inventory_bid_allocation.py` for the optimized allocation exercise.
+
+---
+
+## Senior Python Concurrency & Thread-Safety Interview Guide
+
+This section focuses on the follow-up style common in senior coding rounds: implement a correct stateful data structure, then make it thread-safe, discuss contention, and explain how the design changes when moved across processes or machines.
+
+### Concurrency vs Parallelism
+
+- **Concurrency:** multiple tasks make progress during overlapping time periods.
+- **Parallelism:** multiple tasks literally execute at the same time on different CPU cores/processors.
+
+A Python program can be highly concurrent even when CPython's GIL limits parallel execution of Python bytecode in one process.
+
+---
+
+### What Is the GIL?
+
+CPython's Global Interpreter Lock allows only one thread at a time to execute Python bytecode within a process.
+
+Important consequences:
+
+- CPU-bound pure-Python threads usually do not scale linearly across cores.
+- Threads are still useful for I/O-bound work because waiting threads can release control while another thread runs.
+- Many blocking I/O operations and C extensions release the GIL.
+- The GIL does **not** make arbitrary shared state logically thread-safe.
+
+Strong interview answer:
+
+> The GIL limits simultaneous execution of Python bytecode in CPython, but it does not protect multi-step application invariants. A read-modify-write sequence or a dictionary plus linked-list invariant can still be interleaved across threads, so I still need synchronization around shared mutable state.
+
+---
+
+### Threading vs Multiprocessing vs AsyncIO
+
+|   Model   |                            Best Fit                            |                          Key Trade-Off                          |
+| --------- | -------------------------------------------------------------- | --------------------------------------------------------------- |
+| Threads   | Blocking/I/O-bound work, legacy sync libraries                 | Shared-memory synchronization and GIL for CPU-heavy Python code |
+| Processes | CPU-bound Python work requiring true parallelism               | Serialization, IPC, higher memory/process overhead              |
+| `asyncio` | Many concurrent I/O operations with async-compatible libraries | Cooperative model; blocking calls must not run on event loop    |
+
+Interview line:
+
+> I choose the concurrency model from the workload. Threads and asyncio are strong for I/O concurrency, while processes are more appropriate when CPU-bound Python work needs parallel execution across cores.
+
+---
+
+### Race Condition
+
+A race condition occurs when correctness depends on unpredictable operation interleaving.
+
+Conceptually, this is not one indivisible operation:
+
+```text
+counter += 1
+
+read counter
+add 1
+write counter
+```
+
+Possible interleaving:
+
+```text
+Thread A reads 5
+Thread B reads 5
+Thread A writes 6
+Thread B writes 6
+```
+
+Expected: 7. Actual: 6.
+
+Protect the shared invariant using appropriate synchronization.
+
+---
+
+### `threading.Lock`
+
+A mutex permits one thread at a time inside the protected critical section.
+
+```python
+import threading
+
+
+class Counter:
+    def __init__(self):
+        self._value = 0
+        self._lock = threading.Lock()
+
+    def increment(self):
+        with self._lock:
+            self._value += 1
+
+    def value(self):
+        with self._lock:
+            return self._value
+```
+
+Start with correctness. Keep the critical section as small as practical, but do not split one logical invariant across multiple unsynchronized operations.
+
+---
+
+### `RLock`
+
+`RLock` is reentrant: the same thread can acquire it multiple times before releasing it the same number of times.
+
+Use it when reentrant acquisition is actually part of the design, for example:
+
+```text
+public synchronized method
+   ↓
+calls another synchronized method
+   ↓
+same thread needs same lock again
+```
+
+Strong interview answer:
+
+> I prefer a normal Lock unless reentrancy is required. RLock can be useful when synchronized methods call each other, but using it everywhere can hide accidental recursive lock acquisition.
+
+---
+
+### Semaphore
+
+A semaphore permits up to N concurrent holders rather than exactly one.
+
+Examples:
+
+```text
+allow at most 10 concurrent DB-heavy tasks
+allow at most 20 outbound API calls
+limit parallel downloads
+```
+
+```python
+import asyncio
+
+semaphore = asyncio.Semaphore(10)
+
+
+async def call_service(client, url):
+    async with semaphore:
+        return await client.get(url)
+```
+
+A semaphore controls concurrency; it does not by itself protect a complex shared-state invariant.
+
+---
+
+### Condition Variable
+
+A condition variable lets threads wait for a state predicate while temporarily releasing a lock.
+
+Typical bounded queue predicates:
+
+```text
+producer waits while queue is full
+consumer waits while queue is empty
+```
+
+Always re-check the predicate in a `while` loop:
+
+```python
+with condition:
+    while not predicate():
+        condition.wait()
+```
+
+Why `while`, not `if`?
+
+- Condition waits can wake spuriously.
+- Another thread can change the state before this thread reacquires the lock.
+
+---
+
+### Thread-Safe Queue
+
+Python's `queue.Queue` is the default production answer when the problem simply needs a synchronized producer/consumer queue.
+
+If the interview asks you to implement one, use:
+
+- `deque` for O(1) append/popleft
+- one lock
+- `not_empty` condition
+- `not_full` condition for bounded capacity
+
+See `coding_questions/concurrent_data_structures.py` for a runnable implementation.
+
+---
+
+### Deadlock
+
+Classic example:
+
+```text
+Thread 1: acquire A → waits for B
+Thread 2: acquire B → waits for A
+```
+
+Both wait forever.
+
+Practical defenses:
+
+- Consistent global lock ordering
+- Avoid unnecessary nested locks
+- Keep lock scope small
+- Use timeouts where appropriate
+- Avoid calling unknown/external code while holding a lock
+
+Interview explanation:
+
+> If multiple locks are necessary, I define one acquisition order and enforce it everywhere. That removes the circular-wait pattern that commonly causes deadlocks.
+
+---
+
+### Coarse-Grained vs Fine-Grained Locking
+
+#### Coarse-grained
+
+One lock protects the complete logical state.
+
+Advantages:
+
+- Simple
+- Easier to prove correct
+- Lower deadlock risk
+
+Disadvantage:
+
+- More contention
+
+#### Fine-grained
+
+Different locks protect independent state partitions.
+
+Advantages:
+
+- More concurrency
+
+Disadvantages:
+
+- More complex invariants
+- Lock-ordering concerns
+- Harder multi-key operations
+
+Senior interview pattern:
+
+> I would first protect the whole invariant with one lock. If profiling shows lock contention is material, I would consider partitioning/sharding the state or reducing critical-section work rather than prematurely introducing fine-grained locking.
+
+---
+
+### Lock Sharding
+
+For independent key-based operations:
+
+```python
+lock = locks[hash(key) % len(locks)]
+```
+
+This lets operations on different shards proceed concurrently.
+
+Trade-offs:
+
+- Collisions still serialize unrelated keys.
+- Multi-key operations become more complex.
+- Global ordering/eviction policies may still need centralized synchronization.
+
+---
+
+### Why LRU `get()` Is Not Really Read-Only
+
+An LRU cache maintains recency ordering.
+
+```text
+get(key)
+   ↓
+lookup value
+   ↓
+move node to most-recent position
+```
+
+So `get()` mutates shared state and must participate in the synchronization strategy.
+
+The LRU invariant spans both:
+
+```text
+hash map
++
+doubly linked list ordering
+```
+
+A strong first implementation protects both under one lock.
+
+---
+
+### TTL / Expiring Map Design
+
+A map may store:
+
+```text
+key -> (value, expiry)
+```
+
+and an ordered expiration structure.
+
+#### Fixed TTL with insertion-ordered expiry
+
+A deque can work because expiration order matches insertion order.
+
+#### Arbitrary TTL per key
+
+Use a min-heap:
+
+```text
+(expiration_time, key)
+```
+
+Heap operations cost O(log n).
+
+#### Stale expiration metadata
+
+If key A is overwritten:
+
+```text
+put A with expiry 10
+put A with expiry 20
+```
+
+the old expiry entry must not delete the new value. Compare the queued expiry/version to the map's current expiry/version before deleting.
+
+This is a useful general pattern: secondary index entries can become stale after an overwrite, so validate them against authoritative current state before acting.
+
+---
+
+### Bounded Blocking Queue
+
+Requirements:
+
+```text
+put(item) waits when full
+take() waits when empty
+fixed capacity
+```
+
+Core structure:
+
+```text
+deque
+lock
+not_empty condition
+not_full condition
+```
+
+Producer:
+
+```text
+while full:
+    wait on not_full
+append item
+notify not_empty
+```
+
+Consumer:
+
+```text
+while empty:
+    wait on not_empty
+popleft item
+notify not_full
+```
+
+This also demonstrates **backpressure**: producers cannot create unbounded queued work when consumers are slower.
+
+---
+
+### Rate Limiter Evolution
+
+#### Fixed window
+
+Simple per-key counter keyed by time bucket.
+
+Problem: boundary bursts.
+
+```text
+100 requests at 12:00:59
+100 requests at 12:01:00
+```
+
+The client can generate 200 requests in roughly one second despite a nominal 100/minute limit.
+
+#### Sliding-window log
+
+Store recent timestamps, often in a deque/sorted structure.
+
+- More accurate
+- More state per key
+
+#### Token bucket
+
+Maintain:
+
+```text
+bucket capacity = allowed burst
+refill rate     = sustained rate
+```
+
+Token bucket is a strong practical design when controlled bursts are acceptable.
+
+#### Concurrent limiter
+
+A single lock is the simplest correctness baseline. If contention is high, shard locks/state by key.
+
+#### Distributed limiter
+
+Local process counters cannot enforce one global limit across many API servers.
+
+Options:
+
+- Central/partitioned atomic counter store
+- Redis atomic script/operation
+- Allocate local token budgets from a global quota
+
+Trade-off:
+
+> Centralized exact state adds a network dependency; local quotas scale better but can become approximate.
+
+---
+
+### Task Scheduler
+
+For:
+
+```text
+schedule(task, execution_time)
+get next due task
+```
+
+use a min-heap ordered by execution time.
+
+```text
+schedule: O(log n)
+peek next due: O(1)
+pop: O(log n)
+```
+
+Concurrency follow-ups:
+
+- A producer inserts an earlier task while a worker sleeps.
+- Worker must be notified to recompute its wait duration.
+- Duplicate execution after crash/retry.
+- Durable scheduling across process restart.
+
+Distributed extension:
+
+```text
+durable task table
+   ↓
+conditional lease claim
+   ↓
+worker
+   ↓
+heartbeat / completion
+```
+
+---
+
+### Optimistic vs Pessimistic Concurrency
+
+#### Optimistic
+
+Assume conflicts are uncommon. Detect them at write time.
+
+Example:
+
+```sql
+UPDATE job
+SET state = 'RUNNING',
+    version = version + 1
+WHERE id = :id
+  AND state = 'QUEUED'
+  AND version = :expected_version;
+```
+
+`0 rows affected` means another actor changed the state first.
+
+Good for:
+
+- Short transactions
+- Low/moderate conflict
+- High read concurrency
+
+#### Pessimistic
+
+Lock before making the change.
+
+Good when:
+
+- Conflict is frequent
+- Exclusive ownership is necessary
+- The critical operation is short
+
+Trade-offs:
+
+- Blocking
+- Deadlocks
+- Reduced concurrency
+
+---
+
+### Testing Concurrent Code
+
+Useful strategies:
+
+- Many threads writing the same key/counter.
+- Readers and writers operating simultaneously.
+- Independent keys to verify concurrency does not corrupt shared metadata.
+- Barriers/events to intentionally align threads around a suspected race.
+- Repeated stress runs rather than one execution.
+- Assert invariants after all workers finish.
+- Validate capacity never exceeds its limit.
+- Validate every produced queue item is consumed exactly as the test contract expects.
+- Use race/thread-sanitizer tooling where the language/runtime supports it.
+
+Do not rely only on `sleep()` to “make the race happen”; that creates fragile tests.
+
+---
+
+### Quick Concurrency Interview Questions
+
+#### Does the GIL make Python data structures thread-safe?
+
+No. Some individual CPython operations may appear atomic today, but application-level multi-step invariants still require synchronization. Do not build correctness on implementation accidents.
+
+#### Why use deque instead of list for FIFO?
+
+`deque.popleft()` is O(1); `list.pop(0)` is O(n) because elements shift.
+
+#### Why not use one lock per key everywhere?
+
+Lock lifecycle, eviction, multi-key operations, and global invariants become more complicated. Start coarse, measure contention, then partition when justified.
+
+#### Could LRU `get()` be lock-free?
+
+Not in the straightforward design because it mutates recency ordering. A specialized approximate/concurrent cache could relax this, but that changes semantics and complexity.
+
+#### What is starvation?
+
+A thread/task waits indefinitely because other contenders repeatedly acquire the required resource even though the system as a whole continues making progress.
+
+#### What is contention?
+
+Multiple workers frequently compete for the same synchronization/resource, reducing parallel progress and increasing latency.
+
+---
+
+### Senior Concurrency Revision Card
+
+```text
+Race condition
+Critical section
+Lock / mutex
+RLock
+Semaphore
+Condition variable
+Thread-safe Queue
+Deadlock + lock ordering
+Starvation
+Contention
+Coarse vs fine-grained locking
+Lock sharding
+GIL limits vs logical thread safety
+Threads vs processes vs asyncio
+Optimistic vs pessimistic concurrency
+Leases/heartbeats for distributed ownership
+```
+
+Runnable examples are available in `coding_questions/concurrent_data_structures.py`.

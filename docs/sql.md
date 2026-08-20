@@ -1223,3 +1223,332 @@ Prefer each service to own its persistence boundary. Other services should use a
 **Interview answer:**
 
 > I prefer a relational database when relationships, transactions, constraints, and reporting are central to the workload. I consider NoSQL when a document, key-value, graph, or horizontally distributed access pattern fits better. In microservices I also try to keep clear data ownership so one service does not depend directly on another service's internal schema.
+
+---
+
+## Backend Persistence & Concurrency Interview Patterns
+
+### One Database Session / Transaction Boundary per Request
+
+For typical request/response APIs, use one scoped database session/transaction context per request rather than one global mutable session shared across concurrent requests.
+
+Conceptual flow:
+
+```text
+request
+  ↓
+open/request DB session
+  ↓
+read + validate
+  ↓
+perform atomic writes
+  ↓
+commit
+  ↓
+close session
+```
+
+On failure:
+
+```text
+exception
+  ↓
+rollback
+  ↓
+return mapped error
+```
+
+Long-running external work should generally not hold a database transaction open for the entire network call or user interaction.
+
+---
+
+### Constraints Are Part of Correctness
+
+Application checks improve error messages but do not replace database constraints under concurrency.
+
+Example subscription uniqueness:
+
+```sql
+CREATE UNIQUE INDEX uq_subscription_user_podcast
+ON subscription(user_id, podcast_id);
+```
+
+Even if two concurrent API requests both execute:
+
+```text
+SELECT → no existing subscription
+```
+
+only one should be allowed to create the unique pair.
+
+Useful constraints:
+
+- Primary keys
+- Unique keys
+- Foreign keys
+- `NOT NULL`
+- Check constraints
+
+Strong interview line:
+
+> I use application validation for usability and domain rules, but I keep invariants that must survive concurrency enforced at the authoritative database boundary as well.
+
+---
+
+### Composite Indexes from Access Patterns
+
+Example feed query:
+
+```sql
+SELECT *
+FROM episode
+WHERE podcast_id = :podcast_id
+ORDER BY published_at DESC, episode_id DESC
+LIMIT 50;
+```
+
+Useful index:
+
+```sql
+CREATE INDEX idx_episode_podcast_published
+ON episode(podcast_id, published_at DESC, episode_id DESC);
+```
+
+Why column order matters:
+
+The leading columns should match the high-value filtering/order pattern. A composite index is not equivalent to having independent single-column indexes for every query.
+
+Trade-off:
+
+- Faster qualifying reads
+- More storage
+- More write/update maintenance
+
+---
+
+### Optimistic Concurrency with a Version Column
+
+Schema:
+
+```text
+id
+state
+version
+```
+
+Conditional update:
+
+```sql
+UPDATE job
+SET state = 'RUNNING',
+    version = version + 1
+WHERE id = :job_id
+  AND state = 'QUEUED'
+  AND version = :expected_version;
+```
+
+Result:
+
+```text
+1 row updated → caller won
+0 rows updated → state/version changed; handle conflict
+```
+
+This is useful when conflicts are possible but not common enough to justify holding pessimistic locks across normal reads.
+
+---
+
+### Conditional Allocation for Scarce Resources
+
+Do not implement scarce-resource ownership as:
+
+```text
+SELECT available
+then later UPDATE
+```
+
+without a concurrency guard.
+
+Prefer one authoritative conditional write or a short transaction/lock:
+
+```sql
+UPDATE seat
+SET status = 'HELD', held_by = :user_id
+WHERE seat_id = :seat_id
+  AND status = 'AVAILABLE';
+```
+
+Affected-row count becomes the concurrency result.
+
+This same pattern applies to:
+
+- Inventory
+- Driver assignment
+- Job leasing
+- Quota claims
+- One-time tokens
+
+---
+
+### Idempotent Ingestion with Source IDs
+
+When a scraper/partner can retry the same logical event, store a stable source identity:
+
+```text
+(podcast_id, source_episode_id)
+```
+
+and enforce uniqueness:
+
+```sql
+UNIQUE(podcast_id, source_episode_id)
+```
+
+A retry can then safely return/reuse the existing record rather than creating a duplicate.
+
+The same principle applies to payment-provider event IDs, webhook IDs, and external order IDs.
+
+---
+
+### Transactional Outbox Schema
+
+Example tables:
+
+```text
+business_table
+--------------
+id
+state
+...
+
+outbox
+------
+event_id
+aggregate_type
+aggregate_id
+event_type
+payload
+created_at
+published_at nullable
+```
+
+Write in one DB transaction:
+
+```sql
+BEGIN;
+
+INSERT/UPDATE business_table ...;
+INSERT INTO outbox(...);
+
+COMMIT;
+```
+
+A separate publisher reads unpublished outbox rows and sends them to the broker. Marking an event published must tolerate retries, and downstream consumers should be idempotent.
+
+---
+
+### Read Replicas and Read-After-Write
+
+In a single-primary topology:
+
+```text
+writes → primary
+eligible reads → replicas
+```
+
+Asynchronous replication can produce:
+
+```text
+write committed on primary
+   ↓
+immediate read on replica
+   ↓
+old value
+```
+
+For workflows requiring read-after-write consistency:
+
+- Read from primary for a short session/window.
+- Route based on a replication position/token where supported.
+- Keep critical ownership/permission checks on the authoritative path.
+
+Do not assume every query needs strong consistency; define it per workflow.
+
+---
+
+### SQL vs NoSQL Interview Decision
+
+Ask:
+
+```text
+What are the relationships?
+What transactions/constraints are required?
+What are the dominant access patterns?
+How stable is the schema?
+What write/read scale is expected?
+What consistency is required?
+```
+
+Relational databases are often strong for:
+
+- Orders/payments
+- Subscriptions
+- User-resource ownership
+- Workflow state
+- Control-plane metadata
+
+Specialized NoSQL stores can be strong for:
+
+- Very high-scale simple key access
+- Flexible documents
+- Time-series/telemetry
+- Geo/index-oriented access
+
+A production architecture may use both, but every store adds operational and consistency complexity.
+
+---
+
+### Database Interview Quick Questions
+
+#### Why PostgreSQL for a subscription/feed control plane?
+
+Because users, subscriptions, podcasts, and episodes have clear relationships, uniqueness constraints, and transactional invariants. Read-heavy scale can first be addressed with indexes, caching, and replicas before assuming a different database model is necessary.
+
+#### Why not cache the final allocation decision?
+
+Caches can be stale and usually do not provide the same transactional invariant as the authoritative database. Use cache for discovery/read acceleration; use authoritative conditional state for ownership.
+
+#### What is an N+1 query problem?
+
+One parent query triggers one additional query per returned record, for example one query for 100 users plus 100 separate queries for each user's data. Fix with eager loading, batching, joins, or a deliberately designed aggregate query/read model depending on ownership boundaries.
+
+#### What does a connection pool solve?
+
+It reuses a bounded set of database connections instead of creating a new physical connection for every request. Pool size must respect database capacity; scaling app instances without adjusting aggregate connection demand can exhaust the database.
+
+#### How do you debug a slow query?
+
+- Identify the exact SQL and frequency.
+- Examine execution plan (`EXPLAIN`/`EXPLAIN ANALYZE`).
+- Check scans, join strategy, row estimates, sorts, lock waits.
+- Verify indexes match predicates/order.
+- Reduce unnecessary selected data.
+- Check N+1 and repeated queries.
+- Measure before/after rather than adding indexes blindly.
+
+---
+
+## Quick Persistence Revision Card
+
+```text
+Session/transaction scoped to request
+Rollback on failure
+DB constraints enforce concurrency invariants
+Composite index follows access pattern
+Optimistic version/conditional UPDATE
+Unique source IDs for idempotent ingestion
+Transactional outbox
+Single-primary replicas + lag/read-after-write
+Connection-pool capacity
+SQL vs NoSQL from relationships/invariants/access patterns
+```

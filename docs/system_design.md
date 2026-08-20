@@ -1057,3 +1057,1701 @@ Time-to-live for successfully processed messages can be useful for retention con
 **Interview answer:**
 
 > For dropped messages I would first verify delivery semantics, retry/backoff, visibility timeout, and consumer idempotency. Repeated failures should move to a dead-letter queue with alerts rather than being lost or retried forever. I would keep enough source retention for replay and monitor queue depth, age, retry rate, DLQ volume, and consumer lag. For very large payloads, I would store the blob in object storage and queue only a small reference plus metadata and checksum.
+
+---
+
+## Senior 60-Minute System Design Interview Framework
+
+> **Goal:** Derive the architecture live instead of presenting a prebuilt diagram. Every major component should be justified by a requirement, bottleneck, failure mode, or ownership/scaling boundary.
+
+This section consolidates a reusable backend/API system-design approach for a 60-minute senior interview. It deliberately emphasizes the gaps that commonly appear when candidates know individual concepts but do not clearly connect them into one executable request path.
+
+### Core Interview Opening
+
+A strong opening is:
+
+> I’ll stay at the high level initially. I’ll clarify the functional and non-functional requirements, define the major APIs and data model, and start with the simplest architecture that satisfies those requirements. As we encounter scaling or reliability concerns, I’ll evolve the design, explain why each component is needed, how it works, its trade-offs and failure modes, and we can zoom into any component you’d like.
+
+This signals:
+
+```text
+requirements
+    ↓
+APIs/resources
+    ↓
+simplest HLD
+    ↓
+access patterns/data model
+    ↓
+measured bottleneck
+    ↓
+justified evolution
+    ↓
+critical deep dive
+    ↓
+reliability/security/observability
+```
+
+### 60-Minute Pacing
+
+|   Time    |                                  Focus                                  |
+| --------- | ----------------------------------------------------------------------- |
+| 0–3 min   | Frame the discussion and core functional scope.                         |
+| 3–8 min   | Non-functional requirements and scale assumptions.                      |
+| 8–13 min  | API/resource design and authentication assumptions.                     |
+| 13–18 min | Simplest architecture and service/module boundaries.                    |
+| 18–25 min | Scaling, statelessness, routing, data model, indexes.                   |
+| 25–32 min | Cache/CDN where relevant and database read scaling.                     |
+| 32–47 min | One or two system-defining deep dives.                                  |
+| 47–54 min | Async processing, failure handling, consistency, sharding if justified. |
+| 54–58 min | Security, observability, cost, operational concerns.                    |
+| 58–60 min | Final evolved diagram and concise recap.                                |
+
+Do not attempt to deep-dive every possible subsystem. Breadth establishes the architecture; depth should concentrate on the defining problem.
+
+---
+
+### 1. Functional vs Non-Functional Requirements
+
+Functional requirements answer:
+
+> What must the product do?
+
+Examples:
+
+- Create/read/update a resource.
+- Subscribe/unsubscribe.
+- Book/cancel.
+- Upload/download.
+- Match users/resources.
+- View an ordered feed.
+
+Non-functional requirements answer:
+
+> How well must it do those things?
+
+Always resolve these five questions early:
+
+1. How many users/requests/entities are we designing for, and how quickly are they growing?
+2. Is the workload read-heavy or write-heavy?
+3. Which data can never be lost, and which data can be reconstructed?
+4. What latency is acceptable for the critical workflows?
+5. What are the cost constraints?
+
+Also clarify where relevant:
+
+- Availability target
+- Consistency expectations
+- Geographic scope
+- Peak/burst traffic
+- Retention period
+- Security/multi-tenancy
+- RPO/RTO
+
+A component introduced later should trace back to one of these constraints.
+
+---
+
+### 2. Put APIs Early in the Design
+
+For backend/API interviews, concrete endpoints expose the resources and operations the architecture must support.
+
+Example resource API:
+
+```http
+POST /v1/jobs
+GET /v1/jobs/{job_id}
+POST /v1/jobs/{job_id}/cancel
+GET /v1/jobs?limit=50&cursor=...
+```
+
+Discuss where relevant:
+
+- HTTP method semantics
+- 200 vs 201 vs 202 vs 204
+- Idempotency keys
+- Authentication and authorization
+- Cursor pagination
+- Optimistic concurrency
+- Versioning
+- Structured errors
+- Async job semantics
+
+#### Important `201` vs `202` nuance
+
+A long-running operation does **not** automatically require `202 Accepted`.
+
+If the API synchronously creates a durable job resource:
+
+```text
+POST /jobs
+   ↓
+DB commits Job(id=123, state=QUEUED)
+   ↓
+201 Created
+Location: /jobs/123
+```
+
+Execution can continue asynchronously afterward.
+
+Use `202` when the request has been accepted but the final resource/operation has not yet been completed or durably created in the way the API contract promises.
+
+#### Idempotency for unsafe retries
+
+For retry-sensitive `POST` workflows:
+
+```http
+POST /v1/payments
+Idempotency-Key: 6f...
+```
+
+Store a uniqueness scope such as:
+
+```text
+(tenant_id, idempotency_key)
+```
+
+plus a normalized request hash and the created resource/response. Reusing the same key with a different payload should fail explicitly rather than silently returning the wrong result.
+
+---
+
+### 3. Server, Service, Module, Instance, Gateway, Load Balancer
+
+These terms should never be blurred together.
+
+#### Server / instance
+
+A server instance is **running compute** executing application code.
+
+Examples:
+
+- Process
+- VM
+- Container
+- Kubernetes pod
+
+#### Service
+
+A service is a **logical business/platform capability** exposed through an interface/API.
+
+Examples:
+
+```text
+Feed Service
+Subscription Service
+Payment Service
+Inventory Service
+```
+
+One service may run on many instances:
+
+```text
+Feed Service
+   |
+   +-- Feed instance #1
+   +-- Feed instance #2
+   +-- Feed instance #3
+```
+
+#### Module
+
+A module is a logical code boundary **inside the same deployable application**.
+
+```text
+App Instance
+-------------
+Auth Module
+Feed Module
+Subscription Module
+Podcast Module
+```
+
+A module call within one process does not require a network hop.
+
+#### API Gateway / router
+
+The gateway answers:
+
+> Which logical service owns this request?
+
+Example:
+
+```text
+/feed/*          → Feed Service
+/podcasts/*      → Podcast Service
+/subscriptions/* → Subscription Service
+```
+
+#### Load balancer
+
+A load balancer answers:
+
+> Which equivalent running instance should handle this request?
+
+Example:
+
+```text
+Feed Service LB
+   |
+   +-- Feed #1
+   +-- Feed #2
+   +-- Feed #3
+```
+
+The two routing decisions are different:
+
+```text
+Client
+  |
+  v
+API Gateway
+  |  chooses logical service
+  v
+Service Load Balancer
+  |  chooses equivalent instance
+  v
+Running service instance
+```
+
+Do not draw one generic load balancer randomly selecting between unrelated services unless it is explicitly doing route-aware L7 proxying and that responsibility is explained.
+
+---
+
+### 4. Start with a Modular Monolith When It Is Enough
+
+Do not begin with microservices only because the interview is called “system design.”
+
+A strong first version is often:
+
+```text
+                    Client
+                      |
+                      v
+                Load Balancer
+                 /    |    \
+                v     v     v
+             App #1 App #2 App #3
+                |     |     |
+        +-------+-----+-----+-------+
+        |             |             |
+      Module A      Module B      Module C
+                \     |     /
+                 \    |    /
+                  PostgreSQL
+```
+
+Every app instance contains all modules, so any endpoint can be routed to any healthy app instance.
+
+#### Why this can be better initially
+
+- Simple deployments
+- Easier local development/debugging
+- Transactions remain local
+- Fewer network failure modes
+- Less observability/operational overhead
+
+#### When microservices become justified
+
+Split a module when there is a meaningful reason such as:
+
+- Very different scaling characteristics
+- Strong failure-isolation requirement
+- Independent deployment cadence
+- Clear ownership boundary
+- Independent data lifecycle
+- Technology/runtime needs that materially differ
+
+A good interview statement:
+
+> I would keep the logical boundaries clean from the start, but I would not pay distributed-system costs until independent scaling, deployment, ownership, or isolation justifies them.
+
+---
+
+### 5. Explain What the Server Actually Does
+
+If an interviewer asks “what does the server do?”, answer literally.
+
+For `GET /v1/feed`:
+
+```text
+App instance receives HTTP request
+   |
+   +-- parse request
+   +-- authenticate token
+   +-- derive trusted user identity
+   +-- authorize operation
+   +-- execute feed business logic
+   +-- query cache/database/downstream services
+   +-- merge/rank/filter results
+   +-- serialize JSON
+   +-- return HTTP response
+```
+
+The server is not an unnecessary forwarding box. It is the compute executing the service/module code.
+
+---
+
+### 6. Mandatory End-to-End Request Trace
+
+For the most important workflow, always walk one request from client to response.
+
+Use this checklist:
+
+```text
+What does the user do?
+        ↓
+What HTTP request is created?
+        ↓
+How is the caller authenticated?
+        ↓
+Where does the request first arrive?
+        ↓
+How is it routed?
+        ↓
+Which running instance executes it?
+        ↓
+What business code runs?
+        ↓
+What data does it read?
+        ↓
+From which datastore/cache/service?
+        ↓
+What computation/transformation occurs?
+        ↓
+What response is created?
+        ↓
+How does the client use it?
+```
+
+Avoid vague statements such as:
+
+> The feed service handles it.
+
+Replace them with the exact data flow and transformation.
+
+---
+
+### 7. Scaling: Vertical First, Horizontal When Justified
+
+Vertical scaling:
+
+```text
+same instance
+   ↓
+more CPU / memory
+```
+
+Advantages:
+
+- Simple
+- Minimal application changes
+- Useful short-term capacity increase
+
+Limitations:
+
+- Hardware ceiling
+- Still one failure domain
+
+Horizontal scaling:
+
+```text
+           +-- App #1
+Client--LB-+-- App #2
+           +-- App #3
+```
+
+Use when:
+
+- Capacity exceeds one host
+- Availability requires multiple replicas
+- Failure isolation matters
+- Workloads need independent scale
+
+High availability can justify horizontal replicas **before** the vertical capacity ceiling is reached.
+
+---
+
+### 8. Stateless Application Instances
+
+Critical cross-request state should not live only in one process.
+
+Bad:
+
+```text
+User session created on App #1
+next request reaches App #3
+App #3 has no session
+```
+
+Better:
+
+```text
+App #1 --+
+App #2 --+--> shared session/state store
+App #3 --+
+```
+
+or use an appropriate signed token model where the required session claims are carried by the client and verified by the backend.
+
+#### Sticky sessions
+
+Sticky sessions can preserve affinity, but they are a trade-off rather than a complete solution:
+
+- Can produce uneven load
+- Complicate failover
+- Reduce routing flexibility
+- Do not remove the need for load balancing
+
+---
+
+### 9. Derive the Data Model from Access Patterns
+
+Before creating tables, ask:
+
+> What will the application repeatedly need to answer?
+
+Example:
+
+```text
+Which podcasts does user 123 follow?
+Does user 123 follow podcast 42?
+What are podcast 42's latest episodes?
+What are the newest eligible items for user 123?
+```
+
+Then derive tables/indexes.
+
+This is stronger than inventing a generic schema and hoping it supports the workload.
+
+---
+
+### 10. SQL vs NoSQL Decision Framework
+
+Do not say “NoSQL because scale.”
+
+Evaluate:
+
+- Relationships and joins
+- ACID transactions
+- Constraints/uniqueness
+- Consistency requirements
+- Query flexibility
+- Access-pattern stability
+- Write throughput
+- Schema flexibility
+- Operational experience
+
+A relational database is often a strong default for control-plane/business state that has meaningful invariants. A specialized store can be introduced later for a distinct read/write pattern.
+
+---
+
+### 11. Indexing: Query First, Index Second
+
+Example query:
+
+```sql
+SELECT *
+FROM episode
+WHERE podcast_id = ?
+ORDER BY published_at DESC, episode_id DESC
+LIMIT 50;
+```
+
+Candidate index:
+
+```text
+(podcast_id, published_at DESC, episode_id DESC)
+```
+
+Explain the trade-off:
+
+> The index reduces read work for this access pattern, but it consumes storage and increases write/update work.
+
+Do not add indexes without naming the query they optimize.
+
+---
+
+### 12. Cache Only After Identifying a Hot Read
+
+Basic flow:
+
+```text
+request
+  ↓
+cache
+ /   \
+hit   miss
+ |      |
+return  DB
+         |
+         v
+      populate
+         |
+         v
+       return
+```
+
+#### TTL vs invalidation
+
+- TTL is simple but allows bounded staleness.
+- Active invalidation/update reduces staleness but adds coordination.
+- A combination is often practical: invalidate on known writes and keep a TTL as a safety net.
+
+#### Cache stampede
+
+A hot key expires:
+
+```text
+10,000 requests
+      |
+      v
+     MISS
+      |
+      v
+     DB
+```
+
+Defenses:
+
+- Single-flight / request coalescing
+- Stale-while-refresh
+- Jittered TTLs
+
+#### Cache failure
+
+The cache should usually be an optimization rather than the only source of correctness.
+
+```text
+cache unavailable
+     ↓
+short timeout
+     ↓
+fallback to authoritative store
+     ↓
+rate-limit/backpressure to protect it
+```
+
+---
+
+### 13. Replication and Read-After-Write
+
+Single-primary model:
+
+```text
+             Primary
+             /     \
+            v       v
+       Replica 1 Replica 2
+```
+
+In this architecture:
+
+```text
+writes → primary
+eligible stale-tolerant reads → replicas
+```
+
+#### Replication lag
+
+If a user writes and immediately reads from a replica, the new state may be missing.
+
+Options for a workflow requiring read-after-write:
+
+- Route the immediate read to primary.
+- Use a consistency/session token.
+- Wait for a confirmed replication position where supported.
+
+Normal analytics/feed reads may tolerate small lag while permission/inventory/ownership checks may not.
+
+#### Failover
+
+```text
+Primary fails
+   ↓
+protect/pause ambiguous writes
+   ↓
+promote sufficiently current replica
+   ↓
+routing moves to new primary
+```
+
+Discuss synchronous vs asynchronous replication if RPO/write latency matters.
+
+---
+
+### 14. Queue Choice and Async Work
+
+Introduce a queue when work:
+
+- Is long-running
+- Can complete after the request
+- Arrives in bursts
+- Benefits from buffering/backpressure
+- Should be decoupled from the producer
+
+Different semantics matter:
+
+|                    Need                    |  Better abstraction   |
+| ------------------------------------------ | --------------------- |
+| One task should be processed by one worker | Work queue            |
+| Many independent consumers need the event  | Pub/sub               |
+| Consumers need replay/order/history        | Replayable log/stream |
+
+Do not reflexively choose Kafka when a simple work queue is sufficient.
+
+---
+
+### 15. At-Least-Once Delivery + Idempotent Consumer
+
+Avoid casually promising “exactly once.”
+
+Practical design:
+
+```text
+message delivered
+   ↓
+worker processes
+   ↓
+ack lost / worker crashes
+   ↓
+message redelivered
+```
+
+Therefore the consumer must tolerate duplicates.
+
+Use:
+
+- Stable event/message IDs
+- Unique database constraints
+- Conditional state transitions
+- Idempotency records
+
+A strong answer:
+
+> I prefer at-least-once delivery with idempotent consumers and durable state transitions rather than relying on a vague exactly-once claim.
+
+---
+
+### 16. Transactional Outbox
+
+Problem:
+
+```text
+DB commit      ✓
+publish event  ✗
+process crash
+```
+
+The business state exists, but downstream consumers never hear about it.
+
+Outbox pattern:
+
+```text
+BEGIN
+  write business row
+  write outbox row
+COMMIT
+
+outbox publisher
+   ↓
+message broker
+```
+
+The business update and intent-to-publish are committed atomically. The publisher can retry independently. Consumers still need idempotency because the event may be published more than once.
+
+---
+
+### 17. Retries, Timeouts, Circuit Breakers, Backpressure
+
+#### Retry strategy
+
+Retry only failures that are plausibly transient and retry-safe.
+
+Use:
+
+- Timeout
+- Bounded retries
+- Exponential backoff
+- Jitter
+
+Do not retry permanent validation failures.
+
+#### Why jitter?
+
+Without jitter, thousands of clients that fail together can retry on the same schedule and create another synchronized traffic spike.
+
+#### Circuit breaker
+
+When a dependency is persistently failing, stop sending it full request volume for a period and fail/fallback quickly. This protects both the caller and the unhealthy dependency.
+
+#### Backpressure
+
+If downstream capacity is lower than incoming demand, prevent unbounded work growth through:
+
+- Bounded queues
+- Admission control
+- Rate limits
+- Producer slowing
+- Load shedding
+
+---
+
+### 18. Concurrency and Authoritative State Transitions
+
+For scarce resources such as seats, inventory, driver assignments, quotas, or job ownership, do not make the final allocation decision from stale cache/read-replica state.
+
+Example conditional update:
+
+```sql
+UPDATE resource
+SET status = 'ALLOCATED'
+WHERE id = :id
+  AND status = 'AVAILABLE';
+```
+
+Interpret result:
+
+```text
+1 row changed → success
+0 rows changed → conflict/lost race
+```
+
+Other tools:
+
+- Optimistic version columns
+- Transactions
+- Row locks
+- Leases
+- Heartbeats
+- Reconciliation
+
+Choose based on conflict probability and workflow duration.
+
+---
+
+### 19. Leases and Worker Failure
+
+For long-running work, a worker should not own a job forever merely because it dequeued it once.
+
+Example model:
+
+```text
+job_id
+state
+lease_owner
+lease_expires_at
+attempt
+```
+
+Worker flow:
+
+```text
+claim job with conditional update
+   ↓
+set lease expiry
+   ↓
+heartbeat/extend lease while running
+   ↓
+complete → final state
+```
+
+If the worker dies, the lease expires and a reconciler/new worker can safely reclaim the job.
+
+---
+
+### 20. Sharding Comes Late
+
+Prefer a progression such as:
+
+```text
+query optimization
+      ↓
+indexes
+      ↓
+vertical scaling
+      ↓
+caching
+      ↓
+read replicas
+      ↓
+partitioning/archival
+      ↓
+sharding when necessary
+```
+
+If sharding is required, discuss:
+
+- Shard key
+- Routing
+- Hot shards
+- Rebalancing
+- Cross-shard queries
+- Cross-shard transactions
+- Operational complexity
+
+Important:
+
+> Sharding does not automatically solve a single hot key or one celebrity/event receiving most of the traffic.
+
+---
+
+### 21. Security and Multi-Tenancy
+
+Cover where relevant:
+
+- TLS
+- Authentication
+- Authorization
+- Service-to-service identity
+- Secrets management
+- Tenant scoping
+- Rate limiting
+- Input validation
+- Audit logging
+- Signed URLs
+- PII handling
+
+Keep authentication and authorization distinct:
+
+```text
+Authentication → who are you?
+Authorization  → are you allowed to perform this action?
+```
+
+Do not trust `user_id` from request body as identity when a verified token/context already establishes the caller.
+
+---
+
+### 22. Observability
+
+API/service metrics:
+
+- Request rate
+- Error rate
+- p50/p95/p99 latency
+- Saturation
+
+Database:
+
+- Query latency
+- Connection usage
+- Lock waits
+- Replication lag
+
+Cache:
+
+- Hit/miss rate
+- Evictions
+- Rebuild latency
+- Fallback-to-DB volume
+
+Queue:
+
+- Depth
+- **Age of oldest message**
+- Consumer lag
+- Retry rate
+- Dead-letter volume
+
+The age of the oldest queued item can be more actionable than depth alone: a small queue containing one task stuck for hours can be more serious than a large queue draining normally.
+
+Trace with identifiers such as:
+
+```text
+request_id
+trace_id
+user_id / tenant_id
+resource_id
+job_id
+```
+
+---
+
+### 23. Cost
+
+Tie cost to the architecture rather than saying “cost matters.”
+
+Examples:
+
+- Media-heavy product → object storage and egress
+- Personalized feed → database reads and cache cardinality
+- Realtime service → connection count and fan-out
+- Logging platform → ingestion and retention
+- Performance-test platform → executor compute
+
+A design can be technically scalable but economically poor.
+
+---
+
+## Complete Example: Podcast Subscription and Latest-Episode Feed
+
+This example is intentionally explicit about the complete request path, what the server does, what the feed logic does, and how the architecture evolves.
+
+### Requirements
+
+Core workflows:
+
+1. Subscribe/unsubscribe to podcasts.
+2. View the latest episodes from subscribed podcasts.
+3. Register/update podcast and episode metadata through a separate scraper/ingestion process.
+4. Actual audio/video remains hosted by the publisher.
+
+Assumptions for discussion:
+
+```text
+10M users
+hundreds of thousands of podcasts
+read-heavy
+subscriptions + metadata durable
+feed/cache reconstructible
+few-hundred-ms feed target
+cost matters
+```
+
+### APIs
+
+```http
+PUT /v1/subscriptions/{podcast_id}
+DELETE /v1/subscriptions/{podcast_id}
+GET /v1/subscriptions?limit=50&cursor=...
+GET /v1/feed?limit=50&cursor=...
+GET /v1/podcasts/{podcast_id}
+GET /v1/episodes/{episode_id}
+```
+
+Internal ingestion:
+
+```http
+POST /v1/internal/podcasts
+POST /v1/internal/podcasts/{podcast_id}/episodes
+```
+
+`PUT` is a good subscription operation because the logical resource identity is naturally `(authenticated_user_id, podcast_id)` and repeated calls can be idempotent.
+
+### Initial HLD: Modular Backend
+
+```text
+                 Web / Mobile
+                      |
+                    HTTPS
+                      |
+                      v
+                Load Balancer
+                      |
+          +-----------+-----------+
+          |           |           |
+          v           v           v
+       App #1      App #2      App #3
+          |           |           |
+          +-----------+-----------+
+                      |
+                      v
+                  PostgreSQL
+
+Scraper
+   |
+   v
+internal authenticated endpoint
+```
+
+Each app instance contains:
+
+```text
+Auth Module
+Subscription Module
+Podcast Module
+Episode Module
+Feed Module
+Ingestion Module
+```
+
+No network hop exists between these modules inside the same application process.
+
+### Data Model
+
+```text
+User
+----
+user_id
+email
+created_at
+
+Podcast
+-------
+podcast_id
+title
+feed_url
+website_url
+created_at
+updated_at
+
+Episode
+-------
+episode_id
+podcast_id
+source_episode_id
+title
+published_at
+media_url
+created_at
+
+Subscription
+------------
+user_id
+podcast_id
+created_at
+```
+
+Constraints/indexes:
+
+```text
+UNIQUE(user_id, podcast_id)
+UNIQUE(podcast_id, source_episode_id)
+INDEX subscription(user_id, podcast_id)
+INDEX episode(podcast_id, published_at DESC, episode_id DESC)
+```
+
+### Exact Feed Request Flow
+
+Client sends:
+
+```http
+GET /v1/feed?limit=50
+Authorization: Bearer <token>
+```
+
+End-to-end:
+
+```text
+Web / Mobile
+    |
+    | GET /v1/feed
+    | Authorization token
+    v
+DNS / Edge
+    |
+    v
+Load Balancer
+    |
+    | choose healthy app instance
+    v
+App #2
+    |
+    +-- authentication middleware validates token
+    |       ↓
+    |    trusted user_id = 123
+    |
+    +-- Feed module
+            |
+            +-- query subscriptions for user 123
+            |       ↓
+            |    [pod_A, pod_C, pod_F]
+            |
+            +-- fetch eligible recent episodes
+            |
+            +-- merge/order by published_at DESC
+            |
+            +-- take 50 + create cursor
+            v
+         JSON response
+            |
+            v
+          Client
+```
+
+The subscription graph determines **eligibility**. `published_at` determines the basic **ordering** when the product requirement says “latest.” A recommendation model is unnecessary unless personalized ranking becomes a separate requirement.
+
+### Simple SQL Feed
+
+```sql
+SELECT e.*
+FROM subscription AS s
+JOIN episode AS e
+  ON e.podcast_id = s.podcast_id
+WHERE s.user_id = :user_id
+ORDER BY e.published_at DESC, e.episode_id DESC
+LIMIT 50;
+```
+
+Start here if it meets the latency/scale requirement.
+
+### Large Subscription Set: K-Way Merge
+
+If a user follows many podcasts, retrieve a small newest-first stream per podcast and merge only enough heads to produce the requested page.
+
+```text
+Podcast A: 12:30, 11:50, 10:20
+Podcast C: 12:25, 11:40
+Podcast F: 12:10, 11:30
+                |
+                v
+          heap of stream heads
+                |
+                v
+           newest top 50
+```
+
+With P streams and N returned items, the merge work is approximately:
+
+```text
+O(N log P)
+```
+
+rather than sorting all historical episodes from every subscribed podcast.
+
+### Cursor Pagination
+
+Use an opaque cursor representing ordering position, for example the last:
+
+```text
+(published_at, episode_id)
+```
+
+This is more stable than offsets when new episodes are inserted at the top between page requests.
+
+### Caching
+
+Prefer reusable podcast-level building blocks before millions of personalized full-feed entries:
+
+```text
+podcast:A:latest
+podcast:C:latest
+podcast:F:latest
+```
+
+Then:
+
+```text
+user subscriptions
+       |
+       v
+[A, C, F]
+ |  |  |
+ v  v  v
+shared recent-episode cache entries
+       |
+       v
+merge/paginate
+```
+
+A full cache key such as `feed:user_123` can be useful later if measurement shows merge/query cost dominates, but it creates high cardinality and harder invalidation when popular podcasts publish.
+
+### Scraper Ingestion
+
+```http
+POST /v1/internal/podcasts/pod_42/episodes
+```
+
+Payload includes a publisher/source episode identifier. The unique constraint:
+
+```text
+UNIQUE(podcast_id, source_episode_id)
+```
+
+makes retries safe against duplicate insertion.
+
+For reliable downstream cache invalidation/projections:
+
+```text
+BEGIN
+  INSERT episode
+  INSERT outbox_event
+COMMIT
+```
+
+The outbox publisher later emits `EPISODE_CREATED` and idempotent consumers invalidate/update read models.
+
+### When to Split Services
+
+If feed generation develops different scaling/failure characteristics:
+
+```text
+                        Client
+                          |
+                          v
+                     API Gateway
+                  /        |        \
+                 v         v         v
+          Feed Service  Podcast  Subscription
+              LB        Service      Service
+            / | \          |            |
+           F1 F2 F3       ...          ...
+```
+
+Then `/feed` routing is:
+
+```text
+API Gateway chooses Feed Service
+          ↓
+Feed Service LB chooses F1/F2/F3
+          ↓
+running Feed Service instance executes the request
+```
+
+Avoid an N+1 service fan-out such as one network call per subscribed podcast. Use batched internal APIs, shared read models, or direct ownership-appropriate read stores.
+
+---
+
+## System-Specific Deep-Dive Patterns
+
+### Ticketing / Seat Reservation
+
+Core insight:
+
+> Browsing availability may tolerate staleness; final allocation cannot.
+
+State machine:
+
+```text
+AVAILABLE
+   |
+   v
+ HELD
+ /   \
+v     v
+SOLD  AVAILABLE (expiry/cancel)
+```
+
+Use an authoritative transaction/conditional update for allocation. Do not hold a database lock for the entire external payment flow.
+
+Flash crowd controls:
+
+- Waiting room/admission control
+- Per-event capacity protection
+- Rate limiting
+- Short holds
+- Idempotent payment confirmation
+- Reconciliation after uncertain payment states
+
+Sharding by event can distribute normal load but does not eliminate one extremely hot event.
+
+### Ride Matching
+
+Core insight:
+
+> Geospatial search finds candidate drivers; authoritative trip/driver state decides who actually owns the assignment.
+
+Separate data characteristics:
+
+```text
+Driver location:
+high write rate
+loss of a few updates tolerable
+geo-optimized
+
+Trip assignment/payment:
+stronger consistency
+transactional state
+```
+
+Use a conditional transition such as `AVAILABLE → ASSIGNED` to prevent two riders from owning the same driver.
+
+### Performance-Test Execution Platform
+
+Typical flow:
+
+```text
+Clients/CI
+   ↓
+Gateway/Auth
+   ↓
+Run API
+   ↓
+Postgres + Outbox
+   ↓
+Scheduler
+   ↓
+Work Queue
+   ↓
+Executors / Load Generators
+   ↓
+Target Systems
+```
+
+Use:
+
+- Durable `TestRun` state machine
+- Idempotency key for submission
+- Tenant quotas/fair scheduling
+- Leases/heartbeats for worker ownership
+- Object storage for large raw logs/results
+- Queue depth **and age** monitoring
+- Cancellation as a state transition rather than deleting history
+
+### Photo / Media Application
+
+Keep binary objects outside the relational metadata database:
+
+```text
+Client
+   ↓
+signed upload
+   ↓
+Object Storage
+   ↓
+image-processing queue/workers
+   ↓
+thumbnails/variants
+   ↓
+CDN
+```
+
+Store metadata, ownership, permissions, and object keys in the database.
+
+For social feeds, start with fan-out-on-read and evolve toward fan-out-on-write/hybrid only when measured read cost requires it. Celebrities/high-fanout publishers often need a hybrid strategy.
+
+---
+
+## High-Probability System Design Follow-Up Questions
+
+Practice answering these directly:
+
+1. What exactly does this server do?
+2. What is the difference between the service and the server/container/pod?
+3. Why is this component a separate service rather than a module?
+4. Which component receives this URL first?
+5. How does the API know which user is making the request?
+6. Why is `user_id` not accepted from the body as identity?
+7. How does the gateway know which service owns the route?
+8. How does the load balancer select an instance?
+9. What happens if one application instance dies?
+10. What happens if the load balancer/gateway fails?
+11. Why do we need more than one server?
+12. Why not just vertically scale?
+13. Where is session state stored?
+14. Do sticky sessions solve the problem?
+15. Why SQL instead of NoSQL?
+16. Which exact query does this index optimize?
+17. What happens when the cache is stale?
+18. What happens when the cache is completely unavailable?
+19. How do you prevent a cache stampede?
+20. What happens immediately after a write if a read goes to a lagging replica?
+21. What if the primary fails?
+22. Why do we need a queue?
+23. Why this queue abstraction instead of Kafka/pub-sub/a work queue?
+24. What happens if a worker crashes after performing the side effect but before acking?
+25. How do you make retries safe?
+26. What happens if DB commit succeeds but event publication fails?
+27. What happens if two users try to allocate the same resource concurrently?
+28. Why not use a cache to decide ownership/inventory?
+29. What is the shard key?
+30. What happens to one hot key/event after sharding?
+31. How do you observe that the queue is stuck?
+32. What metrics identify the actual latency bottleneck?
+33. What is the largest cost driver in this architecture?
+34. What happens at 10× traffic?
+35. What data can be rebuilt after failure, and what must be durably protected?
+
+---
+
+## Common System Design Mistakes
+
+- Starting with many microservices before establishing a reason for them.
+- Drawing “server → service” as if the server is merely forwarding to code running nowhere.
+- Using one load balancer to choose among unrelated services without explaining L7 routing.
+- Saying “the service handles it” without explaining the request/data flow.
+- Introducing Redis/Kafka/sharding because they are common interview buzzwords rather than because a bottleneck exists.
+- Choosing NoSQL only because the workload is “large.”
+- Treating a cache as authoritative for a scarce resource allocation.
+- Assuming replicas are instantly consistent.
+- Claiming read replicas universally cannot accept writes rather than describing the proposed replication topology.
+- Promising exactly-once delivery without defining failure semantics.
+- Retrying non-idempotent operations without an idempotency design.
+- Using offsets for fast-changing feeds without discussing insertion drift.
+- Saying `202` is always required for long-running work.
+- Adding sharding before indexes/cache/replication are considered.
+- Ignoring the full client → routing → compute → data → response path.
+
+---
+
+## Quick Interview Revision Card
+
+```text
+1. Functional requirements
+2. Five NFR questions: scale, read/write, durability, latency, cost
+3. APIs/resources/auth
+4. Start Client → App → DB
+5. Define server/service/module precisely
+6. Trace one request end to end
+7. Scale stateless app behind LB if justified
+8. Derive data model from access patterns
+9. SQL/NoSQL based on invariants and queries
+10. Index the critical query
+11. Cache only hot reads; cover miss/stale/stampede/failure
+12. Replicas; cover lag/read-after-write/failover
+13. Queue only asynchronous/bursty work
+14. Outbox + at-least-once + idempotency
+15. Strong consistency for ownership/allocation
+16. Shard late and discuss hot keys
+17. Security + observability + cost
+18. Final evolved diagram + trade-off summary
+```
+
+---
+
+## Additional Senior System-Design Deep Dives
+
+### Load Balancer Reliability and Algorithms
+
+A load balancer should not become the new single point of failure.
+
+In production, use a managed/redundant load-balancing tier or multiple proxy instances with failover rather than one manually managed process.
+
+Common routing strategies:
+
+- Round robin: distribute requests cyclically across healthy instances.
+- Least connections: prefer the instance with fewer active connections.
+- Weighted routing: send more traffic to larger/faster instances or during staged rollout.
+- Consistent hashing: useful when affinity by key is intentionally required, but it should not be introduced casually.
+
+Health checks determine which instances remain eligible for routing.
+
+Strong interview line:
+
+> The logical diagram shows one load-balancing tier, but I would deploy that tier redundantly or use a managed HA load balancer so it is not itself a single point of failure.
+
+---
+
+### Multi-Tenant Performance-Test Platform: Resource and API Details
+
+Useful resources:
+
+```text
+TestConfiguration
+TestRun
+ResultSummary
+Artifact
+TenantQuota
+```
+
+Possible APIs:
+
+```http
+POST /v1/test-runs
+Idempotency-Key: <key>
+
+GET /v1/test-runs/{run_id}
+POST /v1/test-runs/{run_id}/cancel
+GET /v1/test-runs?limit=50&cursor=...
+GET /v1/test-runs/{run_id}/results
+```
+
+If `POST /test-runs` durably creates:
+
+```text
+TestRun(id=R1, state=QUEUED)
+```
+
+then `201 Created` is valid even though execution continues later.
+
+Control plane:
+
+```text
+Client / CI
+    |
+    v
+Gateway + Auth
+    |
+    v
+Run API
+    |
+    v
+PostgreSQL
+    |
+    +-- transactional outbox
+```
+
+Execution plane:
+
+```text
+Scheduler
+   |
+   v
+Work Queue
+   |
+   +-- Executor 1
+   +-- Executor 2
+   +-- Executor N
+         |
+         v
+      target systems
+```
+
+Large raw test logs/artifacts:
+
+```text
+Executor
+   ↓
+Object Storage
+   ↓
+DB stores metadata/object key + summary
+```
+
+#### Fair scheduling
+
+A simple global FIFO can let one tenant consume all executors.
+
+Use tenant-aware quotas/fair scheduling, for example:
+
+```text
+Tenant A queue --+
+Tenant B queue --+--> fair scheduler --> executor capacity
+Tenant C queue --+
+```
+
+Possible controls:
+
+- Per-tenant concurrent-run limit
+- Weighted fair queues
+- Priority with starvation protection
+- Admission control when platform is saturated
+
+#### Cancellation
+
+Cancellation is not equivalent to deleting history.
+
+```text
+QUEUED → CANCELLED
+RUNNING → CANCELLING → CANCELLED
+```
+
+Workers should periodically observe cancellation or receive a control signal. Final state transitions must remain idempotent.
+
+---
+
+### Ticketing: Payment and Hold State Details
+
+A seat hold should be short-lived and represented durably:
+
+```text
+seat_id
+state
+hold_id
+held_by
+hold_expires_at
+version
+```
+
+Allocation:
+
+```sql
+UPDATE seat
+SET state = 'HELD',
+    hold_id = :hold_id,
+    held_by = :user_id,
+    hold_expires_at = :expiry
+WHERE seat_id = :seat_id
+  AND state = 'AVAILABLE';
+```
+
+External payment should not keep the database row locked for the full payment interaction.
+
+Payment state can be modeled separately:
+
+```text
+CREATED
+  ↓
+PROCESSING
+ /        \
+v          v
+SUCCEEDED FAILED
+   |
+ uncertain callback/timeout
+   v
+RECONCILING
+```
+
+Use provider/idempotency IDs and reconciliation for cases where the payment provider may have succeeded but the local response was lost.
+
+---
+
+### Ride Matching: Candidate Search vs Ownership
+
+Do not confuse “closest driver” with “assigned driver.”
+
+```text
+Geo store
+   ↓
+returns candidate drivers near rider
+   ↓
+Trip/Driver authoritative store
+   ↓
+conditional AVAILABLE → ASSIGNED
+   ↓
+winner owns trip
+```
+
+This separation is powerful because the geo index can tolerate rapidly changing/occasionally stale location signals while assignment requires a stronger invariant.
+
+If multiple candidate drivers are attempted:
+
+- Use bounded fan-out rather than contacting every nearby driver.
+- Apply timeout to each offer.
+- Avoid assigning one driver to two trips via conditional state.
+- Release/reconcile stale reservations if the matching worker fails.
+
+---
+
+### Feed Generation: Fan-Out-on-Read vs Fan-Out-on-Write
+
+#### Fan-out-on-read
+
+At request time:
+
+```text
+user
+  ↓
+subscriptions/followees
+  ↓
+recent items per source
+  ↓
+merge/rank
+  ↓
+feed response
+```
+
+Pros:
+
+- Simple writes
+- No need to precompute feeds for inactive users
+- Fresh relationship changes are easy to reflect
+
+Cons:
+
+- Expensive read-time fan-out for users following many sources
+
+#### Fan-out-on-write
+
+When publisher creates an item:
+
+```text
+new item
+   ↓
+find followers
+   ↓
+write item ID into follower feed projections
+```
+
+Pros:
+
+- Fast feed reads
+
+Cons:
+
+- Write amplification
+- Expensive celebrity/high-follower publishers
+- More invalidation/replay complexity
+
+#### Hybrid
+
+Precompute for ordinary publishers; merge celebrity/high-fanout sources at read time.
+
+A strong interview answer starts with fan-out-on-read if scale allows and introduces precomputation only after feed-read cost is shown to be the bottleneck.
+
+---
+
+## Reusable Mock-Interview Prompt Template
+
+Use this template when practicing a new design:
+
+> Act as me, the candidate, in a real 60-minute senior backend/API system-design interview. Start by clarifying functional and non-functional requirements, including scale, read/write ratio, durability, latency, and cost. Define concrete APIs and authentication assumptions early. Start with the simplest architecture and evolve it only when a requirement creates a bottleneck. At every major step show the current cumulative HLD and the relevant LLD/data flow. Be precise about server/instance vs service vs module, API gateway vs service load balancer, and trace at least one critical request end to end from client through routing, compute, data access, transformation, and response. Cover data model, SQL/NoSQL, indexes, caching, replication/read-after-write, queues/outbox/idempotency, concurrency/consistency, failure modes, security, observability, and cost where relevant. Spend most deep-dive time on the one or two system-defining problems. Keep the entire answer realistic for 60 minutes and finish with the final evolved architecture and a 60–90 second summary.

@@ -1565,3 +1565,434 @@ Then verify every suggestion against source and tests. The assistant is useful f
 **Interview answer:**
 
 > In an unfamiliar repository I start from the failing tests, extract the exact contract, and trace one request through route, auth, handler, model, and serializer. I compare the broken path with nearby working code rather than redesigning the repository. I fix one root cause at a time, rerun the narrow test, then expand to the full suite. That keeps the debugging loop evidence-driven and minimizes unrelated changes.
+
+---
+
+## Senior Testing, Security & Reliability Interview Addendum
+
+### Test Coverage: What a Percentage Does and Does Not Mean
+
+A coverage figure such as 87% is useful as a signal that most instrumented code paths are exercised, but it is not evidence that the system is 87% correct.
+
+Coverage can be measured in different ways:
+
+- Line coverage
+- Statement coverage
+- Branch coverage
+- Function/method coverage
+
+Strong interview answer:
+
+> I use coverage as a gap-finding tool rather than a quality target by itself. I care more about whether tests exercise business invariants, failure paths, concurrency boundaries, and important integrations than whether the percentage reaches an arbitrary number.
+
+A healthy strategy is:
+
+```text
+critical domain paths
+  ↓
+unit tests
+  ↓
+edge/failure paths
+  ↓
+integration tests around real boundaries
+  ↓
+coverage report identifies untested risk
+```
+
+---
+
+### Unit vs Integration vs End-to-End
+
+#### Unit test
+
+Tests one unit of logic in isolation.
+
+Characteristics:
+
+- Fast
+- Deterministic
+- Narrow failure signal
+- External boundaries often mocked/faked
+
+#### Integration test
+
+Tests real interaction between components.
+
+Examples:
+
+- FastAPI endpoint + test database
+- ORM model + database constraint
+- Service + message broker emulator/test instance
+- API client adapter + local stub server
+
+#### End-to-end
+
+Exercises a user/business workflow through most of the deployed stack.
+
+Trade-off:
+
+- Highest realism
+- Slowest/most fragile
+- Harder failure diagnosis
+
+Use a test pyramid/portfolio rather than trying to make every test end-to-end.
+
+---
+
+### What Should Be Mocked?
+
+Good mock boundaries:
+
+- External HTTP APIs
+- Cloud service clients in narrow unit tests
+- Payment/partner APIs
+- Email/SMS providers
+- Time/randomness when deterministic behavior matters
+
+Be cautious about mocking:
+
+- Your own domain/service logic
+- ORM behavior you actually need to verify
+- Database constraints
+- Serialization contracts that are part of the integration
+
+Strong rule:
+
+> Mock unstable or expensive boundaries, not internal implementation details merely to make the test pass.
+
+---
+
+### FastAPI Test Strategy
+
+Test layers:
+
+```text
+pure service/domain function tests
+       ↓
+API route tests with dependency overrides
+       ↓
+API + real test DB integration
+       ↓
+selected end-to-end smoke tests
+```
+
+Important cases:
+
+- Happy path
+- Validation errors
+- Authentication failure
+- Authorization failure
+- Not-found
+- Conflict/duplicate request
+- Idempotent retry
+- Database rollback
+- External-service timeout
+- Response schema
+
+---
+
+### Security Scanner Rollout from POC to CI Gate
+
+A static security tool should be introduced as an engineering change with adoption risk, not simply installed and made blocking.
+
+Reusable rollout:
+
+```text
+1. Identify why static security analysis is needed.
+2. Run a proof of concept on representative code.
+3. Classify true positives vs noise.
+4. Review severity/confidence thresholds.
+5. Define suppression/baseline rules with justification.
+6. Expose findings in CI without blocking initially.
+7. Make high-confidence/high-impact classes blocking.
+8. Document how developers reproduce the scan locally.
+9. Track false positives and tune the policy.
+10. Tighten enforcement as the codebase becomes clean.
+```
+
+For Python, Bandit is one example. The broader interview principle is **incremental security enforcement that protects quality without creating avoidable developer friction**.
+
+---
+
+### Security vs Developer Velocity
+
+Bad extremes:
+
+```text
+block every scanner finding immediately
+→ false-positive frustration / release disruption
+```
+
+or:
+
+```text
+never block anything
+→ security becomes advisory noise
+```
+
+Balanced approach:
+
+- Define high-risk non-negotiable findings.
+- Start informational for noisy/legacy categories.
+- Provide local reproduction/remediation guidance.
+- Use baselines only with ownership and review.
+- Tighten over time.
+
+---
+
+### Testing Backward Compatibility
+
+If multiple client/server/framework versions coexist, derive test coverage from a compatibility matrix.
+
+Example:
+
+```text
+             Client v1   Client v2   Client v3
+Server v1       ✓           ✗           ✗
+Server v2       ✓           ✓           ✗
+Server v3       ✓           ✓           ✓
+```
+
+Test strategy:
+
+- Positive contract test for every supported combination.
+- Explicit failure behavior for unsupported combinations.
+- Regression tests around boundary versions.
+- API/client integration tests for high-risk transitions.
+- Track actual version usage before deprecating old combinations.
+
+This is more systematic than manually maintaining pairwise special cases.
+
+---
+
+### Concurrency Testing
+
+Concurrency bugs are often timing-sensitive and may pass ordinary unit tests.
+
+Useful techniques:
+
+- Start many threads/tasks on the same key/state.
+- Use barriers/events to force competing operations to begin together.
+- Mix readers and writers.
+- Test independent keys to detect accidental global corruption.
+- Repeat stress tests many times.
+- Assert final invariants, not only absence of exceptions.
+- Verify queue capacity never exceeds limit.
+- Verify one scarce resource is allocated at most once.
+- Verify stale TTL metadata cannot delete a newer value.
+
+Avoid relying on arbitrary sleeps as the only race trigger.
+
+---
+
+### How to Debug a Slow API
+
+Use an evidence-first sequence:
+
+```text
+1. Confirm request rate and latency distribution (p50/p95/p99).
+2. Trace one slow request end to end.
+3. Split time among app CPU, DB, cache, network, downstream calls.
+4. Inspect slow queries/execution plans.
+5. Check connection-pool saturation.
+6. Check N+1 downstream/DB calls.
+7. Check payload serialization/size.
+8. Check CPU, memory, event-loop/thread-pool saturation.
+9. Optimize the measured bottleneck.
+10. Verify before/after metrics.
+```
+
+Do not jump directly to “add Redis.”
+
+---
+
+### Intermittent 500 Errors: Investigation Order
+
+- Error rate and affected endpoints/tenants/inputs
+- Stack traces and structured logs
+- Correlation with latest deployment/config change
+- Dependency errors/timeouts
+- Database connection exhaustion/locks
+- Container/pod restarts or OOM kills
+- Retry storms
+- CPU/memory saturation
+- Specific request payload patterns
+- Trace IDs across services
+
+If a recent release is clearly implicated and impact is significant, restoring service through rollback can take priority over perfect root-cause analysis.
+
+---
+
+### Retry Safety
+
+Retries should be:
+
+- For transient failures
+- Bounded
+- Exponentially backed off
+- Jittered
+- Idempotent or protected with an idempotency mechanism
+
+Do not retry:
+
+- Validation errors
+- Authorization failures
+- Permanent business-rule conflicts
+
+A timeout without a retry policy is incomplete; a retry policy without a timeout can also hang indefinitely.
+
+---
+
+### Queue Reliability Metrics
+
+Monitor more than queue depth:
+
+```text
+queue depth
+age of oldest message
+consumer throughput
+consumer lag
+retry rate
+DLQ depth
+DLQ age
+processing latency
+```
+
+Why queue age matters:
+
+> A queue of 100 items draining in seconds may be healthy. A queue of five items where the oldest has waited two hours can indicate a stuck partition/consumer or poison message.
+
+---
+
+### Liveness vs Readiness from a Reliability Perspective
+
+- **Readiness:** remove an instance from traffic when it cannot safely serve requests.
+- **Liveness:** restart when the process is irrecoverably unhealthy/wedged.
+
+Do not make liveness fail just because an external database/API is temporarily down; that can cause every instance to restart simultaneously during a dependency outage.
+
+---
+
+### Observability: Logs, Metrics, Traces
+
+#### Logs
+
+Best for discrete events and detailed context.
+
+Include structured fields such as:
+
+```text
+request_id
+trace_id
+user/tenant_id where appropriate
+resource_id
+error_type
+version/build
+```
+
+Avoid secrets, credentials, and unnecessary PII.
+
+#### Metrics
+
+Best for trends, alerting, and aggregate health.
+
+API golden signals:
+
+- Rate
+- Errors
+- Latency
+- Saturation
+
+#### Traces
+
+Best for latency/failure propagation across distributed request paths.
+
+A trace can expose:
+
+```text
+API 20 ms
+DB 15 ms
+Downstream A 450 ms
+Downstream B 30 ms
+```
+
+and identify the real bottleneck without guessing.
+
+---
+
+### Useful Production Metrics by Component
+
+#### API
+
+- Requests/sec
+- 4xx/5xx rate
+- p50/p95/p99 latency
+- In-flight requests
+
+#### Database
+
+- Query latency
+- Active/idle connections
+- Pool wait time
+- Lock waits/deadlocks
+- Replication lag
+
+#### Cache
+
+- Hit/miss ratio
+- Eviction rate
+- Rebuild latency
+- DB fallback volume
+
+#### Worker/queue
+
+- Queue depth
+- Oldest-message age
+- Throughput
+- Retry/DLQ rate
+- Worker utilization
+
+#### Deployment
+
+- Error/latency comparison by version
+- Restart rate
+- Readiness failures
+- Rollback/canary health
+
+---
+
+### Internal Developers as Customers
+
+In platform/developer-productivity systems, the “customer” may be another engineer.
+
+Quality includes:
+
+- Reliable CI pipeline
+- Fast feedback
+- Actionable errors
+- Clear documentation
+- Stable contracts
+- Predictable release/deprecation behavior
+- Low-friction local reproduction
+
+A tool that technically works but produces unclear failures or frequent false positives can still be a poor developer product.
+
+---
+
+## Quick Testing/Security/Observability Revision Card
+
+```text
+Coverage != correctness
+Unit vs integration vs E2E
+Mock external boundaries, not every internal detail
+FastAPI dependency override + real test DB where useful
+Security scanner POC → tune → staged enforcement
+Compatibility matrix drives contract tests
+Concurrency tests use barriers/invariants, not only sleep
+Slow API: measure → trace → isolate bottleneck → optimize
+Retries: transient + timeout + bounded backoff + jitter + idempotency
+Queue depth + oldest-message age + lag + DLQ
+Readiness removes traffic; liveness restarts wedged process
+Logs + metrics + traces have different roles
+Internal developers are customers of platform tooling
+```

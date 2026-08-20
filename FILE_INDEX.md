@@ -28,14 +28,6 @@ This repository contains topic-wise notes for software engineering, backend deve
 | Tableau                          | `docs/tableau.md`                        | Calculated fields, parameters, dual-axis charts, filters, dashboard optimization                |
 | Unix                             | `docs/unix.md`                           | Linux/Unix commands, permissions, text processing, process/networking commands                  |
 
-## Owner-Specific Material
-
-|              File              |                          Purpose                          |
-| ------------------------------ | --------------------------------------------------------- |
-| `owner/my_profile.md`          | Anonymized resume-aligned profile and personal story bank |
-| `owner/interview_questions.md` | Anonymized tailored answers and dated company research    |
-| `owner/README.md`              | Privacy boundary and safe-tailoring guidance              |
-
 ---
 
 ## Generated Interview PDFs
@@ -47,8 +39,7 @@ This repository contains topic-wise notes for software engineering, backend deve
 | `interview_questions/Software_Design_Patterns_Interview_Guide.pdf` | Generic design-pattern guide                  |
 | `interview_questions/Python_Backend_AI_Interview_Master_Guide.pdf` | Combined public interview-preparation sources |
 
-The PDFs are reproducible with `python utils/build_interview_pdfs.py`; the
-generator rejects known personal and company-specific terms before publishing.
+The PDFs are reproducible with `python utils/build_interview_pdfs.py`; the generator rejects known personal and company-specific terms before publishing.
 
 ---
 
@@ -83,5 +74,14 @@ generator rejects known personal and company-specific terms before publishing.
 | Core array, stack & matrix patterns | `coding_questions/core_array_stack_matrix_patterns.py` | Two Sum, stock scan, RPN, matrix rotation, sliding windows, monotonic stack |
 | Concurrent data structures          | `coding_questions/concurrent_data_structures.py`       | LRU, TTL map, blocking queue, rate limiting, locks                          |
 | Expiring window map                 | `coding_questions/expiring_window_map.py`              | Lazy expiration, O(1) average, overwrite-safe cleanup                       |
+| Kubernetes job reconciliation       | `coding_questions/kubernetes_job_reconciliation.py`    | Pod value identity, set reconciliation, dependency injection                |
 | Library management                  | `coding_questions/library_management.py`               | Object-oriented modeling                                                    |
 | General Java coding practice        | `coding_questions/java_coding_questions.java`          | General Java coding patterns                                                |
+
+### Complete Application Projects
+
+|            Project            |                           Directory                            |                               What It Covers                                |
+| ----------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Flask user CRUD application   | `coding_questions/application_projects/flask_user_crud_app/`   | Application factory, validation, SQLite repository, HTTP contract tests     |
+| Hotel reservation application | `coding_questions/application_projects/hotel_reservation_app/` | JSON/CSV data, interval boundaries, sweep-line availability, Flask API      |
+| FastAPI task API              | `coding_questions/application_projects/fastapi_task_api/`      | Pydantic schemas, SQLAlchemy, dependency injection, CRUD, Docker, API tests |

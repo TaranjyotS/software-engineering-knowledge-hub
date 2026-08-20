@@ -4,17 +4,20 @@
 
 ## A version-controlled software engineering, AI engineering, and interview preparation knowledge base with Confluence sync automation.
 
-This repository keeps technical notes, coding questions, interview resources, downloadable PDFs, and documentation automation in one place. Reusable material is separated from anonymized owner-specific preparation so public guides remain company-neutral.
+This repository keeps technical notes, coding questions, interview resources,
+downloadable PDFs, and documentation automation in one place. Reusable public
+material is separated from private, Git-ignored owner-specific preparation so
+the published guides remain company-neutral.
 
 <br/>
 
-<img src="https://img.shields.io/badge/Docs-Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white" />
-<img src="https://img.shields.io/badge/Python-Automation-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-<img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
-<img src="https://img.shields.io/badge/GenAI-LLM%20%7C%20RAG%20%7C%20Agents-7B61FF?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Confluence-Sync-172B4D?style=for-the-badge&logo=confluence&logoColor=white" />
-<img src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" />
-<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Docs-Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown documentation" />
+<img src="https://img.shields.io/badge/Python-Automation-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python automation" />
+<img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI backend" />
+<img src="https://img.shields.io/badge/GenAI-LLM%20%7C%20RAG%20%7C%20Agents-7B61FF?style=for-the-badge" alt="Generative AI, LLM, RAG, and agents" />
+<img src="https://img.shields.io/badge/Confluence-Sync-172B4D?style=for-the-badge&logo=confluence&logoColor=white" alt="Confluence synchronization" />
+<img src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions CI/CD" />
+<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" />
 
 </div>
 
@@ -60,11 +63,12 @@ The repository now includes both traditional software engineering topics and upd
 ```text
 software-engineering-knowledge-hub/
 ├── .github/workflows/              # GitHub Actions for Confluence sync
-├── coding_questions/               # Runnable solutions and problem explanations
+├── coding_questions/               # Compact questions and complete application projects
+│   └── application_projects/       # Flask, hotel-reservation, and FastAPI systems
 ├── confluence_sync/                # Docs-as-code automation scripts
 ├── docs/                           # Markdown notes by topic
 ├── interview_questions/            # PDF interview resources
-├── owner/                          # Anonymized, personalized preparation
+├── owner/                          # Private local preparation ignored by Git
 ├── utils/                          # Helper utilities
 ├── .pymarkdown                    # Markdown lint policy
 ├── .env.example                    # Safe environment variable template
@@ -128,20 +132,30 @@ software-engineering-knowledge-hub/
 | Core array, stack & matrix patterns | [Python](coding_questions/core_array_stack_matrix_patterns.py) |
 | Concurrent data structures          | [Python](coding_questions/concurrent_data_structures.py)       |
 | Expiring window map                 | [Python](coding_questions/expiring_window_map.py)              |
+| Kubernetes job reconciliation       | [Python](coding_questions/kubernetes_job_reconciliation.py)    |
 | Object-oriented library management  | [Python](coding_questions/library_management.py)               |
 | General Java coding practice        | [Java](coding_questions/java_coding_questions.java)            |
 
-> Coding-exercise documentation is intentionally kept inside the runnable source files as question and explanation blocks, so each exercise can be reviewed and executed from one file.
+### Complete application projects
+
+|                                            Project                                            |                       Framework and focus                       |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [Flask user CRUD application](coding_questions/application_projects/flask_user_crud_app/)     | Flask, validation, SQLite, repositories, API tests              |
+| [Hotel reservation application](coding_questions/application_projects/hotel_reservation_app/) | Flask, JSON/CSV data, interval overlap, sweep-line availability |
+| [FastAPI task API](coding_questions/application_projects/fastapi_task_api/)                   | FastAPI, Pydantic, SQLAlchemy, dependency injection, Docker     |
+
+Compact exercises keep their question and explanation in one runnable source
+file. Complete applications have dedicated READMEs, dependencies, packages,
+data where needed, and tests under `coding_questions/application_projects/`.
 
 ---
 
 ## 🔒 Generic and Owner-Specific Content
 
 - `docs/` contains reusable, company-neutral learning and interview material.
-- `owner/` contains anonymized preparation tailored to the repository owner.
+- `owner/` contains local-only preparation tailored to the repository owner.
 - Generated PDFs read only from `docs/`; they never include `owner/` content.
-- The `owner/` directory is still tracked content and must not contain secrets,
-  contact details, client data, or other information that should remain private.
+- The root `.gitignore` excludes `owner/`; verify it remains untracked before publishing or sharing a repository archive.
 
 ---
 
@@ -199,6 +213,9 @@ source .venv/bin/activate      # macOS/Linux
 ```bash
 pip install -r requirements.txt
 ```
+
+Complete application exercises have their own dependency files. Enter the
+selected directory and install its `requirements.txt` before running that app.
 
 ### 4. Configure local environment variables
 

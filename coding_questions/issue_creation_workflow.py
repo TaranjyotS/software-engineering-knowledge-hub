@@ -1,4 +1,4 @@
-'''Issue Creation Workflow: Persistence, Nested Issues, Authentication, and Sequential Identifiers
+"""Issue Creation Workflow: Persistence, Nested Issues, Authentication, and Sequential Identifiers
 
 A backend repository contains a broken POST endpoint for creating issues and sub-issues. The handler parses the request body, computes an
 identifier, and returns HTTP 201, but it never persists a record. The authentication wrapper also has a special-case branch for issue
@@ -51,7 +51,7 @@ Important edge cases:
 - Sub-issue identifier sharing the same team sequence as top-level issues.
 - Caller attempts to spoof creator.
 - Successful response is returned only after persistence and activity creation.
-'''
+"""
 
 from __future__ import annotations
 
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Alternative production implementation:
 - In Django, put creation inside transaction.atomic().
 - Use a dedicated per-team sequence row/counter and select_for_update(), a database-native sequence strategy, or another serialized
@@ -332,4 +332,4 @@ Summary:
 - Never return success before the durable side effect has occurred.
 - Keep business identifier allocation concurrency-safe in production.
 - Use authenticated identity for audit-sensitive fields.
-'''
+"""

@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
 import json
 import os
 import sys
@@ -11,7 +7,10 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 import requests
+from dotenv import load_dotenv
 from markdown import markdown
+
+load_dotenv()
 
 CONFLUENCE_API_URL = os.getenv("CONFLUENCE_API_URL", "").rstrip("/")
 CONFLUENCE_USER = os.getenv("CONFLUENCE_USER", "")

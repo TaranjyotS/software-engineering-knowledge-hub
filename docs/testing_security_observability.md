@@ -28,6 +28,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 ### 6. Production Monitoring, Usage Tracking & Reliability
+
 #### 6.1 Traditional production metrics
 
 - Latency
@@ -58,6 +59,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 #### 6.3 Tracking which user calls which API and token usage
+
 ##### Usage table
 
 ```text
@@ -143,6 +145,7 @@ total_tokens = usage.total_tokens
 ---
 
 ### 13. Testing, Quality Engineering & AI QA
+
 #### 13.1 Testing Strategy
 
 **Interview answer:**
@@ -204,11 +207,13 @@ For AI systems, test:
 ---
 
 ### 9. Security for AI Applications
+
 #### 9.1 Why Security Matters in AI Agent Development
 
 > "Security is very important because AI agents may connect to APIs, databases, customer records, internal tools, or sensitive business systems. I would not treat it like just a chatbot; I would secure the full flow."
 
 #### 9.2 Security Areas to Mention
+
 ##### Authentication
 
 - JWT
@@ -259,6 +264,7 @@ For AI systems, test:
 ---
 
 ### 21. Testing, Monitoring & Continuous Improvement
+
 #### 21.1 Testing AI Agents
 
 Types of tests:
@@ -378,6 +384,7 @@ For LLM systems, tests should not only check code paths but also validate prompt
 ---
 
 ### 14. Observability & Production Monitoring
+
 #### Topics to revise
 
 - Structured logging.
@@ -425,6 +432,7 @@ def log_llm_request(user_id: str, model: str, tokens: int, latency_ms: float) ->
 ---
 
 ### 15. Security, Privacy, and PII Handling
+
 #### Topics to revise
 
 - Secrets management.
@@ -459,6 +467,7 @@ I would avoid sending unnecessary PII to the model, mask or redact sensitive fie
 ---
 
 ### 22. LLM Cost, Latency, and Reliability Optimization
+
 #### Topics to revise
 
 - Token usage tracking.
@@ -494,6 +503,7 @@ def estimate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
 ```
 
 #### Common interview question
+
 ##### How do you reduce LLM cost and latency?
 
 **Answer:**
@@ -503,7 +513,9 @@ I would reduce unnecessary context, use efficient chunk retrieval, cache repeate
 ---
 
 ### 10. API Security
+
 #### 10.1 How can we secure an API?
+
 ##### Strong Answer
 
 > To secure an API, I would apply security at multiple layers: authentication, authorization, input validation, transport security, rate limiting, proper CORS, secrets management, and monitoring.
@@ -556,7 +568,9 @@ def secure_data(is_auth: bool = Depends(verify_token)):
 ---
 
 ### 12. AI Production Challenges
+
 #### 12.1 What is the most challenging problem you faced while working with AI?
+
 ##### Recommended Answer: Hallucinations and response reliability
 
 > One of the biggest challenges I encountered while working with AI systems was ensuring response reliability and reducing hallucinations. Large language models can sometimes generate confident but incorrect information, which becomes a serious issue when the output is used for resumes, recommendations, job applications, or business decisions.
@@ -568,6 +582,7 @@ def secure_data(is_auth: bool = Depends(verify_token)):
 ---
 
 #### 12.2 Other AI challenges to mention
+
 ##### Latency and scalability
 
 Traditional APIs may respond in milliseconds, but LLM calls can take seconds.
@@ -678,7 +693,9 @@ They store embeddings and support similarity search.
 ---
 
 ### 9. Production Reliability, Observability, Incidents, and Runbooks
+
 #### 9.1 Diagnosing latency and incorrect predictions in ML API
+
 ##### Step-by-step approach
 
 1. Treat as production incident.
@@ -695,6 +712,7 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.2 Distinguishing infra vs data pipeline vs model degradation
+
 ##### Infrastructure signals
 
 - CPU/GPU/memory saturation.
@@ -721,6 +739,7 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.3 Handling contradictory monitoring data
+
 ##### Decision principle
 
 > Do not force data to fit the first hypothesis. Choose the lowest-risk reversible action that protects users.
@@ -736,6 +755,7 @@ They store embeddings and support similarity search.
 ---
 
 #### 9.4 Alerting without alert fatigue
+
 ##### Principles
 
 - Alert on symptoms, not every metric.
@@ -762,6 +782,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.5 Game day / incident readiness testing
+
 ##### Scenarios
 
 - Cache outage.
@@ -783,6 +804,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.6 On-call runbooks
+
 ##### Runbook structure
 
 - Service overview.
@@ -806,6 +828,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 #### 9.7 Disaster recovery
+
 ##### Key terms
 
 - **RTO:** how fast service must recover.
@@ -832,7 +855,9 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 ---
 
 ### 14. Security, Privacy, PII, and Access Control
+
 #### 14.1 Handling PII in GenAI systems
+
 ##### Main principle
 
 > Sensitive data should not be sent to the model unless absolutely necessary, and should be masked/tokenized whenever possible.
@@ -859,6 +884,7 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.2 Authentication and authorization for public APIs
+
 ##### First-party web/mobile
 
 - OAuth2/OIDC.
@@ -884,6 +910,7 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.3 Credential and signing key rotation without downtime
+
 ##### JWT signing keys
 
 - Use `kid` header.
@@ -904,6 +931,7 @@ John Smith → [CUSTOMER_NAME]
 ---
 
 #### 14.4 Internal component access control
+
 ##### Design
 
 - Each service gets identity.
@@ -925,6 +953,7 @@ Admin service → restricted elevated access
 ---
 
 #### 14.5 Auditing permissions over time
+
 ##### Practices
 
 - Central inventory of service identities and permissions.
@@ -938,6 +967,7 @@ Admin service → restricted elevated access
 ---
 
 #### 14.6 Tamper-resistant audit logs
+
 ##### Requirements
 
 - Append-only logs.
@@ -963,6 +993,7 @@ Admin service → restricted elevated access
 ---
 
 ### 13. Monitoring, Logging, Reliability & Alerts
+
 #### What to Monitor
 
 |           Area           |               Example Metric                |
@@ -1005,6 +1036,7 @@ ETL Job
 ---
 
 ### 9. Testing With Pytest
+
 #### Likely Questions
 
 - How do you write tests in Python?
@@ -1102,6 +1134,7 @@ def test_invalid_llm_output_is_rejected():
 ---
 
 ### 14. Monitoring, Logging & Production Support
+
 #### Likely Questions
 
 - How do you handle production issues?
@@ -1996,3 +2029,66 @@ Readiness removes traffic; liveness restarts wedged process
 Logs + metrics + traces have different roles
 Internal developers are customers of platform tooling
 ```
+
+---
+
+## Production Scenario Rapid-Fire Answers
+
+### An API suddenly becomes slow
+
+1. Confirm scope and user impact by endpoint, tenant/region, error rate, and p50/p95/p99 latency.
+2. Correlate the start time with deploys, traffic, database health, dependency incidents, and configuration changes.
+3. Follow a correlation ID through traces and split time into application, database, cache, queue, and downstream calls.
+4. Check CPU/memory, worker or event-loop saturation, connection pools, slow queries, locks, and dependency timeouts.
+5. Roll back or reduce traffic if a recent change is strongly correlated and mitigation is safe.
+6. Fix, load test, deploy gradually, and add the missing alert/regression test.
+
+### A downstream service is unavailable
+
+Use explicit timeouts, bounded retries only for transient/idempotent operations, exponential backoff with jitter, a circuit breaker, and bulkhead/concurrency limits. Degrade, cache, queue, or fail fast only when the business contract permits. Monitor dependency latency, error rate, circuit state, retry volume, and queue age. An unbounded retry policy amplifies the outage.
+
+### A Kafka consumer receives the same event twice
+
+Assume at-least-once delivery. Give every event or business operation a stable ID and atomically record that ID with the business update, normally through a unique constraint/inbox table. If the ID already exists, acknowledge without repeating the effect. Commit the offset only after successful processing. Use an outbox when a database state change and produced event must remain consistent.
+
+### A new API field must not break old clients
+
+Make the change additive and optional or provide a safe server default. Preserve existing names, types, and meanings. Keep translation at the version boundary, update the compatibility matrix, and add contract tests for old request/response shapes and new behavior. Release server compatibility first, monitor adoption, and deprecate only after an explicit migration window.
+
+### Bandit reports a high-severity finding during release
+
+The required gate stops promotion. Verify the rule, severity, confidence, reachability, and whether it is new. Fix a real issue and rerun the scanner/tests. For a false positive, use the narrowest documented suppression with required review; never disable the rule globally. Exceptional risk acceptance belongs to authorized security/business owners, not one developer.
+
+### Several I/O calls must run concurrently
+
+Use async clients, one coroutine per independent operation, explicit timeouts, cancellation handling, and a semaphore to protect the dependency. Decide whether one failure cancels the group or partial results are acceptable. Do not run blocking clients or CPU-heavy work on the event loop.
+
+```python
+import asyncio
+
+
+async def fetch_all(client, requests):
+    limit = asyncio.Semaphore(8)
+
+    async def one(request):
+        async with limit:
+            return await asyncio.wait_for(client.fetch(request), timeout=2)
+
+    return await asyncio.gather(*(one(request) for request in requests))
+```
+
+### A query slows down as data grows
+
+Capture the exact query/parameters and inspect a real execution plan. Look for scans, cardinality-estimation errors, expensive joins/sorts, spills, lock waits, stale statistics, poor pagination, and N+1 access. Choose an index, rewrite, keyset pagination, precomputation, partitioning, or retention change based on evidence, then validate with realistic volume and monitor write/plan impact.
+
+### A deployment introduces errors
+
+Pause rollout, compare the new and previous versions, and restore the last known-good immutable artifact or shift traffic when rollback is safe. Database migrations must support rollback through expand-migrate-contract. Preserve logs, traces, image/commit/configuration identifiers, and failed requests. Reproduce, add a regression/deployment check, and redeploy gradually with success criteria.
+
+### An AI agent requests a sensitive tool operation
+
+The model cannot authorize itself. Trusted orchestration checks the authenticated actor, tenant/resource, allow-listed tool, action, schema, policy, and data classification. Use short-lived least-privilege credentials. Require human confirmation for sensitive/irreversible actions, revalidate fresh state before execution, make the operation idempotent, redact the audit trail, and retain a kill switch.
+
+### Monitor a FastAPI microservice
+
+Track request rate, error rate, p50/p95/p99 latency, CPU, memory, restarts, worker/event-loop saturation, connection-pool usage, dependency/database timing, and queue lag where applicable. Use structured logs with correlation ID and deployment version, distributed traces across dependencies, separate readiness/liveness, and alerts tied to user-impacting SLOs rather than every fluctuation. Avoid high-cardinality user IDs in metric labels.

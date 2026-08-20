@@ -1,20 +1,23 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from urllib.parse import quote
-import re
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PDF_DIR = REPO_ROOT / "interview_questions"
 README_FILE = REPO_ROOT / "README.md"
-SECTION_HEADER = "## Downloadable PDFs"
+SECTION_HEADER = "## 📥 Downloadable PDFs"
 GITHUB_REPO_RAW = (
-    "https://github.com/TaranjyotS/software-engineering-knowledge-hub/raw/main/interview_questions"
+    "https://github.com/YOUR_USERNAME/software-engineering-knowledge-hub/raw/main/"
+    "interview_questions"
 )
 
 
 def _title_from_pdf(file_name: str) -> str:
-    return Path(file_name).stem.replace("_", " ").replace("-", " ").title()
+    words = Path(file_name).stem.replace("_", " ").replace("-", " ").split()
+    acronyms = {"ai": "AI", "api": "API", "qa": "QA", "rest": "REST"}
+    return " ".join(acronyms.get(word.lower(), word.title()) for word in words)
 
 
 def generate_pdf_section(use_relative_links: bool = True) -> str:
@@ -23,7 +26,12 @@ def generate_pdf_section(use_relative_links: bool = True) -> str:
     if not pdf_files:
         return ""
 
-    lines = [SECTION_HEADER, "", "The following interview resources are included in the repository:", ""]
+    lines = [
+        SECTION_HEADER,
+        "",
+        "The following interview resources are included in the repository:",
+        "",
+    ]
     for file_name in pdf_files:
         title = _title_from_pdf(file_name)
         if use_relative_links:

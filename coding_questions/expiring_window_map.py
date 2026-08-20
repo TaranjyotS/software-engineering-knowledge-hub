@@ -1,4 +1,4 @@
-'''Expiring Window Map with O(1)-Average Lookup
+"""Expiring Window Map with O(1)-Average Lookup
 
 Design an in-memory key/value structure with a fixed time window. Each put(key, value) makes that value live for window_seconds from the
 write time. The structure supports:
@@ -31,17 +31,17 @@ Complexity (amortized):
 - average: O(1)
 - space: O(n + stale queued overwrite records that have not reached expiry yet)
 Each expiration record is appended once and popped once, so lazy cleanup is amortized O(1) across operations.
-'''
+"""
 
 from __future__ import annotations
 
-from collections import deque
-from dataclasses import dataclass
 import threading
 import time
+from collections import deque
+from dataclasses import dataclass
 from typing import Callable, Generic, TypeVar
 
-K = TypeVar('K')
+K = TypeVar("K")
 
 
 @dataclass(frozen=True)
@@ -60,7 +60,7 @@ class ExpiringWindowMap(Generic[K]):
         thread_safe: bool = False,
     ) -> None:
         if window_seconds <= 0:
-            raise ValueError('window_seconds must be positive')
+            raise ValueError("window_seconds must be positive")
 
         self.window_seconds = window_seconds
         self._clock = clock
@@ -125,7 +125,7 @@ class ExpiringWindowMap(Generic[K]):
 
 
 class _NoOpLock:
-    def __enter__(self) -> '_NoOpLock':
+    def __enter__(self) -> "_NoOpLock":
         return self
 
     def __exit__(self, exc_type, exc, tb) -> bool:
@@ -149,23 +149,23 @@ def run_sample_tests() -> None:
 
     assert values.average() is None
 
-    values.put('a', 10)
-    values.put('b', 30)
-    assert values.get('a') == 10
+    values.put("a", 10)
+    values.put("b", 30)
+    assert values.get("a") == 10
     assert values.average() == 20
 
     clock.advance(5)
-    values.put('a', 50)  # overwrite a; old expiration at t=10 becomes stale
+    values.put("a", 50)  # overwrite a; old expiration at t=10 becomes stale
     assert values.average() == 40
 
-    clock.advance(5)     # t=10: old a record and b expire; newer a survives
-    assert values.get('a') == 50
-    assert values.get('b') is None
+    clock.advance(5)  # t=10: old a record and b expire; newer a survives
+    assert values.get("a") == 50
+    assert values.get("b") is None
     assert values.average() == 50
     assert values.size() == 1
 
-    clock.advance(5)     # t=15: newer a expires
-    assert values.get('a') is None
+    clock.advance(5)  # t=15: newer a expires
+    assert values.get("a") is None
     assert values.average() is None
 
     # Optional thread-safe mode protects data + expiration queue + running sum as
@@ -188,14 +188,14 @@ def run_sample_tests() -> None:
     assert concurrent.size() == 400
     assert concurrent.average() == 49.5
 
-    print('All expiring window map sample tests passed.')
+    print("All expiring window map sample tests passed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Interview follow-ups:
 
 1. Why not compute average by summing the map every time?
@@ -219,4 +219,4 @@ Interview follow-ups:
 6. What if multiple processes or machines need the same map?
    In-process locks are insufficient. Move authoritative state to a shared store with atomic operations or partition ownership by key; define
    time/expiry semantics and idempotency explicitly.
-'''
+"""

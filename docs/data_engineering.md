@@ -28,6 +28,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 ### 10. Big Data, PySpark & Data Engineering
+
 #### 10.1 Big data frameworks
 
 **Interview answer:**
@@ -65,6 +66,7 @@ Tasks on Partitions
 ---
 
 #### 10.3 Transformations vs Actions
+
 ##### Transformations are lazy
 
 ```python
@@ -198,6 +200,7 @@ country_gmv = (
 ---
 
 ### 12. Document Parsing, OCR & PDF Processing
+
 #### 12.1 Document Parsing
 
 **Interview answer:**
@@ -242,6 +245,7 @@ Do **not** use OCR when the PDF already has selectable text. Direct extraction i
 ---
 
 #### 12.3 How OCR works
+
 ##### OCR pipeline
 
 ```text
@@ -304,6 +308,7 @@ for page in reader.pages:
 ---
 
 ### 14. Data Visualization
+
 #### 14.1 What is Data Visualization?
 
 **Interview answer:**
@@ -394,7 +399,9 @@ For this dataset, the discussion covered:
 ---
 
 ### 2. Python / Pandas Data Handling
+
 #### 2.1 Add a New Column
+
 ##### Interview Question
 
 > **“How do you add a new column?”**
@@ -451,6 +458,7 @@ df["is_successful"] = df["status"].eq("SUCCESS")
 ---
 
 #### 2.3 Handling Missing Values
+
 ##### Interview Question
 
 > **“How do you handle missing values in this dataset?”**
@@ -501,6 +509,7 @@ df_clean = df.dropna(subset=[
 ---
 
 #### 2.4 Handling the Discount Column
+
 ##### Interview Question
 
 > **“How do you handle missing values in the discount column?”**
@@ -564,7 +573,9 @@ invalid_dates = df[df["transaction_date"].isnull()]
 ---
 
 ### 4. Data Quality
+
 #### 4.1 Data Quality Dimensions
+
 ##### Interview Question
 
 > **“How do you find data quality in this case?”**
@@ -661,7 +672,9 @@ Useful tools/patterns:
 ---
 
 ### 5. Data Engineering / ETL Pipelines
+
 #### 5.1 Simple Five-Step Data Quality Pipeline
+
 ##### Interview Question
 
 > **“Can you design a simple five-line pipeline for this system?”**
@@ -704,6 +717,7 @@ Data Warehouse / Analytics / ML
 ---
 
 #### 5.2 Cloud-Based ETL Pipeline
+
 ##### Interview Question
 
 > **“How would you design the architecture to ingest data, store it in cloud, clean it, and make it available to reports?”**
@@ -734,6 +748,7 @@ Reports / Dashboards / ML / Downstream Systems
 ---
 
 #### 5.3 Event-Driven Batch ETL From S3
+
 ##### Interview Question
 
 > **“A batch file is dumped into S3. The moment S3 receives the data, the pipeline should trigger. How do you design this ETL pipeline?”**
@@ -811,6 +826,7 @@ s3://data-lake/transactions/quarantine/
 ---
 
 ### 6. Batch, Streaming & Micro-Batch Processing
+
 #### 6.1 Batch Processing
 
 Batch processing means collecting data over a period and processing it together.
@@ -958,6 +974,7 @@ Repeat
 ---
 
 #### 6.5 Lambda vs Kappa Architecture
+
 ##### Lambda Architecture
 
 ```text
@@ -988,7 +1005,8 @@ Serving Layer
 ---
 
 ### 7. Architecture Design Considerations
-##### Interview Question
+
+#### Interview Question
 
 > **“What do you keep in mind while designing this data architecture?”**
 
@@ -1016,7 +1034,8 @@ Key factors:
 ---
 
 ### 8. Data Lineage
-##### Interview Question
+
+#### Interview Question
 
 > **“What is data lineage?”**
 
@@ -1080,7 +1099,9 @@ Lineage answers:
 ---
 
 ### 9. Storage Model Design
+
 #### 9.1 Raw, Staging, Curated, Serving Layers
+
 ##### Interview Question
 
 > **“How would you design the storage model?”**
@@ -1118,6 +1139,7 @@ s3://company-data-lake/transactions/quarantine/year=2026/month=06/day=01/
 ---
 
 #### 9.2 Star Schema for Transactions
+
 ##### Fact Table
 
 ```text
@@ -1190,6 +1212,7 @@ GROUP BY r.region_name, d.month;
 ---
 
 #### 9.3 Why Use These Layers?
+
 ##### Interview Question
 
 > **“Why are you using these particular layers or this type of storage model?”**
@@ -1213,7 +1236,8 @@ GROUP BY r.region_name, d.month;
 ---
 
 ### 10. Amazon S3 Performance Optimization
-##### Interview Question
+
+#### Interview Question
 
 > **“How do you improve S3 performance?”**
 
@@ -1309,7 +1333,9 @@ Benefits:
 ---
 
 ### 11. Delta Lake & Lakehouse Architecture
+
 #### 11.1 What is Delta Lake?
+
 ##### Interview Question
 
 > **“What is Delta Lake?”**
@@ -1388,6 +1414,7 @@ WHEN NOT MATCHED THEN
 ---
 
 #### 11.3 What is Lakehouse Architecture?
+
 ##### Definition
 
 > **A Lakehouse combines the low-cost scalability of a data lake with the reliability, governance, and performance features of a data warehouse.**
@@ -1433,7 +1460,9 @@ Dashboards / ML / Reports
 ---
 
 ### 12. Incremental Loads
+
 #### 12.1 What Are Incremental Loads?
+
 ##### Interview Question
 
 > **“What are incremental loads?”**
@@ -1462,6 +1491,7 @@ If there are 100 million transactions:
 ---
 
 #### 12.2 Incremental Load Strategies
+
 ##### 1. Timestamp-Based Loading
 
 Use `updated_at`, `created_at`, or `last_modified_at`.
@@ -1560,6 +1590,7 @@ WHEN NOT MATCHED THEN
 ---
 
 #### 12.3 Managing Incremental Loads
+
 ##### Interview Question
 
 > **“How do you manage incremental loads?”**
@@ -1599,6 +1630,7 @@ WHERE pipeline_name = 'transaction_etl';
 ---
 
 #### 12.4 Failure Handling and Idempotency
+
 ##### Important Interview Point
 
 > **Only update the watermark after the full pipeline succeeds.**
@@ -1629,6 +1661,7 @@ Then use `MERGE` to prevent duplicates.
 ---
 
 ### 14. Common Interview Follow-Ups
+
 #### Q1. Why fill missing discount with zero?
 
 > “Because discount is optional. If business confirms that missing means no discount was applied, zero is the correct business-driven imputation. Mean or median could distort revenue.”
@@ -1741,6 +1774,7 @@ A simple professional response:
 ---
 
 #### Handling Large Datasets
+
 ##### Interview Question
 
 **How do you work with large datasets?**
@@ -1765,6 +1799,7 @@ For large datasets, avoid loading everything into memory. Use distributed proces
 ---
 
 #### PySpark
+
 ##### Interview Question
 
 **What is PySpark used for?**
@@ -1793,6 +1828,7 @@ result.show()
 ---
 
 #### ETL Pipeline
+
 ##### Interview Question
 
 **How would you design a simple ETL pipeline?**
@@ -1823,6 +1859,7 @@ Source data
 ---
 
 #### Incremental Loads
+
 ##### Interview Question
 
 **How do you manage incremental loads?**

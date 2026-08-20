@@ -41,6 +41,7 @@ This file has been refreshed to keep the original repository topic while merging
 ---
 
 ### 5. FastAPI & Backend API Design
+
 #### 5.1 What is FastAPI?
 
 **Interview answer:**
@@ -147,6 +148,7 @@ async def get_items(db=Depends(get_db)):
 ---
 
 ### 13. API Integration Topics
+
 #### 13.1 REST vs GraphQL
 
 |             REST              |           GraphQL            |
@@ -190,6 +192,7 @@ An AI agent may call APIs to:
 ---
 
 ### 14. FastAPI Topics
+
 #### 14.1 What Is FastAPI?
 
 > "FastAPI is a modern Python web framework for building APIs. It supports async endpoints, automatic documentation, Pydantic validation, dependency injection, and high performance."
@@ -206,7 +209,7 @@ from fastapi import Depends, FastAPI
 app = FastAPI()
 
 async def get_current_user():
-    return {"username": "taran"}
+    return {"username": "alex"}
 
 @app.get("/profile")
 async def get_profile(user=Depends(get_current_user)):
@@ -258,6 +261,7 @@ Use async for:
 Do not expect async to improve CPU-heavy tasks by itself.
 
 #### 14.6 FastAPI Troubleshooting
+
 ##### Step-by-Step Approach
 
 1. Check logs and traceback
@@ -291,6 +295,7 @@ Do not expect async to improve CPU-heavy tasks by itself.
 ---
 
 ### 19. Scaling FastAPI Applications
+
 #### 19.1 Scaling FastAPI from 5 Pods to 100 Pods
 
 > "To scale a FastAPI application from 5 pods to 100 pods, I would use Kubernetes Horizontal Pod Autoscaler. First, I would make sure the application is stateless, containerized properly, and has health checks. Then Kubernetes can scale pods based on CPU, memory, or custom request metrics."
@@ -358,6 +363,7 @@ livenessProbe:
 ---
 
 ### 5. Backend API Development
+
 #### Topics to revise
 
 - API design principles.
@@ -487,7 +493,149 @@ Flask may be discussed because the role mentioned FastAPI/Flask.
 
 ---
 
+### Django Request Flow and MVT
+
+Django is a batteries-included Python web framework. A normal request can be explained as:
+
+```text
+client
+  ↓
+middleware
+  ↓
+URL router
+  ↓
+view
+  ↓
+service/business logic
+  ↓
+model / Django ORM / database
+  ↓
+template or JSON response
+```
+
+Django is commonly described with **MVT**:
+
+- **Model:** persistent/domain data and ORM mapping.
+- **View:** request handling and application logic.
+- **Template:** server-rendered presentation.
+
+Django also includes migrations, authentication, sessions, admin tooling, middleware, forms, and a mature ORM. For API-heavy systems, Django REST Framework is a common addition.
+
+Interview answer:
+
+> Django is a higher-level, batteries-included framework. Requests pass through middleware and URL routing into a view, which may use models through the ORM and return either rendered HTML or an API response. I would choose Django when built-in ORM, auth, admin, migrations, and convention are valuable; I would choose a lighter framework when I want a smaller API-first surface.
+
+---
+
+### Flask Application Context vs Request Context
+
+Flask uses context-local proxies so code can access the active app/request without passing those objects through every function.
+
+|       Context       |   Typical Objects    |                           Meaning                            |
+| ------------------- | -------------------- | ------------------------------------------------------------ |
+| Application context | `current_app`, `g`   | The active Flask application and context-local scratch state |
+| Request context     | `request`, `session` | One specific HTTP request and its request/session data       |
+
+For a normal HTTP request, Flask pushes the request context and the corresponding application context, then removes them when request processing ends.
+
+```text
+request starts
+   ↓
+application context available
+request context available
+   ↓
+view executes
+   ↓
+request context removed
+application context removed
+```
+
+A common error outside an active context is:
+
+```text
+RuntimeError: Working outside of application context
+```
+
+For work that needs an application context without an incoming request:
+
+```python
+with app.app_context():
+    # current_app and application-bound extensions are available here
+    ...
+```
+
+Important nuance: the application context usually does **not** mean "the entire lifetime of the server process." Its lifetime is the active context, which during normal request handling is typically request-scoped.
+
+---
+
+### Flask Application Factory Pattern
+
+Instead of creating and configuring one global application at import time, construct it through a factory:
+
+```python
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
+
+
+def create_app(config_object: str | None = None) -> Flask:
+    app = Flask(__name__)
+
+    if config_object:
+        app.config.from_object(config_object)
+
+    db.init_app(app)
+
+    from .routes import api_blueprint
+    app.register_blueprint(api_blueprint)
+
+    return app
+```
+
+Why it helps:
+
+- Different development/test/production configurations.
+- Cleaner tests that create isolated app instances.
+- Extensions are created once but bound with `init_app(app)`.
+- Reduced circular-import pressure.
+- Easier blueprint/module registration.
+
+Interview answer:
+
+> The application factory pattern moves Flask construction into `create_app()`. That lets me create independently configured app instances, initialize extensions against a specific app, improve testability, and reduce global coupling/circular imports.
+
+---
+
+### Production Flask Deployment
+
+Do not treat Flask's development server as the production serving layer. A traditional Flask deployment uses a production **WSGI server** such as Gunicorn (or another production-capable WSGI server), often behind a load balancer or reverse proxy.
+
+```text
+client
+  ↓
+load balancer / reverse proxy
+  ↓
+Gunicorn worker processes
+  ↓
+Flask application created by create_app()
+  ↓
+DB / cache / downstream APIs
+```
+
+Example factory-style Gunicorn target:
+
+```bash
+gunicorn "app:create_app()"
+```
+
+The WSGI server owns worker/process lifecycle and accepts production traffic; Flask still owns routing, contexts, views, and application behavior.
+
+---
+
 ### 8. REST, gRPC, and API Design
+
 #### REST
 
 REST is commonly used for web APIs. It uses HTTP methods, resources, and status codes.
@@ -515,6 +663,7 @@ gRPC is often used for internal service-to-service communication where performan
 | Best for          | Public APIs, web clients | Internal microservices, low-latency systems |
 
 #### Common interview question
+
 ##### When would you choose gRPC over REST?
 
 **Answer:**
@@ -524,6 +673,7 @@ Use gRPC when services need strong contracts, low latency, efficient binary seri
 ---
 
 ### 9. Clean Architecture & Code Organization
+
 #### Topics to revise
 
 - Separation of concerns.
@@ -563,7 +713,9 @@ Clean architecture keeps business logic separate from frameworks and databases. 
 ---
 
 ### 7. REST API Fundamentals
+
 #### 7.1 What is a REST API?
+
 ##### Answer
 
 A REST API is a way for applications to communicate over HTTP using standard methods like GET, POST, PUT, PATCH, and DELETE.
@@ -623,6 +775,7 @@ Response:
 ---
 
 #### 7.4 GET API example
+
 ##### FastAPI Example
 
 ```python
@@ -634,7 +787,7 @@ app = FastAPI()
 def get_user(user_id: int):
     return {
         "id": user_id,
-        "name": "Taran"
+        "name": "Alex"
     }
 ```
 
@@ -649,7 +802,7 @@ Response:
 ```json
 {
   "id": 1,
-  "name": "Taran"
+  "name": "Alex"
 }
 ```
 
@@ -670,14 +823,14 @@ def search(name: str):
 Request:
 
 ```http
-GET /search?name=taran
+GET /search?name=alex
 ```
 
 Response:
 
 ```json
 {
-  "result": "taran"
+  "result": "alex"
 }
 ```
 
@@ -717,8 +870,8 @@ Body:
 
 ```json
 {
-  "name": "Taran",
-  "email": "taran@example.com"
+  "name": "Alex",
+  "email": "alex@example.com"
 }
 ```
 
@@ -728,8 +881,8 @@ Response:
 {
   "message": "User created",
   "data": {
-    "name": "Taran",
-    "email": "taran@example.com"
+    "name": "Alex",
+    "email": "alex@example.com"
   }
 }
 ```
@@ -846,7 +999,9 @@ def get_car(price: int):
 ---
 
 ### 8. FastAPI and Flask
+
 #### 8.1 Have you worked with Flask and FastAPI?
+
 ##### Strong Answer
 
 > Yes, I have worked with both Flask and FastAPI. Flask is a lightweight and flexible Python web framework, while FastAPI is a modern framework designed for high-performance APIs using Python type hints, async support, and automatic documentation.
@@ -888,6 +1043,7 @@ FastAPI is useful because it provides:
 ---
 
 ### 9. Async APIs and Concurrent Requests
+
 #### 9.1 What is async support in FastAPI?
 
 FastAPI supports `async` and `await` using ASGI.
@@ -952,6 +1108,7 @@ Important:
 ---
 
 #### 9.5 What happens when two users hit the same API at the same time?
+
 ##### Answer
 
 The backend treats them as two independent HTTP requests.
@@ -1074,7 +1231,9 @@ Better HTTP status for second user:
 ---
 
 ### 15. Code Review and API Fix Case Topics
+
 #### 15.1 User API endpoint defects identified
+
 ##### Issues covered
 
 - `SELECT *` returns unnecessary/sensitive fields.
@@ -1091,6 +1250,7 @@ Better HTTP status for second user:
 ---
 
 #### 15.2 Which issue to fix first?
+
 ##### Highest priority options
 
 - SQL injection vulnerability.
@@ -1107,6 +1267,7 @@ Security issues have the highest blast radius and can expose sensitive data or a
 ---
 
 #### 15.3 Corrected API implementation pattern
+
 ##### Pseudocode
 
 ```javascript
@@ -1176,6 +1337,7 @@ app.get('/api/users', async (req, res) => {
 ---
 
 #### 15.4 One performance improvement to recommend
+
 ##### Best choices
 
 1. Pagination.
@@ -1202,6 +1364,7 @@ Choose **Redis/in-memory caching for hot users**.
 ---
 
 #### FastAPI
+
 ##### Interview Question
 
 **Why use FastAPI?**
@@ -1245,6 +1408,7 @@ async def predict(request: PredictionRequest):
 ---
 
 #### API Security
+
 ##### Interview Question
 
 **How can you secure an API?**
@@ -1278,6 +1442,7 @@ Client logs in
 ---
 
 #### API Monitoring
+
 ##### Interview Question
 
 **How would you track which user calls which API and token usage?**
@@ -1327,6 +1492,7 @@ async def log_requests(request: Request, call_next):
 ---
 
 ### 5. Backend APIs: REST, GraphQL, FastAPI, Flask
+
 #### Likely Questions
 
 - How do you design REST APIs?
@@ -1456,6 +1622,7 @@ Pagination prevents:
 ---
 
 #### API Idempotency
+
 ##### Question
 
 How do you prevent duplicate payment/order creation when a client retries?
@@ -2268,6 +2435,9 @@ ETag / optimistic concurrency
 REST vs gRPC
 Polling vs SSE vs WebSocket
 FastAPI request flow
+Django MVT + middleware/URL/view/ORM flow
+Flask app vs request context (`current_app`/`g` vs `request`/`session`)
+Flask application factory + production WSGI/Gunicorn
 Pydantic contract vs business/DB validation
 SQLAlchemy session per request
 Transactions + uniqueness constraints
@@ -2297,4 +2467,381 @@ Interview line:
 
 ### About the HTTP `QUERY` Method
 
-Some newer specifications/ecosystems discuss a `QUERY` method for safe request-body-based queries. Treat support as ecosystem-dependent. For most public APIs and interviews, conventional `GET` plus query parameters or a carefully designed `POST` search endpoint remains more interoperable unless `QUERY` support is an explicit requirement.
+RFC 10008, published in June 2026, defines the HTTP `QUERY` method for a request whose query description is carried in the request content. `QUERY` is explicitly **safe** and **idempotent**, unlike a general `POST`, while avoiding the URI-size, encoding, and logging drawbacks of putting a large query into a `GET` URI.
+
+```http
+QUERY /feed HTTP/1.1
+Host: example.org
+Content-Type: application/json
+
+{"keywords": ["python", "fastapi"], "limit": 20}
+```
+
+Important points:
+
+- The request requires a media type describing the query content.
+- A successful `200 OK` can contain the results.
+- `Location` can identify a resource representing the query for later repetition.
+- `Content-Location` can identify a resource representing the result.
+- Responses are cacheable, but a cache key must incorporate the request content and relevant metadata.
+- `Accept-Query` can advertise supported query media types.
+- Because `QUERY` is not a CORS-safelisted method, browser use requires preflight.
+- Ecosystem/framework/proxy support should still be verified before choosing it for a public API.
+
+Interview comparison:
+
+| Method  |      Safe      |   Idempotent   |   Request content    |                    Typical use                    |
+| ------- | -------------- | -------------- | -------------------- | ------------------------------------------------- |
+| `GET`   | Yes            | Yes            | No defined semantics | Retrieve a URI-identified representation          |
+| `QUERY` | Yes            | Yes            | Expected             | Complex read/query whose description needs a body |
+| `POST`  | Not guaranteed | Not guaranteed | Expected             | Submit processing or create/change state          |
+
+Reference: [RFC 10008 - The HTTP QUERY Method](https://datatracker.ietf.org/doc/html/rfc10008)
+
+---
+
+## Async FastAPI, SQL, Service Layers, and Test Doubles
+
+This section extends the basic examples with a production-shaped async PostgreSQL flow and layered tests.
+
+### Async SQLAlchemy Session per Request
+
+FastAPI does not execute SQL itself. Use a database driver or ORM, obtain a short-lived session from a pool, and inject it into the route/service.
+
+```python
+from collections.abc import AsyncGenerator
+
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+
+DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/app"
+
+engine = create_async_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_size=10,
+    max_overflow=20,
+)
+
+SessionFactory = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with SessionFactory() as session:
+        yield session
+```
+
+Production points:
+
+- Size the application pool against pod/worker count and the database connection limit.
+- Keep transactions short and always roll back failed writes.
+- Use an async driver throughout an async path; blocking database calls still block the event loop.
+- Keep credentials in approved secret/configuration management.
+- Use Alembic or another controlled migration workflow rather than creating schemas from request paths.
+
+### ORM Model vs API Schema
+
+Keep persistence models separate from public API contracts.
+
+```python
+from decimal import Decimal
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import Numeric, String
+from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Account(Base):
+    __tablename__ = "accounts"
+
+    id: Mapped[UUID] = mapped_column(
+        PostgresUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+    )
+    owner_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    balance: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+
+
+class AccountCreate(BaseModel):
+    owner_name: str = Field(min_length=1, max_length=100)
+    opening_balance: Decimal = Field(ge=0, max_digits=12, decimal_places=2)
+
+
+class AccountResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    owner_name: str
+    balance: Decimal
+```
+
+Use `Decimal`/`NUMERIC`, not binary floating point, for money.
+
+### Repository and Parameterized Query
+
+```python
+from sqlalchemy import select, text
+
+
+async def find_account(db: AsyncSession, account_id: UUID) -> Account | None:
+    result = await db.execute(
+        select(Account).where(Account.id == account_id)
+    )
+    return result.scalar_one_or_none()
+
+
+async def find_account_raw(db: AsyncSession, account_id: UUID):
+    result = await db.execute(
+        text(
+            """
+            SELECT id, owner_name, balance
+            FROM accounts
+            WHERE id = :account_id
+            """
+        ),
+        {"account_id": account_id},
+    )
+    return result.mappings().one_or_none()
+```
+
+Never interpolate untrusted values into an SQL string. Parameterization prevents input from being interpreted as SQL syntax; authorization remains a separate requirement.
+
+### Small Endpoint with a Service-Layer Boundary
+
+```python
+from decimal import Decimal
+from typing import Annotated, Protocol
+from uuid import UUID
+
+from fastapi import Depends, FastAPI, Header, HTTPException, status
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+
+class TransactionCreate(BaseModel):
+    account_id: UUID
+    amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    currency: str = Field(min_length=3, max_length=3)
+
+
+class TransactionRepository(Protocol):
+    async def create_if_absent(
+        self,
+        request: TransactionCreate,
+        idempotency_key: str,
+    ) -> dict: ...
+
+
+class TransactionService:
+    SUPPORTED_CURRENCIES = {"CAD", "USD"}
+
+    def __init__(self, repository: TransactionRepository):
+        self.repository = repository
+
+    async def create(self, request, idempotency_key: str) -> dict:
+        currency = request.currency.upper()
+        if currency not in self.SUPPORTED_CURRENCIES:
+            raise ValueError(f"unsupported currency: {currency}")
+
+        normalized = request.model_copy(update={"currency": currency})
+        return await self.repository.create_if_absent(
+            normalized,
+            idempotency_key,
+        )
+
+
+def get_transaction_service() -> TransactionService:
+    raise NotImplementedError
+
+
+@app.post("/transactions", status_code=status.HTTP_201_CREATED)
+async def create_transaction(
+    request: TransactionCreate,
+    idempotency_key: Annotated[
+        str,
+        Header(alias="Idempotency-Key", min_length=8),
+    ],
+    service: Annotated[
+        TransactionService,
+        Depends(get_transaction_service),
+    ],
+):
+    try:
+        return await service.create(request, idempotency_key)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+```
+
+The repository operation must enforce the idempotency key atomically, normally with a unique database constraint. A separate `SELECT` followed by `INSERT` has a race condition.
+
+### Mock an External Async API Through Dependency Injection
+
+Wrap an external API behind an application-owned protocol instead of calling `httpx` directly from every route.
+
+```python
+from typing import Protocol
+
+import httpx
+
+
+class FraudClient(Protocol):
+    async def approve(self, account_id: UUID, amount: Decimal) -> bool: ...
+
+
+class HttpFraudClient:
+    def __init__(self, client: httpx.AsyncClient):
+        self.client = client
+
+    async def approve(self, account_id: UUID, amount: Decimal) -> bool:
+        response = await self.client.post(
+            "/fraud/check",
+            json={"account_id": str(account_id), "amount": str(amount)},
+        )
+        response.raise_for_status()
+        return response.json()["approved"]
+
+
+class FraudCheckRequest(BaseModel):
+    account_id: UUID
+    amount: Decimal = Field(gt=0)
+
+
+def get_fraud_client() -> FraudClient:
+    raise NotImplementedError
+
+
+@app.post("/fraud-decisions")
+async def check_fraud(
+    request: FraudCheckRequest,
+    fraud_client: Annotated[FraudClient, Depends(get_fraud_client)],
+):
+    approved = await fraud_client.approve(request.account_id, request.amount)
+    return {"approved": approved}
+```
+
+Endpoint tests can replace the client dependency without a network call:
+
+```python
+from unittest.mock import AsyncMock
+
+from fastapi.testclient import TestClient
+
+client = TestClient(app)
+
+
+def test_transaction_uses_fraud_client():
+    fraud_client = AsyncMock()
+    fraud_client.approve.return_value = True
+
+    account_id = "7a85a83e-c53e-4ca8-9616-b1de36114e07"
+
+    app.dependency_overrides[get_fraud_client] = lambda: fraud_client
+    try:
+        response = client.post(
+            "/fraud-decisions",
+            json={"account_id": account_id, "amount": "100.00"},
+        )
+        assert response.status_code == 200
+        assert response.json() == {"approved": True}
+        fraud_client.approve.assert_awaited_once_with(
+            UUID(account_id),
+            Decimal("100.00"),
+        )
+    finally:
+        app.dependency_overrides.clear()
+```
+
+Use `httpx.MockTransport` when testing the HTTP adapter itself, including path, headers, serialization, status mapping, and response parsing:
+
+```python
+async def test_http_fraud_client():
+    account_id = UUID("7a85a83e-c53e-4ca8-9616-b1de36114e07")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/fraud/check"
+        return httpx.Response(200, json={"approved": True})
+
+    transport = httpx.MockTransport(handler)
+
+    async with httpx.AsyncClient(
+        base_url="https://fraud-service.test",
+        transport=transport,
+    ) as http_client:
+        fraud_client = HttpFraudClient(http_client)
+        assert await fraud_client.approve(account_id, Decimal("100.00"))
+```
+
+### FastAPI Unit-Test Layers
+
+Use different tests for different contracts:
+
+|             Test             |                  Real pieces                  |                Replaced pieces                |
+| ---------------------------- | --------------------------------------------- | --------------------------------------------- |
+| Service unit test            | Business/service object                       | Repository, clock, external client            |
+| Endpoint unit/component test | Routing, Pydantic, HTTP mapping, service call | Service/infrastructure dependencies           |
+| Database integration test    | Repository, ORM, migrations, real test DB     | External APIs                                 |
+| End-to-end test              | Deployed request path                         | Only uncontrollable third parties when needed |
+
+Example endpoint test:
+
+```python
+from decimal import Decimal
+from unittest.mock import AsyncMock
+
+
+def test_create_transaction_success():
+    service = AsyncMock()
+    service.create.return_value = {
+        "transaction_id": "txn-101",
+        "status": "created",
+    }
+    app.dependency_overrides[get_transaction_service] = lambda: service
+    account_id = "7a85a83e-c53e-4ca8-9616-b1de36114e07"
+
+    try:
+        response = client.post(
+            "/transactions",
+            headers={"Idempotency-Key": "request-123"},
+            json={
+                "account_id": account_id,
+                "amount": "100.00",
+                "currency": "cad",
+            },
+        )
+
+        assert response.status_code == 201
+        assert response.json()["status"] == "created"
+        service.create.assert_awaited_once()
+    finally:
+        app.dependency_overrides.clear()
+```
+
+Test at least:
+
+- Successful request and response schema
+- Missing, malformed, and boundary values
+- Authentication and authorization failures
+- Not found and conflict/idempotency behavior
+- Database rollback on failure
+- External timeout, invalid JSON, and `4xx`/`5xx` mapping
+- Correct dependency calls
+- Concurrency-sensitive uniqueness/invariants in integration tests
+
+Interview answer:
+
+> I keep FastAPI routes thin and inject services, database sessions, authentication, and external clients with `Depends`. Endpoint unit tests use `TestClient` and `app.dependency_overrides`; async collaborators use `AsyncMock` or fakes. I test business rules directly at the service layer, the HTTP adapter with `MockTransport`, and persistence constraints against a disposable real database. That keeps unit tests fast without mocking away the behavior that only a real boundary can verify.

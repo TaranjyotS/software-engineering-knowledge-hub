@@ -45,7 +45,7 @@ Handle follow-up constraints
 
 A useful interview sentence is:
 
-> The straightforward solution is ___ and costs ___. The bottleneck is ___. If I maintain ___, I can reduce the runtime to ___ at the cost of ___ additional memory.
+> The straightforward solution is ___ and costs ___. The bottleneck is ___. If I maintain ___, I can reduce the runtime to ___at the cost of___ additional memory.
 
 ---
 

@@ -41,7 +41,9 @@ This file has been refreshed to keep the original repository topic while merging
 ---
 
 ### 2. Backend and Microservices Architecture
+
 #### 2.1 Pros and cons of microservices
+
 ##### Pros
 
 - Independent deployment.
@@ -65,6 +67,7 @@ This file has been refreshed to keep the original repository topic while merging
 ---
 
 #### 2.2 Database ownership in microservices
+
 ##### Topic covered
 
 How services handle data when one service needs user information while another owns transactions.
@@ -92,6 +95,7 @@ Solution → Transaction Service calls User Service API or reads a replicated us
 ---
 
 #### 2.3 Service communication patterns
+
 ##### Synchronous communication
 
 Use when immediate response is required.
@@ -120,6 +124,7 @@ Examples:
 ---
 
 #### 2.4 API Gateway and BFF/API composition
+
 ##### Question covered
 
 How to expose one public API without coupling clients to each microservice.
@@ -152,7 +157,9 @@ Client → API Gateway → BFF/API Composition Layer → Internal Microservices
 ---
 
 ### 6. Caching, Rate Limiting, Abuse Prevention, and Feature Flags
+
 #### 6.1 Cache consistency when target URL changes
+
 ##### Approach
 
 - Treat DB as source of truth.
@@ -169,6 +176,7 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.2 Preventing cache stampede
+
 ##### Techniques
 
 - Distributed lock using Redis `SETNX`.
@@ -183,6 +191,7 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.3 Graceful degradation if cache is unavailable
+
 ##### Design
 
 - Cache is optimization, not source of truth.
@@ -195,6 +204,7 @@ Update destination URL in DB → delete Redis key short_code:abc → next redire
 ---
 
 #### 6.4 Rate limiting URL/order creation endpoints
+
 ##### Best approach
 
 Use Redis-backed distributed rate limiting at gateway/middleware.
@@ -221,6 +231,7 @@ Retry-After: 60
 ---
 
 #### 6.5 Protecting against automated abuse beyond rate limits
+
 ##### Techniques
 
 - API keys/authentication.
@@ -235,6 +246,7 @@ Retry-After: 60
 ---
 
 #### 6.6 Feature flag system for safe releases
+
 ##### Design principles
 
 - Separate deployment from release.
@@ -256,6 +268,7 @@ internal users → 1% → 5% → 25% → 50% → 100%
 ---
 
 #### 6.7 Fast and reliable runtime flag checks
+
 ##### Best practice
 
 Evaluate flags locally from memory, not by calling the flag service on every request.
@@ -269,6 +282,7 @@ Evaluate flags locally from memory, not by calling the flag service on every req
 ---
 
 ### 7. Distributed Systems: Celery, Redis, RabbitMQ
+
 #### Likely Questions
 
 - What are background jobs?
@@ -392,6 +406,7 @@ Distributed locks prevent multiple workers from processing the same item at the 
 ---
 
 ### 16. Code Reviews & Architecture Discussions
+
 #### Likely Questions
 
 - How do you approach code reviews?
@@ -524,6 +539,7 @@ Webhook handlers should:
 ---
 
 #### Inventory Race Condition Example
+
 ##### Problem
 
 Two users buy the last item at the same time.
@@ -903,6 +919,80 @@ A sound decision sequence is:
 ## Design Sequencing, Storage Fit & Messaging Resilience
 
 Several system-design questions become easier when the answer is framed around **what stage of design we are in** and **what access pattern the workload actually needs**.
+
+### Functional Requirements vs Non-Functional Requirements
+
+Functional requirements describe **what the system must do**. Non-functional requirements (NFRs) describe **how well or under what constraints it must do it**.
+
+Example:
+
+```text
+Functional:
+process a payment
+
+Non-functional:
+p95 latency < 500 ms
+99.99% availability
+no loss of acknowledged transactions
+10,000 transactions/second
+strong authorization/auditability
+```
+
+Common NFR dimensions:
+
+- Scale and throughput.
+- Latency (p50/p95/p99 as appropriate).
+- Availability and fault tolerance.
+- Durability and acceptable data loss.
+- Consistency/read-after-write requirements.
+- Security and compliance.
+- Cost/operational constraints.
+
+A strong interview opening is:
+
+> Before choosing components, I want to clarify the functional requirements and the NFRs that will shape the architecture: expected scale, read/write pattern, latency target, availability, durability/consistency, security, and cost.
+
+#### Learning-platform onboarding example
+
+For an onboarding/learning platform, functional requirements might include signup, interest selection, joining courses/channels, progress tracking, and recommendations. NFRs might include fast content delivery, secure authentication, scalable media delivery, reliable progress persistence, and bounded recommendation latency. The example is useful because the same feature list can lead to very different designs depending on the NFRs.
+
+---
+
+### What Does System Overload Mean?
+
+A system is overloaded when incoming work exceeds the sustainable capacity of one or more resources: application CPU/memory, worker slots, database connections, queue consumers, cache capacity, or a downstream dependency.
+
+```text
+incoming load
+    ↓
+API tier
+    ↓
+DB / queue / downstream service
+
+if arrival rate > sustainable service rate
+→ queues grow
+→ latency rises
+→ timeouts/retries amplify load
+→ failures cascade
+```
+
+A senior response should not be only "add more servers." First identify the bottleneck and protect dependencies.
+
+Useful overload controls:
+
+- Horizontal scaling of stateless application instances.
+- Admission control/rate limiting.
+- Backpressure and bounded queues.
+- Caching where staleness is acceptable.
+- Async queues for non-critical/offline work.
+- Timeouts and bounded retries with jitter.
+- Circuit breaking/fallbacks for unhealthy dependencies.
+- Database connection limits, indexing, query optimization, and read scaling where valid.
+- Graceful degradation instead of total failure.
+
+Interview answer:
+
+> I would first determine which resource is saturated rather than assuming the API tier is the bottleneck. Then I would scale the correct tier and add protection such as rate limiting, backpressure, bounded queues, timeouts, and graceful degradation so overload does not propagate into the database or downstream services.
 
 ### Sequence Architecture Work by Project Stage
 
@@ -2300,6 +2390,20 @@ Core insight:
 
 > Browsing availability may tolerate staleness; final allocation cannot.
 
+#### Calendar availability read path
+
+A calendar or event-list page usually needs a fast read model such as availability counts by event/date:
+
+```text
+GET /events/{event_id}/availability?date=2026-08-22
+        ↓
+availability/read model
+        ↓
+remaining counts / sections / coarse seat state
+```
+
+Those counts may be cached or slightly stale for browsing. Once the user selects a specific seat/ticket, the authoritative inventory store must perform an atomic conditional transition such as `AVAILABLE → HELD`. The UI read does not reserve inventory.
+
 State machine:
 
 ```text
@@ -2469,22 +2573,23 @@ Practice answering these directly:
 ```text
 1. Functional requirements
 2. Five NFR questions: scale, read/write, durability, latency, cost
-3. APIs/resources/auth
-4. Start Client → App → DB
-5. Define server/service/module precisely
-6. Trace one request end to end
-7. Scale stateless app behind LB if justified
-8. Derive data model from access patterns
-9. SQL/NoSQL based on invariants and queries
-10. Index the critical query
-11. Cache only hot reads; cover miss/stale/stampede/failure
-12. Replicas; cover lag/read-after-write/failover
-13. Queue only asynchronous/bursty work
-14. Outbox + at-least-once + idempotency
-15. Strong consistency for ownership/allocation
-16. Shard late and discuss hot keys
-17. Security + observability + cost
-18. Final evolved diagram + trade-off summary
+3. Overload: identify the saturated resource; protect dependencies with rate limits/backpressure/timeouts/degradation
+4. APIs/resources/auth
+5. Start Client → App → DB
+6. Define server/service/module precisely
+7. Trace one request end to end
+8. Scale stateless app behind LB if justified
+9. Derive data model from access patterns
+10. SQL/NoSQL based on invariants and queries
+11. Index the critical query
+12. Cache only hot reads; cover miss/stale/stampede/failure
+13. Replicas; cover lag/read-after-write/failover
+14. Queue only asynchronous/bursty work
+15. Outbox + at-least-once + idempotency
+16. Strong consistency for ownership/allocation
+17. Shard late and discuss hot keys
+18. Security + observability + cost
+19. Final evolved diagram + trade-off summary
 ```
 
 ---

@@ -28,6 +28,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 ### 1. Core GenAI & Agentic AI
+
 #### 1.1 What is Generative AI?
 
 **Interview answer:**
@@ -172,6 +173,7 @@ Output format: JSON with answer and sources.
 ---
 
 ### 2. RAG, Retrieval, Chunking & Vector Search
+
 #### 2.1 What is RAG?
 
 **Interview answer:**
@@ -256,6 +258,7 @@ Examples:
 ---
 
 #### 2.5 Vector Indexing Strategies
+
 ##### Flat index
 
 - Compares against every vector
@@ -299,6 +302,7 @@ Examples:
 ---
 
 #### 2.6 Different Chunking Strategies
+
 ##### 1. Fixed-size chunking
 
 Split by fixed token or word count.
@@ -407,6 +411,7 @@ async def query_rag(question: str):
 ---
 
 #### 2.8 Building a RAG System from PDFs
+
 ##### Pipeline
 
 ```text
@@ -474,6 +479,7 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100):
 ---
 
 ### 3. LLM Evaluation, Hallucination & Model Comparison
+
 #### 3.1 What is LLM Evaluation?
 
 **Interview answer:**
@@ -511,6 +517,7 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100):
 ---
 
 #### 3.4 Human vs Automated Evaluation
+
 ##### Human evaluation
 
 Good for:
@@ -612,6 +619,7 @@ Metrics:
 ---
 
 #### 3.7 BLEU and ROUGE
+
 ##### BLEU
 
 - Precision-oriented
@@ -658,6 +666,7 @@ Metrics:
 ---
 
 #### 3.9 Accuracy, Precision, Recall, F1
+
 ##### If 2 out of 5 predictions are correct
 
 That is usually **accuracy**:
@@ -694,7 +703,9 @@ Useful for imbalanced datasets.
 ---
 
 ### 15. System Design for AI Assistants
+
 #### 15.1 Design a production AI assistant
+
 ##### Architecture
 
 ```text
@@ -785,6 +796,7 @@ Use cases:
 ---
 
 ### 4. AI Agents
+
 #### 4.1 What Is an AI Agent?
 
 > "An AI agent is a software system that uses an LLM along with tools, memory, external APIs, decision logic, and workflows to complete tasks. Unlike a simple chatbot, an agent can take actions, call APIs, retrieve data, create tickets, check order status, and complete multi-step workflows."
@@ -854,6 +866,7 @@ User
 ---
 
 ### 5. RAG Systems
+
 #### 5.1 What Is RAG?
 
 > "RAG stands for Retrieval-Augmented Generation. It allows an LLM to retrieve relevant information from an external knowledge source before generating an answer. This helps make responses more accurate, grounded, and up to date."
@@ -952,11 +965,13 @@ Metrics:
 ---
 
 ### 6. LLM Evaluation & Metadata
+
 #### 6.1 Simple Explanation
 
 > "When evaluating an LLM or AI agent, I look at whether the answer is correct, useful, safe, and grounded. I also track metadata such as latency, token usage, model version, prompt version, retrieved documents, user feedback, and conversation outcome."
 
 #### 6.2 What Metadata Would You Track?
+
 ##### Prompt Metadata
 
 - Prompt version
@@ -1014,6 +1029,7 @@ Metrics:
 ---
 
 ### 7. Prompt Engineering
+
 #### 7.1 What Is Prompt Engineering?
 
 > "Prompt engineering is the process of designing instructions, examples, constraints, and output formats to guide an LLM toward reliable and consistent responses."
@@ -1067,6 +1083,7 @@ Answer:
 ---
 
 ### 8. Productionizing AI Agents
+
 #### 8.1 What Does It Mean to Take an Agent to Production?
 
 > "Taking an AI agent into production means moving it from a prototype or demo into a reliable system that real users can use safely. It includes API integrations, authentication, testing, monitoring, logging, deployment, fallback handling, and continuous evaluation."
@@ -1110,6 +1127,7 @@ Answer:
 ---
 
 ### 10. Current GenAI Role Explanation
+
 #### 10.1 Simple Explanation
 
 > "My current GenAI work focuses on LLM evaluation, prompt engineering, AI quality assessment, response analysis, and model behavior improvement. I review AI responses, identify hallucinations or weak reasoning, compare outputs, and provide structured feedback to improve accuracy, consistency, safety, and user experience."
@@ -1134,6 +1152,7 @@ Answer:
 ---
 
 ### 17. LLM / GenAI Application Development
+
 #### Topics to revise
 
 - Hosted LLM APIs.
@@ -1202,6 +1221,7 @@ Wrapping LLM providers behind an internal interface makes it easier to switch pr
 ---
 
 ### 18. Prompt Engineering & Context Construction
+
 #### Prompt engineering topics
 
 - Clear instructions.
@@ -1241,6 +1261,7 @@ Rules:
 ```
 
 #### Common interview question
+
 ##### How do you reduce hallucinations using prompt design?
 
 **Answer:**
@@ -1331,6 +1352,7 @@ class RAGService:
 | Hierarchical chunking    | Long documents where section-level retrieval helps |
 
 #### Common interview question
+
 ##### How would you build a RAG system?
 
 **Answer:**
@@ -1340,6 +1362,7 @@ I would design an ingestion pipeline to parse and clean documents, split them in
 ---
 
 ### 20. Embeddings & Vector Databases
+
 #### Embeddings
 
 Embeddings are numerical representations of text that capture semantic meaning. Similar text should have similar vectors.
@@ -1384,6 +1407,7 @@ def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
 ---
 
 ### 21. LLM Evaluation, Guardrails, and Safety
+
 #### Evaluation topics
 
 - Accuracy.
@@ -1422,6 +1446,7 @@ For each generated answer:
 ```
 
 #### Common interview question
+
 ##### How would you evaluate a RAG system?
 
 **Answer:**
@@ -1431,6 +1456,7 @@ I would evaluate both retrieval and generation. For retrieval, I would measure w
 ---
 
 ### 23. Model Selection, Fine-Tuning, LoRA/QLoRA
+
 #### Model selection topics
 
 - Quality.
@@ -1455,6 +1481,7 @@ I would evaluate both retrieval and generation. For retrieval, I would measure w
 LoRA and QLoRA are parameter-efficient fine-tuning techniques used to adapt models without updating all model parameters.
 
 #### Common interview question
+
 ##### When would you use RAG vs fine-tuning?
 
 **Answer:**
@@ -1477,6 +1504,7 @@ The role mentions familiarity with models that can handle text, images, or struc
 - Safety concerns for images/documents.
 
 #### Possible interview question
+
 ##### How would multimodal AI be useful in business applications?
 
 **Answer:**
@@ -1486,7 +1514,9 @@ Multimodal AI can help process documents, screenshots, forms, invoices, charts, 
 ---
 
 ### 11. GenAI, ChatGPT API, and Prompt Engineering
+
 #### 11.1 What is the ChatGPT API?
+
 ##### Answer
 
 The ChatGPT API allows developers to integrate large language model capabilities into applications.
@@ -1561,6 +1591,7 @@ Application UI
 ---
 
 #### 11.6 What is prompt engineering?
+
 ##### Answer
 
 Prompt engineering is the process of designing prompts to get accurate, relevant, structured, and consistent outputs from an AI model.
@@ -1578,6 +1609,7 @@ It includes:
 ---
 
 #### 11.7 How do you know if a prompt is good?
+
 ##### Strong Interview Answer
 
 > A good prompt is one that consistently produces accurate, relevant, and structured outputs aligned with the intended objective. I do not judge a prompt by a single response; I judge it based on repeatability, clarity, and output quality across multiple test cases.
@@ -1585,6 +1617,7 @@ It includes:
 ---
 
 #### 11.8 Criteria for a good prompt
+
 ##### 1. Clarity
 
 Bad prompt:
@@ -1662,7 +1695,9 @@ Examples:
 ---
 
 ### 13. LLMs, RAG, Prompt Engineering, and GenAI Evaluation
+
 #### 13.1 LLM model selection
+
 ##### Models discussed generally
 
 - GPT-style models.
@@ -1690,6 +1725,7 @@ Examples:
 ---
 
 #### 13.2 Claude-style model use cases
+
 ##### Strengths
 
 - Long-context document analysis.
@@ -1706,6 +1742,7 @@ Examples:
 ---
 
 #### 13.3 Why use RAG?
+
 ##### RAG solves
 
 - Hallucinations.
@@ -1725,6 +1762,7 @@ Examples:
 ---
 
 #### 13.4 RAG evaluation
+
 ##### Evaluate retrieval separately
 
 - Did we retrieve the right chunks?
@@ -1742,6 +1780,7 @@ Examples:
 ---
 
 #### 13.5 Prompt engineering
+
 ##### Effective prompt structure
 
 1. Clear task.
@@ -1765,6 +1804,7 @@ Return JSON with risk_level and reason.
 ---
 
 #### 13.6 Prompt versioning
+
 ##### Production principle
 
 > Treat prompts like code: versioned, tested, deployed, monitored, and rollbackable.
@@ -1782,6 +1822,7 @@ Return JSON with risk_level and reason.
 ---
 
 #### 13.7 MLflow for prompt/model experiments
+
 ##### What to log
 
 - Prompt version.
@@ -1800,6 +1841,7 @@ Use Git/config for source control and MLflow for experiment tracking.
 ---
 
 #### 13.8 LLM evaluation and factual accuracy
+
 ##### Criteria
 
 - Factual correctness.
@@ -1821,6 +1863,7 @@ Use Git/config for source control and MLflow for experiment tracking.
 ---
 
 #### 13.9 Stabilizing AI systems with regression tests
+
 ##### Golden evaluation set
 
 Include:
@@ -1847,6 +1890,7 @@ Block deployment if:
 ---
 
 #### What Is a Large Language Model?
+
 ##### Interview Question
 
 **What is an LLM?**
@@ -1868,6 +1912,7 @@ A Large Language Model is a deep learning model trained on large amounts of text
 ---
 
 #### Transformers
+
 ##### Interview Question
 
 **Why are Transformers important in modern AI?**
@@ -1888,6 +1933,7 @@ Transformers use self-attention to understand relationships between tokens in a 
 ---
 
 #### RLHF
+
 ##### Interview Question
 
 **Explain RLHF.**
@@ -1913,6 +1959,7 @@ RLHF is a technique used to improve the behavior of language models using human 
 ---
 
 #### Prompt Engineering
+
 ##### Interview Question
 
 **What makes a good prompt?**
@@ -1949,6 +1996,7 @@ Summarize the following technical incident report in 5 bullet points. Focus on r
 ---
 
 #### Prompt Orchestration
+
 ##### Interview Question
 
 **What is prompt orchestration?**
@@ -1977,6 +2025,7 @@ User query
 ---
 
 #### What Is RAG?
+
 ##### Interview Question
 
 **Explain RAG.**
@@ -2005,6 +2054,7 @@ Documents
 ---
 
 #### Why Use RAG?
+
 ##### Benefits
 
 - Reduces hallucination
@@ -2049,6 +2099,7 @@ for idx in indices[0]:
 ---
 
 #### Chunking Strategies
+
 ##### Interview Question
 
 **What are different ways to chunk documents for RAG?**
@@ -2087,6 +2138,7 @@ print(len(chunks))
 ---
 
 #### RAG Evaluation
+
 ##### Interview Question
 
 **How do you evaluate a RAG system as a whole?**
@@ -2121,6 +2173,7 @@ print(len(chunks))
 ---
 
 #### What Is an AI Agent?
+
 ##### Interview Question
 
 **What is an AI agent?**
@@ -2144,6 +2197,7 @@ User goal
 ---
 
 #### Agent vs Generative AI
+
 ##### Interview Question
 
 **What is the difference between Agentic AI and Generative AI?**
@@ -2166,6 +2220,7 @@ Generative AI produces outputs such as text, code, or summaries. Agentic AI goes
 ---
 
 #### Tool Calling
+
 ##### Interview Question
 
 **What is tool calling in LLM systems?**
@@ -2210,6 +2265,7 @@ print(agent_response("123"))
 ---
 
 #### Embeddings
+
 ##### Interview Question
 
 **What is an embedding?**
@@ -2228,6 +2284,7 @@ An embedding is a numerical vector representation of data such as text, images, 
 ---
 
 #### Vector Databases
+
 ##### Interview Question
 
 **Why use a vector database?**
@@ -2248,6 +2305,7 @@ A vector database stores embeddings and supports similarity search. It is common
 ---
 
 #### Similarity Search
+
 ##### Common Similarity Metrics
 
 |       Metric       |              Use              |
@@ -2276,6 +2334,7 @@ print(cosine_similarity(vector_1, vector_2))
 ---
 
 #### Indexing Strategies
+
 ##### Interview Question
 
 **What are indexing strategies for vector search?**
@@ -2305,6 +2364,7 @@ For small datasets, exact search may be enough. For large-scale systems, approxi
 ---
 
 #### What Is Hallucination?
+
 ##### Interview Question
 
 **What is hallucination in LLMs?**
@@ -2316,6 +2376,7 @@ Hallucination happens when an LLM generates information that sounds confident bu
 ---
 
 #### How to Reduce Hallucinations
+
 ##### Techniques
 
 - Use RAG with trusted sources
@@ -2336,6 +2397,7 @@ Answer only using the provided context. If the context does not contain the answ
 ---
 
 #### LLM Evaluation
+
 ##### Interview Question
 
 **How do you evaluate an LLM system?**
@@ -2365,6 +2427,7 @@ Answer only using the provided context. If the context does not contain the answ
 ---
 
 #### BLEU and ROUGE
+
 ##### Interview Question
 
 **What are BLEU and ROUGE?**
@@ -2395,6 +2458,7 @@ BLEU and ROUGE can be useful, but they do not always capture semantic correctnes
 ---
 
 ### 8. AI / LLM / GenAI Integration
+
 #### Likely Questions
 
 - What is your experience with LLMs?
@@ -2419,6 +2483,7 @@ BLEU and ROUGE can be useful, but they do not always capture semantic correctnes
 ---
 
 #### Prompt Engineering
+
 ##### Good Prompt Structure
 
 ```text
@@ -2570,6 +2635,7 @@ Evaluate outputs for:
 ---
 
 #### Using AI Tools as an Engineer
+
 ##### Good Answer
 
 > I use AI tools to move faster with drafting, debugging ideas, boilerplate, test generation, and code review support. But I treat AI output as a suggestion, not as final code. I still review logic, security, edge cases, tests, and production impact before shipping anything.
@@ -2914,3 +2980,264 @@ For financial or other high-stakes workflows:
 **Interview answer:**
 
 > I treat an agent as a distributed application with an LLM inside it, not as a prompt that can directly perform actions. The model can choose a proposed tool call, but trusted code validates the schema, checks permissions, executes the tool, records the result, and enforces step and cost limits. I cache safe read results only within the active `(entity_id, intent)` task, clear that state when intent changes, and always revalidate authoritative state before financial or other high-impact actions.
+
+---
+
+## Retrieval Top-K, LangGraph, and MCP Protocol Deep Dive
+
+### What Are Top-K Chunks in a RAG Pipeline?
+
+Top-k chunks are the `k` highest-ranked document segments returned by the retrieval stage for a query. They are evidence candidates, not automatically correct context.
+
+```text
+documents
+   ↓ parse / clean / classify
+chunks + metadata
+   ↓ embeddings + lexical index
+query
+   ↓ authorization and metadata filters
+candidate retrieval
+   ↓ reranking / deduplication
+best k chunks
+   ↓ prompt/context assembly
+LLM answer + citations
+```
+
+If `k = 3`, a vector search might return:
+
+| Rank | Chunk | Similarity |            Meaning             |
+| ---- | ----- | ---------- | ------------------------------ |
+| 1    | 18    | 0.91       | Strongest semantic match       |
+| 2    | 42    | 0.87       | Additional supporting evidence |
+| 3    | 7     | 0.82       | Third context candidate        |
+
+#### Why `k` Matters
+
+If `k` is too small:
+
+- Relevant evidence can be missed.
+- Multi-section answers become incomplete.
+- Retrieval recall falls.
+
+If `k` is too large:
+
+- Irrelevant or conflicting context enters the prompt.
+- Token cost and latency increase.
+- Important evidence can be diluted or lost in the middle.
+- The model has more opportunities to attach a claim to the wrong source.
+
+#### Candidate Retrieval vs Final Context
+
+A strong production design commonly retrieves more candidates than it finally sends:
+
+```text
+hybrid retrieval: 20 candidates
+             ↓
+cross-encoder / learned reranker
+             ↓
+deduplicate + diversify
+             ↓
+best 3-6 chunks in final context
+```
+
+Initial retrieval optimizes recall. Reranking and context selection optimize precision.
+
+```python
+candidate_chunks = vector_store.similarity_search(
+    query=user_question,
+    k=20,
+)
+
+ranked_chunks = reranker.rank(
+    query=user_question,
+    documents=candidate_chunks,
+)
+
+context_chunks = deduplicate(ranked_chunks)[:5]
+```
+
+#### How to Tune Top-K
+
+Use a representative evaluation set and measure:
+
+- Recall@k / whether required evidence appears
+- Context precision / proportion of supplied chunks that are useful
+- Mean reciprocal rank or nDCG when ranking quality matters
+- Answer groundedness, correctness, completeness, and citation accuracy
+- Latency, prompt tokens, and cost
+- Performance by query type rather than one global average
+
+A reasonable starting experiment might retrieve 10-20 candidates and send 3-6 after reranking, but the correct values depend on chunk size, corpus, query complexity, filters, and context budget.
+
+Interview answer:
+
+> Top-k chunks are the k highest-ranked document segments returned for a query. A small k can miss evidence while a large k introduces noise and cost. I normally retrieve a broader authorized candidate set, rerank and deduplicate it, and place only the strongest few chunks into the model context. I tune both candidate and final k using retrieval recall, context precision, groundedness, citation quality, latency, and token cost.
+
+### LangGraph as an Orchestration Runtime
+
+LangGraph is a low-level orchestration runtime for long-running, stateful agents. Its key value is explicit state and control flow rather than a particular prompt or model provider.
+
+Core ideas:
+
+- **State:** Typed shared data carried between steps.
+- **Nodes:** Deterministic functions, model calls, tools, validators, or approval steps.
+- **Edges:** Fixed or conditional transitions.
+- **Persistence/checkpointing:** Durable execution and recovery from an intermediate state.
+- **Human-in-the-loop:** Interrupt, inspect, approve, edit, and resume.
+- **Streaming:** Surface tokens, events, or state updates during execution.
+- **Memory:** Short-term workflow state and, when designed explicitly, longer-term cross-session memory.
+
+```python
+from typing import TypedDict
+
+from langgraph.graph import END, START, StateGraph
+
+
+class ReviewState(TypedDict):
+    request: str
+    risk: str
+    approved: bool
+
+
+def classify(state: ReviewState):
+    return {"risk": classify_risk(state["request"])}
+
+
+def route_after_classification(state: ReviewState):
+    return "approval" if state["risk"] == "high" else "execute"
+
+
+graph = StateGraph(ReviewState)
+graph.add_node("classify", classify)
+graph.add_node("approval", request_human_approval)
+graph.add_node("execute", execute_authorized_action)
+graph.add_edge(START, "classify")
+graph.add_conditional_edges("classify", route_after_classification)
+graph.add_edge("approval", "execute")
+graph.add_edge("execute", END)
+compiled = graph.compile(checkpointer=checkpointer)
+```
+
+#### Workflow vs Agent
+
+- A deterministic workflow follows application-defined transitions.
+- An agent can let a model select a route or tool within bounded policy.
+- A production graph can combine both: deterministic authorization and approval around model-driven planning.
+
+#### Checkpointer vs Long-Term Store
+
+- A checkpointer persists graph execution state for a thread/run so it can resume safely.
+- A long-term store holds intentionally selected information across sessions/users.
+- Neither should become an uncontrolled dump of prompts, secrets, or sensitive data.
+
+#### Failure and Recovery
+
+Design each node for:
+
+- Stable operation IDs and idempotency
+- Timeouts and bounded retries
+- Typed output validation
+- Checkpoint placement before/after side effects
+- Compensation or reconciliation for uncertain external results
+- Maximum step, time, and cost limits
+- Traceable transitions and model/tool versions
+
+Reference: [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview)
+
+### Model Context Protocol (MCP) - 2026-07-28 Notes
+
+MCP standardizes how an AI host communicates with servers that expose context and capabilities. It is a protocol boundary, not an authorization system or automatic safety layer.
+
+#### Architecture
+
+```text
+Host application
+   |
+   +-- MCP client A <--> MCP server A
+   |
+   +-- MCP client B <--> MCP server B
+```
+
+- **Host:** Coordinates AI integration, creates clients, controls connection permissions, enforces consent/security policy, and aggregates context.
+- **Client:** Maintains a one-to-one relationship with one server and attaches protocol version/capabilities to requests.
+- **Server:** Exposes focused capabilities and context through protocol primitives.
+
+#### Server Primitives
+
+- **Tools:** Callable operations such as querying a system, invoking an API, or performing a computation.
+- **Resources:** Context/data that a host can read or subscribe to according to server capabilities.
+- **Prompts:** Reusable parameterized prompt templates exposed by a server.
+
+Treat every tool description and external result as untrusted input until validated by host policy.
+
+#### Transports in the 2026-07-28 Revision
+
+MCP uses JSON-RPC semantics over transport bindings:
+
+- **stdio:** Newline-delimited messages over a client-launched local subprocess.
+- **Streamable HTTP:** Each request/notification is an HTTP `POST` to one MCP endpoint; a response is a JSON object or a request-scoped SSE stream.
+
+For the 2026-07-28 Streamable HTTP revision:
+
+- `GET` and `DELETE` to the MCP endpoint return `405 Method Not Allowed`.
+- Protocol-level sessions and the GET stream endpoint were removed.
+- A request-scoped SSE response is not a resumable global session stream.
+- Older protocol revisions require explicit backward-compatibility behavior/version fallback.
+
+Do not memorize a transport detail without naming the specification revision because MCP has evolved.
+
+#### Capability Negotiation and Extensions
+
+Protocol version and supported capabilities are negotiated/attached according to the revision. Optional extensions require explicit support by both sides. The 2026-07-28 specification describes opt-in extensions such as long-running Tasks; an application should not assume an extension exists without negotiation.
+
+#### Secure MCP Design
+
+```text
+model proposes tool call
+   ↓
+host validates schema
+   ↓
+authenticate actor from trusted context
+   ↓
+authorize actor + tenant + resource + operation
+   ↓
+approval for sensitive/irreversible action
+   ↓
+execute with least-privilege, short-lived credential
+   ↓
+validate result + audit + return bounded output
+```
+
+Controls:
+
+- User consent and clear visibility into exposed/invoked tools
+- Least-privilege credentials scoped to actor, tenant, resource, and action
+- Input/output schema validation and size limits
+- Prompt-injection separation: tool/resource content cannot override host policy
+- Human approval for sensitive or irreversible operations
+- Idempotency and fresh-state revalidation before writes
+- Timeouts, rate limits, bounded retries, and circuit protection
+- Redacted audit events and trace correlation
+- SSRF/egress restrictions for remote endpoints
+- No secrets placed in model-visible context
+
+#### MCP vs Direct Function Calling
+
+|                  Direct function calling                  |                          MCP                          |
+| --------------------------------------------------------- | ----------------------------------------------------- |
+| Tool contract is embedded in one app/provider integration | Standardized client/server protocol boundary          |
+| Simpler for a small local tool set                        | Useful for discoverable, reusable integrations        |
+| App owns transport and discovery                          | Protocol defines primitives, messages, and transports |
+
+MCP is valuable when standardized discovery and reuse justify the additional protocol, lifecycle, compatibility, and security surface.
+
+Interview answer:
+
+> MCP defines a standard boundary between a host, one client per connected server, and servers exposing tools, resources, and prompts. The protocol makes integrations discoverable and reusable, but it does not make them trusted. The host still authenticates the user, authorizes each resource/action, validates schemas, requests approval for high-impact operations, executes with least privilege, and audits the result. I would also name the protocol revision when discussing transport behavior because Streamable HTTP changed in the 2026-07-28 specification.
+
+References:
+
+- [MCP specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28)
+- [MCP architecture](https://modelcontextprotocol.io/specification/2026-07-28/architecture)
+- [MCP transport overview](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+- [MCP tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)

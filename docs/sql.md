@@ -41,6 +41,7 @@ This file has been refreshed to keep the original repository topic while merging
 ---
 
 ### 11. SQL Interview Patterns
+
 #### 11.1 Top 3 orders per customer
 
 ```sql
@@ -119,6 +120,7 @@ QUALIFY SUM(increased) OVER (
 ---
 
 ### 10. Databases, ORM, and Data Modeling
+
 #### Topics to revise
 
 - Relational databases.
@@ -161,6 +163,7 @@ class Document(Base):
 ---
 
 ### 16. Databases, Caching, and Messaging Systems
+
 #### Databases
 
 Topics mentioned or implied:
@@ -195,6 +198,7 @@ Examples:
 - Event-driven pipelines.
 
 #### Common interview question
+
 ##### When would you use a queue?
 
 **Answer:**
@@ -204,7 +208,9 @@ Use a queue when a task is slow, asynchronous, retryable, or should not block th
 ---
 
 ### 3. REST API Design and Idempotency
+
 #### 3.1 Idempotent HTTP methods
+
 ##### Idempotent methods
 
 - `GET`
@@ -233,6 +239,7 @@ POST /orders         → unsafe unless idempotency key is used
 ---
 
 #### 3.2 Safely retriable POST endpoint
+
 ##### Problem
 
 A client retries `POST /orders` after timeout. Without protection, duplicate orders may be created.
@@ -261,6 +268,7 @@ Content-Type: application/json
 ---
 
 #### 3.3 Request/response contract for idempotent create order
+
 ##### First response
 
 ```http
@@ -318,6 +326,7 @@ Retry-After: 2
 ---
 
 #### 3.4 Exactly-once behavior with RDS and DynamoDB
+
 ##### Topic covered
 
 How to avoid duplicate order creation without distributed transactions.
@@ -348,6 +357,7 @@ If RDS commits but DynamoDB update fails:
 ---
 
 #### 3.5 Django implementation of idempotency
+
 ##### Model example
 
 ```python
@@ -417,6 +427,7 @@ Use unique constraints plus row-level locks to ensure two simultaneous requests 
 ---
 
 #### 3.6 REST API versioning
+
 ##### Preferred external API style
 
 ```text
@@ -440,6 +451,7 @@ Use unique constraints plus row-level locks to ensure two simultaneous requests 
 ---
 
 #### 3.7 Deprecating an old API version
+
 ##### Safe process
 
 1. Announce deprecation.
@@ -451,14 +463,15 @@ Sunset: <date>
 Link: </api/v2/docs>; rel="successor-version"
 ```
 
-3. Monitor usage by client/API key.
-4. Provide migration guide.
-5. Keep old version running during migration window.
-6. Sunset only after usage is low and clients are migrated.
+1. Monitor usage by client/API key.
+2. Provide migration guide.
+3. Keep old version running during migration window.
+4. Sunset only after usage is low and clients are migrated.
 
 ---
 
 #### 3.8 Client SDK design
+
 ##### SDK responsibilities
 
 - Authentication.
@@ -491,7 +504,9 @@ class NotFoundError(Exception): pass
 ---
 
 ### 4. Django and ORM Performance
+
 #### 4.1 Avoiding N+1 queries in nested serialization
+
 ##### Use `select_related`
 
 For single-valued relationships:
@@ -528,6 +543,7 @@ queryset = Order.objects.prefetch_related(
 ---
 
 #### 4.2 Structuring large list endpoints with optional filters
+
 ##### Recommended pattern
 
 Use a query builder or custom manager instead of putting all logic in the view.
@@ -572,6 +588,7 @@ def apply_annotations(qs, params):
 ---
 
 #### 4.3 RESTful filtering and sorting with validation
+
 ##### Query parameter example
 
 ```http
@@ -619,7 +636,9 @@ Raw user input should not be passed directly into query construction.
 ---
 
 ### 5. Databases and Data Modeling
+
 #### 5.1 Primary key vs unique constraint
+
 ##### Primary key
 
 - Main identifier for a row.
@@ -645,6 +664,7 @@ CREATE TABLE users (
 ---
 
 #### 5.2 Many-to-many modeling
+
 ##### Join table example
 
 ```sql
@@ -681,6 +701,7 @@ CREATE TABLE user_roles (
 ---
 
 #### 5.3 MongoDB embedding vs referencing
+
 ##### Embed when
 
 - Data is read together.
@@ -710,6 +731,7 @@ Example:
 ---
 
 #### 5.4 INNER JOIN vs LEFT JOIN
+
 ##### INNER JOIN
 
 Returns only rows with matches in both tables.
@@ -740,6 +762,7 @@ ON o.customer_id = c.id;
 ---
 
 #### 5.5 Strong consistency vs eventual consistency
+
 ##### Strong consistency when
 
 - Duplicate order creation is unacceptable.
@@ -763,6 +786,7 @@ ON o.customer_id = c.id;
 ---
 
 #### 5.6 Preventing duplicate processing in eventual consistency
+
 ##### Techniques
 
 - Idempotency key/event ID.
@@ -798,6 +822,7 @@ If transaction fails, retry starts cleanly.
 ---
 
 #### 5.7 Optimizing equality queries without an index
+
 ##### Techniques
 
 - Check execution plan.
@@ -822,7 +847,9 @@ Sorting or clustering data can help zone-map pruning skip row groups even withou
 ---
 
 ### 3. SQL Interview Questions
+
 #### 3.1 Successful Revenue by Region
+
 ##### Interview Question
 
 > **“How do you calculate successful revenue by region?”**
@@ -848,6 +875,7 @@ ORDER BY total_revenue DESC;
 ---
 
 #### 3.2 Top One Transaction Per Customer
+
 ##### Interview Question
 
 > **“For each customer, find the top one transaction.”**
@@ -891,6 +919,7 @@ WHERE rn = 1;
 ---
 
 #### 3.3 Top Transaction With Ties
+
 ##### Follow-Up Question
 
 > **“What if two transactions have the same highest amount?”**
@@ -954,6 +983,7 @@ WHERE rn = 1;
 ---
 
 #### 3.5 Customers With More Than One Paid Transaction
+
 ##### Interview Question
 
 > **“Find customers with more than one paid transaction only.”**
@@ -1007,6 +1037,7 @@ WHERE status = 'PAID'
 ---
 
 ### 6. Databases, ORMs & PostgreSQL
+
 #### Likely Questions
 
 - What is relational data modeling?
@@ -1092,6 +1123,7 @@ class Order(Base):
 ---
 
 #### Avoiding N+1 Queries
+
 ##### Problem
 
 If you load 100 orders and then separately query the customer for each order, you may execute 101 queries.

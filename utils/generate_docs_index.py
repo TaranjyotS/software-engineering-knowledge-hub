@@ -1,25 +1,24 @@
 from __future__ import annotations
 
 from pathlib import Path
-import sys
+
+from format_markdown_tables import format_markdown_text
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from utils.format_markdown_tables import format_markdown_text
 
 DOCS_DIR = REPO_ROOT / "docs"
 DOCS_README = DOCS_DIR / "README.md"
 
 TOPIC_FOCUS = {
-    "my_profile.md": "Resume-aligned profile, experience, positioning, and knowledge summary",
-    "interview_questions.md": "Behavioral, HR, resume-based, senior engineering, and general interview questions",
+    "my_profile.md": "Generic professional profile, positioning, evidence inventory, and privacy guidance",
+    "interview_questions.md": "Company-neutral behavioral answers, STAR examples, and interview strategy",
+    "project_deep_dive.md": "Backend, data, AI, delivery, and production-scenario answer bank",
     "coding_interview_patterns.md": "Progressive coding interviews, DSA patterns, complexity, testing, optimization",
     "python.md": "Core Python, advanced Python, concurrency, OOP, coding patterns",
     "rest_api.md": "REST, FastAPI, Flask, API contracts, security, pagination, idempotency",
     "sql.md": "SQL fundamentals, joins, indexes, transactions, window functions, optimization",
     "system_design.md": "Scalability, microservices, distributed systems, queues, caching, consistency",
+    "software_design_patterns.md": "GoF and backend patterns, Python examples, LLD selection, comparisons, trade-offs",
     "genai_llm_rag.md": "LLMs, prompt engineering, RAG, AI agents, tool calling, evaluation",
     "machine_learning.md": "ML fundamentals, model lifecycle, validation, drift, deployment, monitoring",
     "data_engineering.md": "ETL, data quality, batch/streaming, S3 pipelines, lineage, lakehouse concepts",
@@ -102,7 +101,7 @@ def generate() -> str:
 - Keep one topic per Markdown file.
 - Prefer reusable interview answers over company-specific content.
 - Add code snippets when they clarify implementation.
-- Keep personal profile details aligned with the latest resume.
+- Keep personalized resume evidence under `owner/`, not in generic topic files.
 - When adding a new file under `docs/`, run `python confluence_sync/build_page_map.py` before syncing to Confluence.
 """
 

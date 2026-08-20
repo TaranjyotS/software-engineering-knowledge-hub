@@ -1,4 +1,4 @@
-'''Safe Agent Orchestrator: Bounded Tool Calls, Task-Scoped Cache, and Protected Writes
+"""Safe Agent Orchestrator: Bounded Tool Calls, Task-Scoped Cache, and Protected Writes
 
 Implement an orchestration loop for a tool-using customer-support agent. The model returns either a final answer or a structured
 tool call. The orchestrator, not the model, is responsible for validating and executing actions.
@@ -34,7 +34,7 @@ Complexity:
 
 Important edge cases include malformed JSON, unknown tools, repeated identical reads, same order with a new intent, changed authentication,
 refund amount above manager threshold, stale eligibility after a prior refund, tool failures, and a model that never returns a final answer.
-'''
+"""
 
 from __future__ import annotations
 
@@ -42,7 +42,6 @@ import json
 from dataclasses import dataclass
 from datetime import date
 from typing import Any, Callable
-
 
 MAX_TOOL_CALLS = 5
 
@@ -186,7 +185,9 @@ class SafeAgent:
 
         try:
             result = tool(**arguments)
-        except Exception as exc:  # sanitized result; log the real exception internally in production
+        except (
+            Exception
+        ) as exc:  # sanitized result; log the real exception internally in production
             return {"ok": False, "error": type(exc).__name__}
 
         self._read_cache[cache_key] = result
@@ -287,7 +288,7 @@ class ScriptedModel:
 
 def run_sample_tests() -> None:
     assert extract_first_json_object(
-        "Here is the result:\n```json\n{\"type\": \"final\", \"answer\": \"done\"}\n```"
+        'Here is the result:\n```json\n{"type": "final", "answer": "done"}\n```'
     ) == {"type": "final", "answer": "done"}
     assert extract_first_json_object("not JSON") is None
 
@@ -383,7 +384,7 @@ if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Explanation:
 1. The agent loop accepts only two decision types: final response or tool call. Every tool call is dispatched through trusted code.
 2. The hard five-call limit creates a deterministic upper bound and ensures a looping model cannot consume tools indefinitely.
@@ -397,4 +398,4 @@ Summary:
 - Bound loops and cache safe reads to control cost.
 - Invalidate state on task changes and refresh authoritative data before high-impact writes.
 - Treat malformed model output and tool failures as normal production failure modes.
-'''
+"""

@@ -1,4 +1,4 @@
-'''Incident Alert Router and Retry Backoff
+"""Incident Alert Router and Retry Backoff
 
 We are building the backend for an incident-alerting service. Each Alert represents a reported problem for a service and has
 an alert ID, service, severity, created time, optional resolved time, and zero or more delivery attempts made to on-call
@@ -38,7 +38,7 @@ Complexity:
 
 Important edge cases include no alerts for a service, a resolved alert before a later open alert, unknown alert IDs, zero or one
 delivery attempt, attempts arriving out of order, a gap exactly equal to cooldown, and multiple violations for one alert.
-'''
+"""
 
 from __future__ import annotations
 
@@ -176,7 +176,7 @@ def run_sample_tests() -> None:
 if __name__ == "__main__":
     run_sample_tests()
 
-'''
+"""
 Explanation:
 1. has_open_alert scans until it finds an alert whose service matches and whose resolved_at value is None. The False return is
    outside the loop, which fixes the early-return bug where a resolved alert could hide a later open alert for the same service.
@@ -191,4 +191,4 @@ Summary:
 - Keep mutable state per entity rather than sharing one list across instances.
 - Sorting plus adjacent-pair comparison is a simple and reliable way to validate retry spacing.
 - A gap equal to cooldown is valid; only a strictly smaller gap violates the policy.
-'''
+"""

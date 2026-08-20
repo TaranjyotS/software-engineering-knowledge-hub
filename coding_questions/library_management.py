@@ -1,4 +1,4 @@
-'''To design a **Library Management System** in Python while following the **Singleton** and **Observer** design patterns,
+"""To design a **Library Management System** in Python while following the **Singleton** and **Observer** design patterns,
 we will need the following entities:
 
 1. **Library (Singleton)**: The library itself will be a singleton, meaning that only one instance of the library can exist
@@ -13,12 +13,14 @@ Design Steps:
 1. **Singleton Pattern**: The library class will follow the Singleton pattern to ensure only one instance exists.
 2. **Observer Pattern**: Users will be observers of book availability. If a book is borrowed or returned, users waiting for
 that book will be notified.
-'''
+"""
+
 
 # Observer Pattern for book borrowing and return
 class Observer:
     def update(self, book_name, message):
         raise NotImplementedError("Subclass must implement abstract method")
+
 
 class User(Observer):
     def __init__(self, user_name):
@@ -26,6 +28,7 @@ class User(Observer):
 
     def update(self, book_name, message):
         print(f"User {self.user_name} notified: {book_name} {message}")
+
 
 # Singleton Library
 class Library:
@@ -90,6 +93,7 @@ class Library:
         else:
             print(f"User {user.user_name} has no borrowed books")
 
+
 # Librarian (uses Singleton Library)
 class Librarian:
     def __init__(self, name):
@@ -127,14 +131,14 @@ if __name__ == "__main__":
     # Check out and return books
     librarian.check_out_book(user1, "The Great Gatsby")
     librarian.check_out_book(user2, "1984")
-    
+
     # Return a book
     librarian.accept_returned_book(user1)
 
     # Check out the returned book again
     librarian.check_out_book(user2, "The Great Gatsby")
 
-'''
+"""
 Explanation:
 1. **Library (Singleton)**:
    - The library class is implemented using the Singleton pattern to ensure only one instance of the library is created.
@@ -154,4 +158,4 @@ Summary:
 - **Singleton Pattern** ensures only one library exists.
 - **Observer Pattern** allows users to be notified when a book is borrowed or returned.
 - The system handles the addition of books, check-in, and check-out operations via a librarian entity.
-'''
+"""

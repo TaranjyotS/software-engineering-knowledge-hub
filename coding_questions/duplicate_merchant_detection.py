@@ -1,11 +1,11 @@
-'''
+"""
 Duplicate Merchant Detection
 
 Part 1: Linking Merchant Accounts
 ---------------------------------
 We want to enhance user experience and decision-making by discovering preexisting relationships within merchant data.
 Merchants can be clustered based on shared attributes. Given a list of merchants, where each merchant is represented by a
-unique ID and a map of attributes, identify the merchants that are directly linked to a given merchantId. Two merchants are 
+unique ID and a map of attributes, identify the merchants that are directly linked to a given merchantId. Two merchants are
 considered directly linked if they share at least one attribute with an identical value.
 
 Example:
@@ -14,9 +14,9 @@ Example:
 
 Part 2: Soft Links
 ------------------
-In a real-world scenario, identical information in a single field does not always justify a direct linkage decision. In this 
-part, matching information from multiple fields is used to build a confidence score to make the link decision. If merchantA 
-and merchantB have multiple identical fields, add the confidence score for each identical field and compare the total score to 
+In a real-world scenario, identical information in a single field does not always justify a direct linkage decision. In this
+part, matching information from multiple fields is used to build a confidence score to make the link decision. If merchantA
+and merchantB have multiple identical fields, add the confidence score for each identical field and compare the total score to
 a confidence threshold. If the total confidence score is at least the threshold value, then the accounts are directly linked.
 
 Example:
@@ -28,7 +28,8 @@ Example:
     Required link formation confidence level: 55
     Merchant of interest: m1
     Expected output: ["m2"]
-'''
+"""
+
 
 def find_related_merchants_verbose(merchants, merchant_of_interest):
     """
@@ -267,7 +268,7 @@ def run_examples():
 if __name__ == "__main__":
     run_examples()
 
-'''
+"""
 Explanation:
 1. Part 1 first locates the merchant of interest, then compares every other merchant against its non-empty attributes. A single
    identical attribute value is enough to create a direct link, so comparison can stop as soon as one field matches.
@@ -279,4 +280,4 @@ Summary:
 - Direct matching can short-circuit after the first qualifying field.
 - Weighted matching turns multiple weaker signals into one confidence score.
 - Ignore identifiers and missing values when comparing descriptive merchant attributes.
-'''
+"""

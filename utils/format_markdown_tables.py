@@ -1,4 +1,4 @@
-"""Format Markdown pipe tables in-place.
+"""Normalize Markdown headings and format pipe tables in-place.
 
 This utility scans Markdown files, centers header labels in the source and aligns separator dashes and row cells consistently in VS Code/GitHub.
 
@@ -30,6 +30,7 @@ IGNORED_DIRS = {
 }
 
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
+HEADING_RE = re.compile(r"^ {0,3}#{1,6}(?:\s+|$)")
 
 
 class MarkdownTableFormatterError(Exception):
@@ -225,7 +226,9 @@ def separator_text(width: int, alignment: str) -> str:
 
 
 def format_row(cells: Sequence[str], widths: Sequence[int], alignments: Sequence[str]) -> str:
-    formatted = [align_text(cell, widths[index], alignments[index]) for index, cell in enumerate(cells)]
+    formatted = [
+        align_text(cell, widths[index], alignments[index]) for index, cell in enumerate(cells)
+    ]
     return "| " + " | ".join(formatted) + " |"
 
 
@@ -254,13 +257,9 @@ def format_table_block(lines: Sequence[str]) -> list[str]:
     widths: list[int] = []
     for column in range(column_count):
         content_width = max(
-            display_width(row[column])
-            for index, row in enumerate(rows)
-            if index != separator_index
+            display_width(row[column]) for index, row in enumerate(rows) if index != separator_index
         )
-        widths.append(
-            max(content_width, minimum_separator_width(alignments[column]))
-        )
+        widths.append(max(content_width, minimum_separator_width(alignments[column])))
 
     header_index = separator_index - 1
     header_alignments = ["center"] * column_count
@@ -285,10 +284,36 @@ def find_table_end(lines: Sequence[str], start: int) -> int:
     return end
 
 
+def normalize_heading_spacing(lines: Sequence[str]) -> list[str]:
+    """Place one blank line around ATX headings outside fenced code blocks."""
+    output: list[str] = []
+    in_fence = False
+
+    for index, line in enumerate(lines):
+        if FENCE_RE.match(line):
+            in_fence = not in_fence
+            output.append(line)
+            continue
+
+        if not in_fence and HEADING_RE.match(line):
+            if output and output[-1].strip():
+                output.append("")
+            output.append(line)
+
+            next_line = lines[index + 1] if index + 1 < len(lines) else None
+            if next_line is not None and next_line.strip():
+                output.append("")
+            continue
+
+        output.append(line)
+
+    return output
+
+
 def format_markdown_text(text: str) -> str:
-    """Format all Markdown pipe tables outside fenced code blocks."""
+    """Normalize headings and format pipe tables outside fenced code blocks."""
     has_trailing_newline = text.endswith("\n")
-    lines = text.splitlines()
+    lines = normalize_heading_spacing(text.splitlines())
     output: list[str] = []
     index = 0
     in_fence = False
@@ -359,7 +384,7 @@ def process_file(path: Path, *, check: bool, dry_run: bool, backup: bool) -> boo
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Center headers and align Markdown pipe tables across files.",
+        description="Normalize headings and align Markdown pipe tables across files.",
     )
     parser.add_argument(
         "paths",

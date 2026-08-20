@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+import os
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-
-import os
-import requests
 
 
 def _die(msg: str, code: int = 2) -> None:
@@ -18,7 +18,9 @@ def _auth() -> tuple[str, str]:
     user = os.getenv("CONFLUENCE_USER", "")
     token = os.getenv("CONFLUENCE_TOKEN", "")
     if not api_url:
-        _die("Missing env var: CONFLUENCE_API_URL (e.g., https://<site>.atlassian.net/wiki/rest/api)")
+        _die(
+            "Missing env var: CONFLUENCE_API_URL (e.g., https://<site>.atlassian.net/wiki/rest/api)"
+        )
     if not user:
         _die("Missing env var: CONFLUENCE_USER (your Confluence/Atlassian email)")
     if not token:
@@ -67,7 +69,9 @@ def main() -> None:
             auth_ok = True
             break
 
-        _die(f"Confluence health check got unexpected status {res.status_code} for {url}: {res.text[:200]}")
+        _die(
+            f"Confluence health check got unexpected status {res.status_code} for {url}: {res.text[:200]}"
+        )
 
     if not auth_ok:
         _die(
@@ -100,7 +104,9 @@ def main() -> None:
             print(f"Space '{space_key}' is accessible.")
             return
 
-        _die(f"Unexpected status {res.status_code} while checking space '{space_key}': {res.text[:200]}")
+        _die(
+            f"Unexpected status {res.status_code} while checking space '{space_key}': {res.text[:200]}"
+        )
 
     print("No CONFLUENCE_SPACE_KEY provided; using personal space behavior.")
 

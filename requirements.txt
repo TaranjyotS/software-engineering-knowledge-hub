@@ -3,3 +3,4 @@ markdown
 beautifulsoup4
 markdownify
 python-dotenv
+reportlab>=4.0,<5

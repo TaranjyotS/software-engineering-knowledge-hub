@@ -42,3 +42,6 @@ Thumbs.db
 # Generated archives / local exports
 *.zip
 *.patch
+
+# Private owner-specific material
+/owner/

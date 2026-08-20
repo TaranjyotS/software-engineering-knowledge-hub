@@ -1,4 +1,4 @@
-'''Top-K Frequent Paths: Batch, Heap-Optimized, Dynamic-K, and Streaming Variants
+"""Top-K Frequent Paths: Batch, Heap-Optimized, Dynamic-K, and Streaming Variants
 
 Given a sequence of path strings representing observed process routes, return the k most frequently occurring unique paths.
 This is a reusable top-k frequency problem. If frequencies tie, this implementation returns the lexicographically smaller path first so
@@ -37,7 +37,7 @@ Important edge cases:
 - Very high-cardinality input with a small k.
 - Dynamic k where a previously discarded candidate may become part of a larger requested result.
 - Streaming queries that require an explicit window definition if "recent" rather than all-time frequency is desired.
-'''
+"""
 
 from __future__ import annotations
 
@@ -79,12 +79,8 @@ class _Candidate:
 
 
 def _is_better(candidate: _Candidate, weakest: _Candidate) -> bool:
-    return (
-        candidate.frequency > weakest.frequency
-        or (
-            candidate.frequency == weakest.frequency
-            and candidate.path < weakest.path
-        )
+    return candidate.frequency > weakest.frequency or (
+        candidate.frequency == weakest.frequency and candidate.path < weakest.path
     )
 
 
@@ -185,7 +181,7 @@ if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Alternative approaches and follow-ups:
 1. Tiny fixed k:
    Keep a sorted list of at most k candidates. Updating it costs O(k) per unique path, which is effectively linear in u when k is a
@@ -216,4 +212,4 @@ Summary:
 - k = 1: O(n + u) after counting.
 - Dynamic k over static data: sort once, slice many times.
 - Streaming arbitrary k: keep exact running counts; choose query-time heap or a more complex ordered index based on query frequency.
-'''
+"""

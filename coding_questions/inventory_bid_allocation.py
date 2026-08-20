@@ -1,4 +1,4 @@
-'''Priority Inventory Allocation with Round-Robin Tie Handling
+"""Priority Inventory Allocation with Round-Robin Tie Handling
 
 A limited inventory must be allocated across customer requests. Each request contains:
 
@@ -53,12 +53,11 @@ Common debugging failure modes:
 - A grouped while-loop whose boundary variable never advances can create an infinite loop and timeout.
 - Incrementing the outer index while trying to find the end of a group can corrupt the scan state.
 - Simulating one item at a time is correct conceptually but unnecessary for this output and can be far too slow.
-'''
+"""
 
 from __future__ import annotations
 
 from typing import Iterable, Sequence
-
 
 Request = tuple[int, int, int, int]
 
@@ -68,7 +67,9 @@ def _normalize_requests(requests: Iterable[Sequence[int]]) -> list[Request]:
 
     for request in requests:
         if len(request) != 4:
-            raise ValueError("Each request must contain customer_id, quantity, bid_amount, and timestamp")
+            raise ValueError(
+                "Each request must contain customer_id, quantity, bid_amount, and timestamp"
+            )
 
         customer_id, quantity, bid_amount, timestamp = map(int, request)
         if quantity <= 0:
@@ -98,10 +99,7 @@ def get_unfulfilled_customers(
 
     while group_start < request_count:
         if remaining <= 0:
-            return sorted(
-                customer_id
-                for customer_id, _, _, _ in ordered[group_start:]
-            )
+            return sorted(customer_id for customer_id, _, _, _ in ordered[group_start:])
 
         bid_amount = ordered[group_start][2]
         group_end = group_start
@@ -120,19 +118,12 @@ def get_unfulfilled_customers(
 
         if remaining < group_size:
             unfulfilled = [
-                customer_id
-                for customer_id, _, _, _ in ordered[group_start + remaining:group_end]
+                customer_id for customer_id, _, _, _ in ordered[group_start + remaining : group_end]
             ]
-            unfulfilled.extend(
-                customer_id
-                for customer_id, _, _, _ in ordered[group_end:]
-            )
+            unfulfilled.extend(customer_id for customer_id, _, _, _ in ordered[group_end:])
             return sorted(unfulfilled)
 
-        return sorted(
-            customer_id
-            for customer_id, _, _, _ in ordered[group_end:]
-        )
+        return sorted(customer_id for customer_id, _, _, _ in ordered[group_end:])
 
     return []
 
@@ -177,7 +168,7 @@ if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Alternative approach:
 A literal round-robin simulator can keep each equal-bid group in timestamp order and repeatedly give one item to each active request.
 That is easy to explain, but its runtime depends on the number of items allocated and can approach O(total_inventory), which is unsafe
@@ -197,4 +188,4 @@ Summary:
 - Group equal-priority records after sorting.
 - Maintain clear pointer-progress invariants in nested scans.
 - Separate "request not fully satisfied" from "received no items"; they are different conditions.
-'''
+"""

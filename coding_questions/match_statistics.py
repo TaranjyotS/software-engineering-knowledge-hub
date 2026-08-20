@@ -1,4 +1,4 @@
-'''Match Statistics and Head-to-Head History
+"""Match Statistics and Head-to-Head History
 
 Build a game manager that stores registered players and match results. The system should validate incoming results, calculate
 per-player statistics, calculate average scores grouped by outcome, and summarize head-to-head history between two players.
@@ -27,7 +27,7 @@ Complexity:
 
 Important edge cases include unknown players, players with no matches, only draws, repeated opponents, no history between the
 requested pair, and records arriving out of timestamp order.
-'''
+"""
 
 from __future__ import annotations
 
@@ -130,9 +130,7 @@ class GameManager:
         return True
 
     def get_player_statistics(self, player_id: str) -> PlayerStatistics:
-        player_matches = [
-            result for result in self.match_results if result.player_id == player_id
-        ]
+        player_matches = [result for result in self.match_results if result.player_id == player_id]
 
         wins = sum(result.outcome == Outcome.WIN for result in player_matches)
         losses = sum(result.outcome == Outcome.LOSS for result in player_matches)
@@ -161,10 +159,7 @@ class GameManager:
             totals[result.outcome] = totals.get(result.outcome, 0) + result.score
             counts[result.outcome] = counts.get(result.outcome, 0) + 1
 
-        return {
-            outcome: totals[outcome] / counts[outcome]
-            for outcome in totals
-        }
+        return {outcome: totals[outcome] / counts[outcome] for outcome in totals}
 
     def summarize_head_to_head(
         self,
@@ -175,8 +170,7 @@ class GameManager:
         matches = [
             result
             for result in self.match_results
-            if result.player_id == player1_id
-            and result.opponent_id == player2_id
+            if result.player_id == player1_id and result.opponent_id == player2_id
         ]
 
         if not matches:
@@ -245,7 +239,7 @@ def run_sample_tests() -> None:
 if __name__ == "__main__":
     run_sample_tests()
 
-'''
+"""
 Explanation:
 1. GameManager keeps registered player IDs in a set and stores MatchResult records in a list. Validation prevents results for
    unknown players from entering the system.
@@ -261,4 +255,4 @@ Summary:
 - Use totals plus counts for grouped averages.
 - Be careful with mirrored or duplicated representations of the same real-world event.
 - Prefer explicit timestamps over insertion order when determining the latest event.
-'''
+"""

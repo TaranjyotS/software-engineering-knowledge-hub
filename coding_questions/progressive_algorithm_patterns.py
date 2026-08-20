@@ -1,4 +1,4 @@
-'''Progressive Algorithm Interview Patterns
+"""Progressive Algorithm Interview Patterns
 
 This file collects reusable coding-interview problems where the strongest discussion is not only the final implementation, but the
 progression from a simple correct solution to a better one. Each function is intentionally small enough to explain in a 45–60 minute
@@ -24,22 +24,22 @@ Interview pattern:
 - Introduce the data structure that removes that work.
 - Recalculate complexity.
 - Test normal, empty, duplicate/boundary, and no-solution cases.
-'''
+"""
 
 from __future__ import annotations
 
+import heapq
 from collections import Counter, defaultdict, deque
 from dataclasses import dataclass
-import heapq
 from typing import Iterable, Sequence
 
 
 def two_sum(nums: Sequence[int], target: int) -> list[int]:
-    '''Return indices of two values whose sum equals target, or [] if absent.
+    """Return indices of two values whose sum equals target, or [] if absent.
 
     Expected time O(n), space O(n).
     Invariant: seen[value] stores an index from the already-processed prefix.
-    '''
+    """
     seen: dict[int, int] = {}
 
     for index, value in enumerate(nums):
@@ -52,11 +52,11 @@ def two_sum(nums: Sequence[int], target: int) -> list[int]:
 
 
 def longest_unique_substring(s: str) -> int:
-    '''Return the length of the longest substring with no repeated characters.
+    """Return the length of the longest substring with no repeated characters.
 
     Time O(n), space O(min(n, alphabet_size)).
     Invariant: s[left:right+1] contains no duplicate character.
-    '''
+    """
     last_seen: dict[str, int] = {}
     left = 0
     best = 0
@@ -72,11 +72,11 @@ def longest_unique_substring(s: str) -> int:
 
 
 def top_k_frequent(nums: Iterable[int], k: int) -> list[int]:
-    '''Return up to k most-frequent values, deterministic for frequency ties.
+    """Return up to k most-frequent values, deterministic for frequency ties.
 
     Count phase O(n). Let u be unique values; selection is O(u log k).
     Space O(u + k).
-    '''
+    """
     if k <= 0:
         return []
 
@@ -104,10 +104,10 @@ def top_k_frequent(nums: Iterable[int], k: int) -> list[int]:
 
 
 def merge_intervals(intervals: Sequence[Sequence[int]]) -> list[list[int]]:
-    '''Merge overlapping/touching intervals.
+    """Merge overlapping/touching intervals.
 
     Time O(n log n) for sorting, O(n) scan; result space O(n) worst case.
-    '''
+    """
     if not intervals:
         return []
 
@@ -125,11 +125,11 @@ def merge_intervals(intervals: Sequence[Sequence[int]]) -> list[list[int]]:
 
 
 def subarray_sum_equals_k(nums: Iterable[int], k: int) -> int:
-    '''Count contiguous subarrays whose sum equals k.
+    """Count contiguous subarrays whose sum equals k.
 
     Time O(n), space O(n).
     If current prefix is P, every earlier prefix P-k starts a matching subarray.
-    '''
+    """
     prefix_count = {0: 1}
     prefix = 0
     result = 0
@@ -143,10 +143,10 @@ def subarray_sum_equals_k(nums: Iterable[int], k: int) -> int:
 
 
 def product_except_self(nums: Sequence[int]) -> list[int]:
-    '''Return product of all other values for each position without division.
+    """Return product of all other values for each position without division.
 
     Time O(n). Auxiliary space O(1) excluding the required output array.
-    '''
+    """
     result = [1] * len(nums)
 
     prefix = 1
@@ -163,12 +163,12 @@ def product_except_self(nums: Sequence[int]) -> list[int]:
 
 
 def kth_largest(nums: Iterable[int], k: int) -> int:
-    '''Return the kth-largest value using a size-k min-heap.
+    """Return the kth-largest value using a size-k min-heap.
 
     Time O(n log k), space O(k).
-    '''
+    """
     if k <= 0:
-        raise ValueError('k must be positive')
+        raise ValueError("k must be positive")
 
     heap: list[int] = []
 
@@ -179,17 +179,17 @@ def kth_largest(nums: Iterable[int], k: int) -> int:
             heapq.heapreplace(heap, value)
 
     if len(heap) < k:
-        raise ValueError('k is greater than the number of values')
+        raise ValueError("k is greater than the number of values")
 
     return heap[0]
 
 
 def min_meeting_rooms(intervals: Sequence[Sequence[int]]) -> int:
-    '''Return the minimum rooms needed when intervals are [start, end].
+    """Return the minimum rooms needed when intervals are [start, end].
 
     Time O(n log n), space O(n) worst case.
     Heap stores end times of meetings currently occupying rooms.
-    '''
+    """
     if not intervals:
         return 0
 
@@ -208,10 +208,10 @@ def min_meeting_rooms(intervals: Sequence[Sequence[int]]) -> int:
 
 
 def number_of_islands(grid: Sequence[Sequence[str]]) -> int:
-    '''Count 4-directionally connected components of '1' cells without mutating input.
+    """Count 4-directionally connected components of '1' cells without mutating input.
 
     Time O(rows * cols), space O(rows * cols) worst case.
-    '''
+    """
     if not grid or not grid[0]:
         return 0
 
@@ -222,7 +222,7 @@ def number_of_islands(grid: Sequence[Sequence[str]]) -> int:
 
     for row in range(rows):
         for col in range(cols):
-            if grid[row][col] != '1' or (row, col) in visited:
+            if grid[row][col] != "1" or (row, col) in visited:
                 continue
 
             islands += 1
@@ -238,7 +238,7 @@ def number_of_islands(grid: Sequence[Sequence[str]]) -> int:
 
                     if not (0 <= next_row < rows and 0 <= next_col < cols):
                         continue
-                    if grid[next_row][next_col] != '1':
+                    if grid[next_row][next_col] != "1":
                         continue
                     if (next_row, next_col) in visited:
                         continue
@@ -253,11 +253,11 @@ def can_finish_courses(
     num_courses: int,
     prerequisites: Iterable[tuple[int, int]],
 ) -> bool:
-    '''Return whether a directed prerequisite graph is acyclic using Kahn's algorithm.
+    """Return whether a directed prerequisite graph is acyclic using Kahn's algorithm.
 
     Pair (course, prerequisite) means prerequisite -> course.
     Time O(V + E), space O(V + E).
-    '''
+    """
     graph: dict[int, list[int]] = defaultdict(list)
     indegree = [0] * num_courses
 
@@ -265,11 +265,7 @@ def can_finish_courses(
         graph[prerequisite].append(course)
         indegree[course] += 1
 
-    ready = deque(
-        course
-        for course in range(num_courses)
-        if indegree[course] == 0
-    )
+    ready = deque(course for course in range(num_courses) if indegree[course] == 0)
 
     completed = 0
 
@@ -287,7 +283,7 @@ def can_finish_courses(
 
 @dataclass(frozen=True)
 class FeedItem:
-    '''Newest-first item used by the k-way merge example.'''
+    """Newest-first item used by the k-way merge example."""
 
     item_id: str
     source_id: str
@@ -298,11 +294,11 @@ def merge_newest_streams(
     streams: Sequence[Sequence[FeedItem]],
     limit: int,
 ) -> list[FeedItem]:
-    '''Merge individually newest-first streams and return at most limit items.
+    """Merge individually newest-first streams and return at most limit items.
 
     Let p be the number of non-empty streams and n the number of returned items.
     Heap size is at most p, so merge work is O(n log p) and O(p) heap space.
-    '''
+    """
     if limit <= 0:
         return []
 
@@ -347,9 +343,9 @@ def run_sample_tests() -> None:
     assert two_sum([], 10) == []
     assert two_sum([3, 3], 6) == [0, 1]
 
-    assert longest_unique_substring('abcabcbb') == 3
-    assert longest_unique_substring('bbbbb') == 1
-    assert longest_unique_substring('') == 0
+    assert longest_unique_substring("abcabcbb") == 3
+    assert longest_unique_substring("bbbbb") == 1
+    assert longest_unique_substring("") == 0
 
     assert top_k_frequent([1, 1, 1, 2, 2, 3], 2) == [1, 2]
     assert top_k_frequent([], 2) == []
@@ -375,17 +371,17 @@ def run_sample_tests() -> None:
     except ValueError:
         pass
     else:
-        raise AssertionError('expected ValueError for k > n')
+        raise AssertionError("expected ValueError for k > n")
 
     assert min_meeting_rooms([[0, 30], [5, 10], [15, 20]]) == 2
     assert min_meeting_rooms([[7, 10], [2, 4]]) == 1
     assert min_meeting_rooms([]) == 0
 
     grid = [
-        ['1', '1', '0', '0', '0'],
-        ['1', '1', '0', '0', '0'],
-        ['0', '0', '1', '0', '0'],
-        ['0', '0', '0', '1', '1'],
+        ["1", "1", "0", "0", "0"],
+        ["1", "1", "0", "0", "0"],
+        ["0", "0", "1", "0", "0"],
+        ["0", "0", "0", "1", "1"],
     ]
     assert number_of_islands(grid) == 3
 
@@ -394,29 +390,29 @@ def run_sample_tests() -> None:
 
     streams = [
         [
-            FeedItem('a1', 'A', 130),
-            FeedItem('a2', 'A', 100),
+            FeedItem("a1", "A", 130),
+            FeedItem("a2", "A", 100),
         ],
         [
-            FeedItem('b1', 'B', 125),
-            FeedItem('b2', 'B', 90),
+            FeedItem("b1", "B", 125),
+            FeedItem("b2", "B", 90),
         ],
         [
-            FeedItem('c1', 'C', 120),
-            FeedItem('c2', 'C', 110),
+            FeedItem("c1", "C", 120),
+            FeedItem("c2", "C", 110),
         ],
     ]
     merged = merge_newest_streams(streams, 5)
-    assert [item.item_id for item in merged] == ['a1', 'b1', 'c1', 'c2', 'a2']
+    assert [item.item_id for item in merged] == ["a1", "b1", "c1", "c2", "a2"]
 
-    print('All progressive algorithm pattern sample tests passed.')
+    print("All progressive algorithm pattern sample tests passed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Follow-up discussion prompts:
 
 Two Sum
@@ -456,4 +452,4 @@ K-Way Merge
 - Why not concatenate and sort everything?
 - How would cursor pagination continue from a previous page?
 - What if one stream is extremely hot or slow to fetch?
-'''
+"""

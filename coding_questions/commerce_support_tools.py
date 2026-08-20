@@ -1,4 +1,4 @@
-'''Commerce Support Tools: Database Queries, Refund Rules, Live Stock, and Tool Schemas
+"""Commerce Support Tools: Database Queries, Refund Rules, Live Stock, and Tool Schemas
 
 Build a small tool layer for a customer-support AI agent. The agent must be able to read order details, search a stale product
 catalog, determine refund eligibility, and check live warehouse stock through a command-line integration.
@@ -46,7 +46,7 @@ Complexity:
 Important edge cases include nonexistent orders, orders with no items, NULL and zero prices, mixed-case search, SQL-injection-like
 input, exactly 30 days versus more than 30 days, malformed dates, final-sale items, multiple previous refunds, stock quantity zero,
 warehouse timeout, non-zero process exit, and malformed warehouse output.
-'''
+"""
 
 from __future__ import annotations
 
@@ -57,7 +57,6 @@ import subprocess
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from typing import Any, Callable
-
 
 WAREHOUSE_TIMEOUT_SECONDS = 2
 
@@ -546,7 +545,7 @@ if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Explanation:
 1. SQL values are always passed through placeholders. The query text is controlled by the application, while user-provided search
    strings and IDs are values only.
@@ -561,4 +560,4 @@ Summary:
 - Parameterize SQL and validate external-system output.
 - Treat exact date boundaries and NULL-versus-zero semantics deliberately.
 - Give agents narrow, well-described tools instead of broad database or shell access.
-'''
+"""

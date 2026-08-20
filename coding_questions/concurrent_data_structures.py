@@ -1,4 +1,4 @@
-'''Concurrent Data Structures: LRU, TTL Map, Blocking Queue, and Rate Limiter
+"""Concurrent Data Structures: LRU, TTL Map, Blocking Queue, and Rate Limiter
 
 This file contains runnable interview-style implementations that naturally support senior follow-ups such as:
 - make the structure thread-safe,
@@ -25,41 +25,41 @@ Problems covered:
 Important interview principle:
 Start with the simplest synchronization that proves correctness. If profiling shows contention, discuss sharding/partitioning the state or
 reducing critical-section work rather than prematurely creating complex lock graphs.
-'''
+"""
 
 from __future__ import annotations
 
-from collections import deque
-from dataclasses import dataclass
 import threading
 import time
+from collections import deque
+from dataclasses import dataclass
 from typing import Callable, Generic, TypeVar
 
-K = TypeVar('K')
-V = TypeVar('V')
-T = TypeVar('T')
+K = TypeVar("K")
+V = TypeVar("V")
+T = TypeVar("T")
 
 
 @dataclass
 class _LRUNode(Generic[K, V]):
     key: K | None = None
     value: V | None = None
-    prev: '_LRUNode[K, V] | None' = None
-    next: '_LRUNode[K, V] | None' = None
+    prev: "_LRUNode[K, V] | None" = None
+    next: "_LRUNode[K, V] | None" = None
 
 
 class ThreadSafeLRUCache(Generic[K, V]):
-    '''O(1) get/put LRU cache protected by one coarse-grained lock.
+    """O(1) get/put LRU cache protected by one coarse-grained lock.
 
     Invariant:
     - _nodes contains every live data node exactly once.
     - The doubly linked list contains the same live nodes between sentinels.
     - left.next is least-recently used; right.prev is most-recently used.
-    '''
+    """
 
     def __init__(self, capacity: int) -> None:
         if capacity <= 0:
-            raise ValueError('capacity must be positive')
+            raise ValueError("capacity must be positive")
 
         self.capacity = capacity
         self._nodes: dict[K, _LRUNode[K, V]] = {}
@@ -119,7 +119,7 @@ class ThreadSafeLRUCache(Generic[K, V]):
             del self._nodes[lru.key]
 
     def snapshot_lru_to_mru(self) -> list[tuple[K, V]]:
-        '''Return a test/debug snapshot while holding the same invariant lock.'''
+        """Return a test/debug snapshot while holding the same invariant lock."""
         with self._lock:
             result: list[tuple[K, V]] = []
             node = self._left.next
@@ -133,11 +133,11 @@ class ThreadSafeLRUCache(Generic[K, V]):
 
 
 class ExpiringMap(Generic[K, V]):
-    '''Fixed-TTL map with lazy cleanup using a deque ordered by expiration time.
+    """Fixed-TTL map with lazy cleanup using a deque ordered by expiration time.
 
     put/get are protected by one lock because cleanup and map mutation must remain atomic relative to one another.
     A fake clock can be injected for deterministic tests.
-    '''
+    """
 
     def __init__(
         self,
@@ -146,7 +146,7 @@ class ExpiringMap(Generic[K, V]):
         clock: Callable[[], float] = time.monotonic,
     ) -> None:
         if ttl_seconds <= 0:
-            raise ValueError('ttl_seconds must be positive')
+            raise ValueError("ttl_seconds must be positive")
 
         self.ttl_seconds = ttl_seconds
         self._clock = clock
@@ -196,17 +196,17 @@ class ExpiringMap(Generic[K, V]):
 
 
 class BoundedBlockingQueue(Generic[T]):
-    '''Blocking FIFO queue implemented with conditions.
+    """Blocking FIFO queue implemented with conditions.
 
     - put waits while full.
     - take waits while empty.
     - while loops re-check predicates after wakeup.
     - deque gives O(1) append and popleft.
-    '''
+    """
 
     def __init__(self, capacity: int) -> None:
         if capacity <= 0:
-            raise ValueError('capacity must be positive')
+            raise ValueError("capacity must be positive")
 
         self.capacity = capacity
         self._queue: deque[T] = deque()
@@ -237,15 +237,15 @@ class BoundedBlockingQueue(Generic[T]):
 
 
 class FixedWindowRateLimiter(Generic[K]):
-    '''Thread-safe fixed-window limiter.
+    """Thread-safe fixed-window limiter.
 
     allow(key, now) is O(1) expected and stores O(number_of_active_keys) state.
     This deliberately exposes the fixed-window boundary-burst trade-off for discussion.
-    '''
+    """
 
     def __init__(self, limit: int, window_seconds: float) -> None:
         if limit <= 0 or window_seconds <= 0:
-            raise ValueError('limit and window_seconds must be positive')
+            raise ValueError("limit and window_seconds must be positive")
 
         self.limit = limit
         self.window_seconds = window_seconds
@@ -283,22 +283,22 @@ class _FakeClock:
 
 def _test_lru() -> None:
     cache: ThreadSafeLRUCache[str, int] = ThreadSafeLRUCache(2)
-    cache.put('a', 1)
-    cache.put('b', 2)
-    assert cache.get('a') == 1  # a becomes MRU
-    cache.put('c', 3)          # b should be evicted
-    assert cache.get('b') is None
-    assert cache.get('c') == 3
-    assert cache.snapshot_lru_to_mru() == [('a', 1), ('c', 3)]
+    cache.put("a", 1)
+    cache.put("b", 2)
+    assert cache.get("a") == 1  # a becomes MRU
+    cache.put("c", 3)  # b should be evicted
+    assert cache.get("b") is None
+    assert cache.get("c") == 3
+    assert cache.snapshot_lru_to_mru() == [("a", 1), ("c", 3)]
 
     # Multiple threads repeatedly mutate the same logical structure. The test
     # asserts structural capacity/integrity rather than relying on a race to fail.
     def writer(prefix: str) -> None:
         for index in range(200):
-            cache.put(f'{prefix}-{index}', index)
-            cache.get(f'{prefix}-{index}')
+            cache.put(f"{prefix}-{index}", index)
+            cache.get(f"{prefix}-{index}")
 
-    threads = [threading.Thread(target=writer, args=(f't{n}',)) for n in range(4)]
+    threads = [threading.Thread(target=writer, args=(f"t{n}",)) for n in range(4)]
     for thread in threads:
         thread.start()
     for thread in threads:
@@ -313,15 +313,15 @@ def _test_expiring_map() -> None:
     clock = _FakeClock()
     cache: ExpiringMap[str, int] = ExpiringMap(10, clock=clock)
 
-    cache.put('a', 1)            # expires at 10
+    cache.put("a", 1)  # expires at 10
     clock.advance(5)
-    cache.put('a', 2)            # expires at 15; old metadata remains in deque
+    cache.put("a", 2)  # expires at 15; old metadata remains in deque
 
-    clock.advance(5)             # time 10
-    assert cache.get('a') == 2   # stale expiry 10 must not delete newer value
+    clock.advance(5)  # time 10
+    assert cache.get("a") == 2  # stale expiry 10 must not delete newer value
 
-    clock.advance(5)             # time 15
-    assert cache.get('a') is None
+    clock.advance(5)  # time 15
+    assert cache.get("a") is None
     assert len(cache) == 0
 
 
@@ -358,16 +358,16 @@ def _test_fixed_window_rate_limiter() -> None:
         window_seconds=60,
     )
 
-    assert limiter.allow('user-1', 0)
-    assert limiter.allow('user-1', 10)
-    assert limiter.allow('user-1', 20)
-    assert not limiter.allow('user-1', 30)
+    assert limiter.allow("user-1", 0)
+    assert limiter.allow("user-1", 10)
+    assert limiter.allow("user-1", 20)
+    assert not limiter.allow("user-1", 30)
 
     # New time bucket resets the count.
-    assert limiter.allow('user-1', 60)
+    assert limiter.allow("user-1", 60)
 
     # Independent keys have independent state.
-    assert limiter.allow('user-2', 30)
+    assert limiter.allow("user-2", 30)
 
 
 def run_sample_tests() -> None:
@@ -375,14 +375,14 @@ def run_sample_tests() -> None:
     _test_expiring_map()
     _test_blocking_queue()
     _test_fixed_window_rate_limiter()
-    print('All concurrent data structure sample tests passed.')
+    print("All concurrent data structure sample tests passed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run_sample_tests()
 
 
-'''
+"""
 Interview follow-ups:
 
 ThreadSafeLRUCache
@@ -409,4 +409,4 @@ FixedWindowRateLimiter
 - How do you reduce lock contention? Partition locks/state by key.
 - How do you enforce one global limit across many API servers? Use an atomic shared/partitioned store or allocate approximate local token budgets from
   a global quota; local process counters alone are not globally correct.
-'''
+"""

@@ -1,18 +1,18 @@
-'''Weekly deployment window problem.
+"""Weekly deployment window problem.
 
-We deploy services throughout the week, but deployments are only allowed during scheduled deployment windows and must be 
-blocked during freeze windows. Time is represented as minute_of_week from 0 to 10079, where 0 is Monday 00:00 and 10079 is 
+We deploy services throughout the week, but deployments are only allowed during scheduled deployment windows and must be
+blocked during freeze windows. Time is represented as minute_of_week from 0 to 10079, where 0 is Monday 00:00 and 10079 is
 Sunday 23:59. Each window is half-open, meaning [start, end) includes start but excludes end.
-For Part 1, each CSV row is start,end,type, where type is either allowed or freeze. A minute is deployable only if it falls 
-inside at least one allowed window and inside no freeze windows. Return the sorted list of continuous deployable intervals 
+For Part 1, each CSV row is start,end,type, where type is either allowed or freeze. A minute is deployable only if it falls
+inside at least one allowed window and inside no freeze windows. Return the sorted list of continuous deployable intervals
 as a 2D integer array.
-In Part 2, deployment windows may come from teams in different time zones, so each CSV row becomes start, end, type, 
-timezone_offset_minutes, where start and end are local minute_of_week values. Convert each row to UTC using 
-utc = local - timezone_offset_minutes, then compute deployable windows using the same rule: inside at least one allowed window 
-and zero freeze windows. The first input row gives utc_now,lead_time_minutes,min_continuous_minutes,k. A valid deployment start 
-must be at or after utc_now + lead_time_minutes, must remain continuously deployable for at least min_continuous_minutes, and 
+In Part 2, deployment windows may come from teams in different time zones, so each CSV row becomes start, end, type,
+timezone_offset_minutes, where start and end are local minute_of_week values. Convert each row to UTC using
+utc = local - timezone_offset_minutes, then compute deployable windows using the same rule: inside at least one allowed window
+and zero freeze windows. The first input row gives utc_now,lead_time_minutes,min_continuous_minutes,k. A valid deployment start
+must be at or after utc_now + lead_time_minutes, must remain continuously deployable for at least min_continuous_minutes, and
 must not go beyond the end of the week. Return the next k valid deployable UTC intervals, or fewer if not enough exist.
-'''
+"""
 
 import os
 
@@ -163,7 +163,7 @@ def solve_part2(inputCsv):
     allowed = []
     frozen = []
 
-    for row in inputCsv[config_index + 1:]:
+    for row in inputCsv[config_index + 1 :]:
         cols = parse(row)
 
         if len(cols) < 4:
@@ -237,7 +237,7 @@ if __name__ == "__main__":
 
     fptr.close()
 
-'''
+"""
 Explanation:
 1. Weekly intervals are represented as half-open ranges [start, end). Any interval that wraps across the end of the week is
    split into two non-wrapping intervals so the rest of the algorithm can use ordinary range processing.
@@ -251,4 +251,4 @@ Summary:
 - Difference arrays make overlapping allowed/freeze windows easy to aggregate over a fixed-size week.
 - Convert all time-zone inputs to one common time base before applying scheduling rules.
 - Half-open interval semantics avoid double counting at shared boundaries.
-'''
+"""

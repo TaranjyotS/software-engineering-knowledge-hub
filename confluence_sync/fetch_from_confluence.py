@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
 import json
 import os
 import re
@@ -12,7 +8,10 @@ from typing import Dict, Tuple
 
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 from markdownify import markdownify as md
+
+load_dotenv()
 
 CONFLUENCE_API_URL = os.getenv("CONFLUENCE_API_URL", "").rstrip("/")
 CONFLUENCE_USER = os.getenv("CONFLUENCE_USER", "")
@@ -46,7 +45,9 @@ def local_title_to_filename() -> Dict[str, str]:
     mapping: Dict[str, str] = {}
     for md_file in OUT_DIR.glob("*.md"):
         text = md_file.read_text(encoding="utf-8", errors="ignore")
-        first_h1 = next((line[2:].strip() for line in text.splitlines() if line.startswith("# ")), None)
+        first_h1 = next(
+            (line[2:].strip() for line in text.splitlines() if line.startswith("# ")), None
+        )
         if first_h1:
             mapping[first_h1.strip().lower()] = md_file.name
     return mapping
@@ -83,7 +84,9 @@ def export_all() -> None:
         try:
             clean_title, html = get_page_html(page_id)
             markdown = convert_html_to_md(html).strip()
-            file_name = title_file_map.get(clean_title.strip().lower()) or title_file_map.get(title.strip().lower())
+            file_name = title_file_map.get(clean_title.strip().lower()) or title_file_map.get(
+                title.strip().lower()
+            )
             if not file_name:
                 file_name = f"{slugify_title(clean_title or title)}.md"
 

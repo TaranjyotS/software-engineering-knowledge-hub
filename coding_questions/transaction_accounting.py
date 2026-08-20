@@ -1,4 +1,4 @@
-'''Transaction Accounting and Fee Rules
+"""Transaction Accounting and Fee Rules
 
 Build a transaction manager that stores deposits and withdrawals for multiple accounts and supports balance calculation,
 per-account average transaction amounts, and a chronological fee policy.
@@ -26,7 +26,7 @@ Complexity:
 
 Important edge cases include a missing account, exactly three transactions, multiple interleaved accounts, out-of-order input,
 only deposits or only withdrawals, and negative input amounts when calculating absolute averages.
-'''
+"""
 
 from __future__ import annotations
 
@@ -81,10 +81,7 @@ class TransactionManager:
             totals[account_id] = totals.get(account_id, 0.0) + abs(transaction.amount)
             counts[account_id] = counts.get(account_id, 0) + 1
 
-        return {
-            account_id: totals[account_id] / counts[account_id]
-            for account_id in totals
-        }
+        return {account_id: totals[account_id] / counts[account_id] for account_id in totals}
 
     def get_transaction_fees(self) -> dict[str, float]:
         """Calculate fees chronologically and independently per account."""
@@ -140,7 +137,7 @@ def run_sample_tests() -> None:
 if __name__ == "__main__":
     run_sample_tests()
 
-'''
+"""
 Explanation:
 1. get_balance applies direction based on TransactionType: deposits are added and withdrawals are subtracted.
 2. get_average_transaction_amount_by_account uses two dictionaries, totals and counts, and adds abs(amount) for every
@@ -154,4 +151,4 @@ Summary:
 - When a business rule depends on event order, process events chronologically.
 - Maintain counters independently per account instead of using one global transaction count.
 - Initialize result state before branches that may continue or skip processing.
-'''
+"""

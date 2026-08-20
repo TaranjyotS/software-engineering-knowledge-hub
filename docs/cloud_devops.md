@@ -28,6 +28,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 ### 7. AWS, CI/CD, Docker & Kubernetes
+
 #### 7.1 AWS deployment methods
 
 |      Service      |              Use Case               |
@@ -143,6 +144,7 @@ Key concepts:
 ---
 
 ### 16. Git / Version Control
+
 #### 16.1 Typical Git Workflow
 
 ```bash
@@ -170,7 +172,9 @@ git push origin feature/agent-api
 ---
 
 ### 17. Cloud / AWS Topics
+
 #### 17.1 EC2 vs Lambda
+
 ##### When to Use EC2
 
 Use EC2 when you need:
@@ -232,6 +236,7 @@ For scaling a backend/AI application:
 ---
 
 ### 18. Kubernetes / Docker Topics
+
 #### 18.1 What Is Kubernetes?
 
 > "Kubernetes is a container orchestration platform used to deploy, manage, scale, and monitor containerized applications. It automates deployment, scaling, load balancing, self-healing, and rolling updates."
@@ -284,6 +289,7 @@ Kubernetes does not require the Docker Engine runtime. Modern clusters commonly 
 ---
 
 ### 20. Azure / Terraform Deployment Question
+
 #### 20.1 Client Question
 
 > "I need to know Azure/Terraform experience — how did you deploy?"
@@ -348,6 +354,7 @@ resource "azurerm_storage_account" "app_storage" {
 ---
 
 ### 12. CI/CD, Git, and Engineering Workflow
+
 #### Topics to revise
 
 - Git branching.
@@ -376,6 +383,7 @@ resource "azurerm_storage_account" "app_storage" {
 ```
 
 #### Common interview question
+
 ##### What should a good CI/CD pipeline include?
 
 **Answer:**
@@ -385,6 +393,7 @@ A good CI/CD pipeline should automatically run linting, formatting checks, type 
 ---
 
 ### 13. Docker, Containers, Kubernetes, and Cloud
+
 #### Docker topics
 
 - Dockerfile basics.
@@ -443,7 +452,9 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ---
 
 ### 7. Cloud, AWS, Kubernetes, and GenAI Deployment
+
 #### 7.1 Deploying GenAI applications on cloud/Kubernetes
+
 ##### Typical architecture
 
 ```text
@@ -465,6 +476,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.2 Kubernetes deployment components
+
 ##### Common manifests
 
 - Deployment.
@@ -487,6 +499,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.3 AWS stack for backend/GenAI apps
+
 ##### Common services
 
 - EKS/ECS for compute.
@@ -502,6 +515,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.4 Choosing DynamoDB vs RDS for idempotency
+
 ##### DynamoDB advantages
 
 - Low-latency key-value access.
@@ -522,6 +536,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.5 Securing AWS order-create endpoint
+
 ##### Security layers
 
 - OAuth2/OIDC JWT validation.
@@ -537,6 +552,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 #### 7.6 Autoscaling compute while protecting RDS
+
 ##### Compute scaling metrics
 
 - CPU.
@@ -557,7 +573,9 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 ---
 
 ### 8. Docker, Git, and CI/CD
+
 #### 8.1 Starting and creating Docker containers
+
 ##### Basic command
 
 ```bash
@@ -600,6 +618,7 @@ docker image inspect <image_name> --format='{{.Size}}'
 ---
 
 #### 8.3 Debugging a crashing Docker container
+
 ##### Commands
 
 ```bash
@@ -624,6 +643,7 @@ docker exec -it <container_id> sh
 ---
 
 #### 8.4 Dockerized CI/CD pipeline
+
 ##### Pipeline flow
 
 ```text
@@ -650,6 +670,7 @@ kubectl rollout undo deployment/app
 ---
 
 #### 8.5 Git: remove file from last commit before push
+
 ##### Keep file locally but remove from commit
 
 ```bash
@@ -668,6 +689,7 @@ git commit --amend
 ---
 
 #### 8.6 Git: remove experimental files from commit history
+
 ##### If only last commit
 
 ```bash
@@ -687,6 +709,7 @@ Then edit commits and remove unwanted files.
 ---
 
 #### 8.7 Git: reconciling long-lived branches after restructuring
+
 ##### Safe process
 
 1. Create backup branch.
@@ -714,6 +737,7 @@ git cherry-pick <commit_hash>
 ---
 
 #### AWS Services
+
 ##### Interview Question
 
 **What AWS services have you worked with or would use?**
@@ -735,6 +759,7 @@ git cherry-pick <commit_hash>
 ---
 
 #### EC2 vs Lambda
+
 ##### Interview Question
 
 **What is the difference between EC2 and Lambda?**
@@ -751,6 +776,7 @@ git cherry-pick <commit_hash>
 ---
 
 #### Docker
+
 ##### Interview Question
 
 **What is Docker and why use it?**
@@ -778,6 +804,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 ---
 
 #### Kubernetes
+
 ##### Interview Question
 
 **What is Kubernetes used for?**
@@ -799,6 +826,7 @@ Kubernetes is used to orchestrate containers at scale.
 ---
 
 #### CI/CD
+
 ##### Interview Question
 
 **What is CI/CD?**
@@ -828,6 +856,7 @@ Code push
 ---
 
 #### Production Monitoring
+
 ##### Interview Question
 
 **What would you monitor in production?**
@@ -862,6 +891,7 @@ Monitor both application and infrastructure health.
 ---
 
 ### 10. Docker & Containerization
+
 #### Likely Questions
 
 - What is Docker?
@@ -946,6 +976,7 @@ services:
 ---
 
 ### 11. Kubernetes & Deployment Basics
+
 #### Likely Questions
 
 - What is Kubernetes?
@@ -1019,6 +1050,7 @@ spec:
 ---
 
 ### 12. CI/CD
+
 #### Likely Questions
 
 - What is CI/CD?
@@ -1109,6 +1141,7 @@ jobs:
 ---
 
 ### 13. Cloud Platforms
+
 #### Likely Questions
 
 - What cloud services have you used?
@@ -1495,6 +1528,87 @@ Strong answer:
 
 ---
 
+### Secure CI/CD Authentication to AWS and EC2
+
+Separate two questions:
+
+```text
+1. How does CI/CD authenticate to AWS APIs?
+2. How does the deployment mechanism reach/manage an EC2 host?
+```
+
+#### CI/CD → AWS: prefer temporary role credentials
+
+Preferred pattern for hosted CI systems such as GitHub Actions:
+
+```text
+CI job
+  ↓ OIDC identity token
+AWS IAM trust policy
+  ↓ AssumeRoleWithWebIdentity
+AWS STS temporary credentials
+  ↓
+ECR / EC2 / S3 / SSM / deployment APIs
+```
+
+This avoids long-lived access keys in repository secrets.
+
+Example GitHub Actions shape:
+
+```yaml
+permissions:
+  id-token: write
+  contents: read
+
+steps:
+  - uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: arn:aws:iam::123456789012:role/deploy-role
+      aws-region: us-east-1
+
+  - run: aws sts get-caller-identity
+```
+
+The IAM role should have only the deployment permissions the pipeline actually needs.
+
+For Jenkins, strong options are:
+
+- Run Jenkins on AWS compute with an attached IAM role/instance profile where appropriate.
+- Use an identity-federation/role-assumption setup that produces temporary STS credentials.
+- If static credentials are unavoidable in an older environment, keep them in Jenkins Credentials/secret storage, rotate them, scope them narrowly, and treat migration to short-lived credentials as the preferred direction.
+
+#### CI/CD → EC2 host
+
+Prefer AWS Systems Manager (SSM) for host management when the environment supports it:
+
+```text
+CI/CD with IAM permission
+      ↓
+AWS Systems Manager
+      ↓
+EC2 instance with SSM agent + instance role
+```
+
+This can avoid opening SSH broadly or distributing private keys. If SSH is required, store the private key in a secure credential store, restrict network access/security groups, verify host keys, and rotate credentials.
+
+#### EC2 workload → AWS services
+
+The application running on EC2 should normally use an **instance profile/IAM role**, not embedded `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` values.
+
+```text
+EC2 application
+   ↓ instance metadata / role credentials
+STS-managed temporary credentials
+   ↓
+S3 / SQS / Secrets Manager / other allowed AWS APIs
+```
+
+Interview answer:
+
+> I separate pipeline identity from instance identity. The CI/CD job assumes a least-privilege IAM role and receives temporary STS credentials—OIDC is preferred for hosted CI. For managing EC2 I prefer Systems Manager when possible rather than distributing SSH keys. The EC2 workload itself gets an instance profile so application code does not contain long-lived AWS credentials.
+
+---
+
 ### Deployment to AWS: Reusable Flow
 
 One common containerized deployment pattern:
@@ -1607,6 +1721,8 @@ Pod vs K8s Service vs logical application service
 Liveness vs readiness
 Stateless horizontal scaling
 Autoscale on real bottleneck signal
+CI/CD → AWS: OIDC/role assumption/STS temporary credentials
+EC2 management: prefer SSM; EC2 workload uses instance profile
 Compatibility matrix for multi-product releases
 Staged/canary/rollback strategy
 ```

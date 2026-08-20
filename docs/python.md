@@ -40,6 +40,7 @@ This file has been refreshed to keep the original repository topic while merging
 ---
 
 ### 4. Python Internals & Concurrency
+
 #### 4.1 Python GIL
 
 **Interview answer:**
@@ -150,6 +151,7 @@ For API or LLM failures:
 ---
 
 ### 15. Python Topics
+
 #### 15.1 Why Use Generators in AI Pipelines?
 
 > "Generators help process large datasets efficiently by producing one item at a time instead of loading everything into memory."
@@ -303,7 +305,9 @@ A decorator wraps a function to add reusable behavior such as logging, timing, a
 ---
 
 ### 1. Python Fundamentals
+
 #### 1.1 What is the difference between a tuple and a set?
+
 ##### Interview Answer
 
 A **tuple** is an ordered, immutable collection that allows duplicates.
@@ -346,6 +350,7 @@ The set removes duplicates and does not guarantee insertion order.
 ---
 
 #### 1.2 Write a list comprehension to find squares from 1 to 5
+
 ##### Code
 
 ```python
@@ -369,7 +374,9 @@ print(squares)
 ---
 
 ### 2. Python Operators & Expressions
+
 #### 2.1 What is the output of `2**3**2`?
+
 ##### Code
 
 ```python
@@ -408,6 +415,7 @@ Step-by-step:
 ---
 
 #### 2.2 What is the output of `a | b` when `a = 4` and `b = 11`?
+
 ##### Code
 
 ```python
@@ -448,7 +456,9 @@ Binary `1111` equals decimal `15`.
 ---
 
 ### 3. Lists, Tuples, and Sets
+
 #### 3.1 What does `seta ^ setb` mean?
+
 ##### Answer
 
 `^` between two sets means **symmetric difference**.
@@ -484,6 +494,7 @@ Equivalent expression:
 ---
 
 #### 3.2 Different ways to join two lists
+
 ##### Method 1: Using `+`
 
 ```python
@@ -589,6 +600,7 @@ Output:
 ---
 
 #### 3.3 Difference between `append()` and `extend()`
+
 ##### `append()`
 
 Adds the entire object as one element.
@@ -645,6 +657,7 @@ for item in list2:
 ---
 
 #### 3.4 What happens when we multiply a list by 2?
+
 ##### Example
 
 ```python
@@ -666,6 +679,7 @@ Output:
 ---
 
 #### 3.5 Character list multiplication
+
 ##### Example
 
 ```python
@@ -724,7 +738,9 @@ Output:
 ---
 
 ### 4. Python Functions, Decorators, and Generators
+
 #### 4.1 What are decorators in Python?
+
 ##### Interview Answer
 
 A decorator is a function that modifies or extends the behavior of another function without changing its source code.
@@ -837,6 +853,7 @@ It tells FastAPI:
 ---
 
 #### 4.2 What is a generator in Python?
+
 ##### Interview Answer
 
 A generator is a special function that returns values one at a time using `yield`, instead of returning all values at once.
@@ -904,6 +921,7 @@ The values are generated one by one.
 ---
 
 #### 4.4 When should we use `yield` and when should we use `return`?
+
 ##### Use `return` when:
 
 - The dataset is small.
@@ -969,7 +987,9 @@ This generates values on demand.
 ---
 
 ### 5. Exception Handling
+
 #### 5.1 When does the `finally` block execute?
+
 ##### Answer
 
 The `finally` block is executed **always**, whether an exception occurs or not.
@@ -1070,7 +1090,9 @@ Even if reading fails, the file is closed.
 ---
 
 ### 6. Concurrency in Python
+
 #### 6.1 What is the GIL?
+
 ##### Answer
 
 GIL stands for **Global Interpreter Lock**.
@@ -1399,7 +1421,9 @@ WHERE rn = 1;
 ---
 
 ### 10. Python Core Concepts
+
 #### 10.1 Threading, multiprocessing, asyncio, and GIL
+
 ##### GIL
 
 The Global Interpreter Lock allows only one thread to execute Python bytecode at a time in CPython.
@@ -1450,6 +1474,7 @@ asyncio.run(fetch())
 ---
 
 #### 10.2 Mutable vs immutable objects
+
 ##### Mutable
 
 Can be changed after creation.
@@ -1475,6 +1500,7 @@ Examples:
 ---
 
 #### 10.3 List vs tuple
+
 ##### List
 
 - Mutable.
@@ -1583,6 +1609,7 @@ class Example:
 ---
 
 #### 10.7 Decorators and custom decorators
+
 ##### Simple decorator
 
 ```python
@@ -1629,6 +1656,7 @@ Output:
 ---
 
 #### 10.9 `==` vs `is`
+
 ##### `==`
 
 Checks value equality.
@@ -1682,6 +1710,7 @@ def test():
 ---
 
 #### 10.11 Mutable default argument bug
+
 ##### Bad
 
 ```python
@@ -1707,6 +1736,7 @@ Default arguments are evaluated once when the function is defined.
 ---
 
 #### 10.12 Lists, sets, and dicts for membership/deduplication
+
 ##### List
 
 - Ordered.
@@ -1738,7 +1768,9 @@ for item in items:
 ---
 
 ### 11. Python Coding Problems and Algorithms
+
 #### 11.1 Longest substring without repeating characters
+
 ##### Sliding window solution
 
 ```python
@@ -1771,6 +1803,7 @@ print(longest_substring("abcabcbb"))  # abc
 ---
 
 #### 11.2 Minimum window substring without Counter
+
 ##### Problem
 
 Find the smallest substring in `s` containing all characters of `t`, including duplicates.
@@ -1819,6 +1852,7 @@ print(min_window_substring("ADOBECODEBANC", "ABC"))  # BANC
 ---
 
 #### 11.3 Kth largest element using Quickselect
+
 ##### Idea
 
 Convert kth largest to `(n-k)`th smallest.
@@ -1894,6 +1928,7 @@ Use `int(a / b)` instead of `a // b` when truncation toward zero is required.
 ---
 
 #### 11.5 Combination calculation with memoization
+
 ##### Problem
 
 Naive recursion recalculates same subproblems.
@@ -1938,6 +1973,7 @@ def is_even(number):
 ---
 
 #### 11.7 Merge dictionaries
+
 ##### Original issue
 
 Mutating `dict1` may cause side effects.
@@ -1963,6 +1999,7 @@ Overlapping keys from `dict2` overwrite `dict1`.
 ---
 
 #### 11.8 Print queue / priority order without heapq
+
 ##### Problem summary
 
 Jobs are printed by highest priority. If same priority, preserve original order.
@@ -2003,6 +2040,7 @@ Python is likely to come up because it is central to AI/ML, backend development,
 ---
 
 #### Python GIL
+
 ##### Interview Question
 
 **What is the Python GIL?**
@@ -2032,6 +2070,7 @@ The GIL prevents multiple native Python threads from executing Python bytecode s
 ---
 
 #### Threading vs Multiprocessing vs AsyncIO
+
 ##### Interview Question
 
 **When would you use threading, multiprocessing, or AsyncIO?**
@@ -2115,6 +2154,7 @@ asyncio.run(main())
 ---
 
 #### Decorators
+
 ##### Interview Question
 
 **What is a decorator in Python?**
@@ -2163,6 +2203,7 @@ Mention `functools.wraps` because it preserves the original function's metadata.
 ---
 
 #### Generators
+
 ##### Interview Question
 
 **What is a generator in Python?**
@@ -2200,6 +2241,7 @@ for row in read_large_file("data.txt"):
 ---
 
 #### Try, Except, Finally
+
 ##### Interview Question
 
 **When does the finally block execute?**
@@ -2232,6 +2274,7 @@ Even if there is a `return` inside `try` or `except`, `finally` usually still ex
 ---
 
 #### Python Memory and Performance
+
 ##### Interview Question
 
 **How would you improve Python performance?**
@@ -2265,6 +2308,7 @@ print(fibonacci(35))
 ---
 
 ### 4. Python Engineering
+
 #### Likely Questions
 
 - How strong is your Python experience?
@@ -2373,6 +2417,7 @@ A generator is useful when:
 ---
 
 #### Python GIL
+
 ##### Question
 
 What is the Global Interpreter Lock?
@@ -2415,6 +2460,84 @@ async def main():
 
 asyncio.run(main())
 ```
+
+### Fan-Out / Fan-In I/O Aggregation
+
+A common backend/dashboard problem is:
+
+```text
+request arrives
+   ↓
+start several independent I/O operations
+   ↓
+wait until the required operations finish
+   ↓
+combine results
+   ↓
+build one response/dashboard
+```
+
+If seven independent calls each take roughly one second, running them sequentially can take roughly seven seconds. Concurrent execution is closer to the duration of the slowest required call, plus aggregation overhead.
+
+#### Async-compatible I/O: `asyncio.gather()`
+
+```python
+import asyncio
+
+
+async def fetch_source(name: str) -> dict[str, str]:
+    await asyncio.sleep(1)  # stand-in for async network/database I/O
+    return {name: f"data_from_{name}"}
+
+
+async def build_dashboard() -> dict[str, str]:
+    tasks = [fetch_source(f"source_{i}") for i in range(1, 8)]
+    results = await asyncio.gather(*tasks)
+
+    combined: dict[str, str] = {}
+    for result in results:
+        combined.update(result)
+    return combined
+```
+
+Use this when the underlying clients are async-compatible. `asyncio.gather()` is a fan-out/fan-in primitive: schedule independent work, await the group, then aggregate.
+
+If partial results are acceptable, failure policy must be explicit rather than accidental:
+
+```python
+results = await asyncio.gather(*tasks, return_exceptions=True)
+successful = [result for result in results if not isinstance(result, Exception)]
+```
+
+For stricter structured concurrency, modern Python also provides `asyncio.TaskGroup`; failure of one child task can cancel sibling tasks according to the task-group semantics.
+
+#### Blocking I/O: `ThreadPoolExecutor`
+
+When the libraries are synchronous/blocking, a thread pool is often the cleanest adapter:
+
+```python
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
+def fetch_source(name: str) -> dict[str, str]:
+    # stand-in for a blocking API/DB/file call
+    return {name: f"data_from_{name}"}
+
+
+sources = [f"source_{i}" for i in range(1, 8)]
+results: list[dict[str, str]] = []
+
+with ThreadPoolExecutor(max_workers=7) as executor:
+    futures = [executor.submit(fetch_source, source) for source in sources]
+    for future in as_completed(futures):
+        results.append(future.result())
+```
+
+Interview explanation:
+
+> If the operations are independent and I/O-bound, I would fan them out concurrently, wait for the required results, then fan them back in through an aggregation step. I would use `asyncio` when the libraries are async-native and a bounded thread pool when they are blocking. For production I would also define timeouts, partial-failure behavior, concurrency limits, and downstream rate-limit protection.
+
+Important nuance: threads/async tasks provide **concurrency** for I/O. Calling this "parallel" is common conversationally, but CPU-bound Python parallelism generally requires processes or native code that releases the GIL.
 
 ---
 
@@ -3463,6 +3586,8 @@ Coarse vs fine-grained locking
 Lock sharding
 GIL limits vs logical thread safety
 Threads vs processes vs asyncio
+Fan-out/fan-in: gather async I/O, thread pool for blocking I/O
+Timeouts + partial-failure policy for aggregated calls
 Optimistic vs pessimistic concurrency
 Leases/heartbeats for distributed ownership
 ```

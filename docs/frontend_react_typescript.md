@@ -28,6 +28,7 @@ This is a new topic file created because the attached repository files did not h
 ---
 
 ### 11. ReactJS Interview Topics
+
 #### 11.1 What Is React?
 
 > "React is a JavaScript library for building user interfaces using reusable components. It allows developers to manage UI state efficiently and build dynamic frontend applications."
@@ -137,6 +138,7 @@ const filteredUsers = useMemo(() => {
 ---
 
 ### 12. TypeScript Interview Topics
+
 #### 12.1 Why Use TypeScript?
 
 > "TypeScript adds static typing to JavaScript, helping catch errors earlier, improve maintainability, and provide better IDE support."
@@ -201,6 +203,7 @@ async function askAgent(question: string): Promise<AgentResponse> {
 ---
 
 ### 15. Full-Stack / Product Engineering
+
 #### Likely Questions
 
 - Have you owned features end-to-end?

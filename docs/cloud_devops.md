@@ -25,127 +25,9 @@ This is a new topic file created because the attached repository files did not h
 
 > AWS, Azure, Terraform, Docker, Kubernetes, Git, CI/CD pipelines, deployment patterns, infrastructure, containers, and cloud architecture.
 
----
+### 1. Git / Version Control
 
-### 7. AWS, CI/CD, Docker & Kubernetes
-
-#### 7.1 AWS deployment methods
-
-|      Service      |              Use Case               |
-| ----------------- | ----------------------------------- |
-| EC2               | Full control over VM deployment     |
-| ECS               | Managed Docker containers           |
-| EKS               | Managed Kubernetes                  |
-| Lambda            | Serverless event-driven functions   |
-| Elastic Beanstalk | Simple app deployment               |
-| App Runner        | Simple containerized app deployment |
-| SageMaker         | ML training and model endpoints     |
-
----
-
-#### 7.2 FastAPI deployment on AWS
-
-```text
-Developer
-   ↓
-GitHub
-   ↓
-CI/CD Pipeline
-   ↓
-Run tests
-   ↓
-Build Docker image
-   ↓
-Push to Amazon ECR
-   ↓
-Deploy to EC2/ECS/EKS
-   ↓
-Load Balancer
-   ↓
-Users
-```
-
-**Interview answer:**
-
-> I would containerize the FastAPI application using Docker, push the image to Amazon ECR, and deploy it on EC2, ECS, or EKS depending on scale. I would use Jenkins or GitHub Actions for CI/CD, place an Application Load Balancer in front, store secrets in AWS Secrets Manager, and monitor using CloudWatch or Prometheus/Grafana.
-
----
-
-#### 7.3 CI/CD
-
-**Interview answer:**
-
-> CI/CD automates software delivery. Continuous Integration ensures each code change is built, tested, and validated before merge. Continuous Deployment automates releasing validated changes to environments. A good pipeline includes linting, unit tests, integration tests, security scans, Docker image builds, deployment, smoke tests, and rollback capability.
-
-##### CI/CD flow
-
-```text
-Git Push
-   ↓
-Lint + Unit Tests
-   ↓
-Integration Tests
-   ↓
-Security Scan
-   ↓
-Build Docker Image
-   ↓
-Push Image
-   ↓
-Deploy
-   ↓
-Smoke Test
-   ↓
-Monitor
-```
-
----
-
-#### 7.4 Docker
-
-**Interview answer:**
-
-> Docker packages an application and all dependencies into a portable container so it runs consistently across development, testing, and production environments.
-
-##### Simple Dockerfile for FastAPI
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
----
-
-#### 7.5 Kubernetes
-
-**Interview answer:**
-
-> Kubernetes orchestrates containers by handling scheduling, scaling, rolling updates, self-healing, service discovery, and load balancing. It is useful for running microservices reliably at scale.
-
-Key concepts:
-
-- Pod
-- Deployment
-- Service
-- ConfigMap
-- Secret
-- Ingress
-- Horizontal Pod Autoscaler
-- Liveness/readiness probes
-
----
-
-### 16. Git / Version Control
-
-#### 16.1 Typical Git Workflow
+#### 1.1 Typical Git Workflow
 
 ```bash
 git checkout -b feature/agent-api
@@ -157,7 +39,7 @@ git push origin feature/agent-api
 ## Merge after approval
 ```
 
-#### 16.2 Merge vs Rebase
+#### 1.2 Merge vs Rebase
 
 |           Merge           |             Rebase             |
 | ------------------------- | ------------------------------ |
@@ -165,15 +47,15 @@ git push origin feature/agent-api
 | Adds merge commit         | Rewrites commits               |
 | Safer for shared branches | Good for local cleanup         |
 
-#### 16.3 Interview Line
+#### 1.3 Interview Line
 
 > "I use Git for feature branches, pull requests, code reviews, version control, and collaboration. For shared branches I prefer merge, while for cleaning up local commits before a PR, rebase can be useful."
 
 ---
 
-### 17. Cloud / AWS Topics
+### 2. Cloud / AWS Topics
 
-#### 17.1 EC2 vs Lambda
+#### 2.1 EC2 vs Lambda
 
 ##### When to Use EC2
 
@@ -199,11 +81,7 @@ Use Lambda when you need:
 - Queue processing
 - Lightweight background jobs
 
-#### 17.2 Interview Answer: Why EC2 Instead of Lambda?
-
-> "I would choose EC2 when the application needs long-running processes, custom runtime setup, persistent connections, background workers, or more control over CPU, memory, networking, and installed dependencies. Lambda is great for short-lived event-driven tasks, but EC2 is better for continuously running services like a FastAPI backend, AI agent server, vector database worker, or LLM integration service."
-
-#### 17.3 AWS Preparations for Scaling
+#### 2.2 AWS Preparations for Scaling
 
 For scaling a backend/AI application:
 
@@ -221,7 +99,7 @@ For scaling a backend/AI application:
 - Configure security groups and VPC networking
 - Monitor external API limits and latency
 
-#### 17.4 GenAI-Specific AWS Considerations
+#### 2.3 GenAI-Specific AWS Considerations
 
 - LLM provider rate limits
 - Embedding API throughput
@@ -233,68 +111,13 @@ For scaling a backend/AI application:
 - Queue-based workloads
 - Logging and audit trails
 
----
+### 3. Azure / Terraform Deployment Question
 
-### 18. Kubernetes / Docker Topics
-
-#### 18.1 What Is Kubernetes?
-
-> "Kubernetes is a container orchestration platform used to deploy, manage, scale, and monitor containerized applications. It automates deployment, scaling, load balancing, self-healing, and rolling updates."
-
-#### 18.2 Why Use Kubernetes?
-
-- Auto scaling
-- Load balancing
-- Self-healing
-- Rolling updates
-- High availability
-- Service discovery
-- Better container management
-
-#### 18.3 Core Kubernetes Components
-
-| Component  |            Meaning             |
-| ---------- | ------------------------------ |
-| Pod        | Smallest deployable unit       |
-| Deployment | Manages desired number of pods |
-| Service    | Stable endpoint to reach pods  |
-| Ingress    | Routes external traffic        |
-| ConfigMap  | Non-secret configuration       |
-| Secret     | Sensitive configuration        |
-| HPA        | Horizontal Pod Autoscaler      |
-
-#### 18.4 Docker vs Kubernetes
-
-Docker and Kubernetes solve complementary problems rather than competing directly.
-
-|                  Docker                  |                               Kubernetes                               |
-| ---------------------------------------- | ---------------------------------------------------------------------- |
-| Builds portable OCI-compatible images    | Orchestrates containers created from those images                      |
-| Runs containers on a host                | Schedules workloads across a cluster                                   |
-| Provides packaging and runtime isolation | Provides scaling, self-healing, service discovery, and rollout control |
-| Common for local development and CI      | Common for production workloads that need orchestration                |
-
-Docker Compose is useful for running several related containers on one machine, such as an API, PostgreSQL, and Redis during local development. Kubernetes is justified when the workload needs cluster-level availability, horizontal scaling, controlled rollouts, service discovery, or standardized operations across many services.
-
-Kubernetes does not require the Docker Engine runtime. Modern clusters commonly use runtimes such as `containerd`, while still running OCI-compatible images that may have been built with Docker.
-
-#### 18.5 Interview Line
-
-> "Docker packages an application and its dependencies into a portable container image. Kubernetes operates those containerized workloads across a cluster by handling scheduling, scaling, service discovery, health management, and rolling updates. I use Docker for packaging and Kubernetes when the operational requirements justify orchestration."
-
-#### 18.6 What Happens When a Pod Crashes?
-
-> "Kubernetes continuously monitors pod health. If a pod crashes, the deployment controller creates a replacement pod to maintain the desired state."
-
----
-
-### 20. Azure / Terraform Deployment Question
-
-#### 20.1 Client Question
+#### 3.1 Client Question
 
 > "I need to know Azure/Terraform experience — how did you deploy?"
 
-#### 20.2 Safe Answer Strategy
+#### 3.2 Safe Answer Strategy
 
 Be truthful and avoid overstating experience.
 
@@ -303,7 +126,7 @@ A strong answer:
 > "My primary hands-on production deployment experience has been with cloud deployments using Docker, Kubernetes, CI/CD, and infrastructure automation concepts. I have worked with Azure Database as part of backend application development and understand Terraform's Infrastructure-as-Code workflow, including declarative infrastructure definitions, state management, variables, modules, and automated provisioning.
 > Most of my production deployment experience has been on AWS-based environments, but Terraform principles are cloud-agnostic. The same workflow can be adapted to Azure resources such as resource groups, app services, container apps, Azure SQL, storage accounts, virtual networks, and Key Vault. I am comfortable working with Terraform-based Azure deployments and can quickly contribute using my cloud engineering and IaC background."
 
-#### 20.3 Example Terraform Flow for Azure
+#### 3.3 Example Terraform Flow for Azure
 
 ```bash
 terraform init
@@ -313,7 +136,7 @@ terraform plan
 terraform apply
 ```
 
-#### 20.4 Example Terraform Structure
+#### 3.4 Example Terraform Structure
 
 ```text
 terraform/
@@ -326,7 +149,7 @@ terraform/
     prod.tfvars
 ```
 
-#### 20.5 Example Azure Terraform Snippet
+#### 3.5 Example Azure Terraform Snippet
 
 ```hcl
 provider "azurerm" {
@@ -347,113 +170,13 @@ resource "azurerm_storage_account" "app_storage" {
 }
 ```
 
-#### 20.6 Interview Line
+#### 3.6 Interview Line
 
 > "The way I think about deployment is: define infrastructure using Terraform, validate the plan, provision the resources, deploy the application through CI/CD, store secrets securely, monitor through cloud logs/metrics, and maintain changes through version control."
 
----
+### 4. Cloud, AWS, Kubernetes, and GenAI Deployment
 
-### 12. CI/CD, Git, and Engineering Workflow
-
-#### Topics to revise
-
-- Git branching.
-- Pull requests.
-- Code reviews.
-- CI pipelines.
-- Build/test/lint/type-check stages.
-- CD deployment pipelines.
-- Rollbacks.
-- Environment variables.
-- Secrets handling.
-
-#### Example CI pipeline stages
-
-```text
-1. Install dependencies
-2. Run linting
-3. Run type checks
-4. Run unit tests
-5. Run integration tests
-6. Build Docker image
-7. Scan image/security dependencies
-8. Deploy to staging
-9. Run smoke tests
-10. Promote to production
-```
-
-#### Common interview question
-
-##### What should a good CI/CD pipeline include?
-
-**Answer:**
-
-A good CI/CD pipeline should automatically run linting, formatting checks, type checks, unit tests, integration tests, security scans, Docker builds, and deployment steps. It should also support rollback, environment-specific configuration, and release visibility.
-
----
-
-### 13. Docker, Containers, Kubernetes, and Cloud
-
-#### Docker topics
-
-- Dockerfile basics.
-- Images vs containers.
-- Multi-stage builds.
-- Environment variables.
-- Volumes.
-- Container networking.
-- Docker Compose.
-
-#### Example Dockerfile
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-#### Kubernetes topics
-
-- Pods.
-- Deployments.
-- Services.
-- ConfigMaps.
-- Secrets.
-- Ingress.
-- Horizontal scaling.
-- Health checks.
-- Rolling updates.
-
-#### Cloud topics
-
-- AWS, Azure, or GCP basics.
-- Serverless vs containers.
-- Managed databases.
-- Object storage.
-- IAM/least privilege.
-- Logs and metrics.
-- Infrastructure as code.
-
-#### Common interview questions
-
-1. Why use Docker?
-2. What problem does Kubernetes solve?
-3. How do you scale a Python API?
-4. How do you handle secrets in cloud applications?
-5. What is the difference between a container and a VM?
-
----
-
-### 7. Cloud, AWS, Kubernetes, and GenAI Deployment
-
-#### 7.1 Deploying GenAI applications on cloud/Kubernetes
+#### 4.1 Deploying GenAI applications on cloud/Kubernetes
 
 ##### Typical architecture
 
@@ -475,7 +198,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-#### 7.2 Kubernetes deployment components
+#### 4.2 Kubernetes deployment components
 
 ##### Common manifests
 
@@ -498,7 +221,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-#### 7.3 AWS stack for backend/GenAI apps
+#### 4.3 AWS stack for backend/GenAI apps
 
 ##### Common services
 
@@ -514,7 +237,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-#### 7.4 Choosing DynamoDB vs RDS for idempotency
+#### 4.4 Choosing DynamoDB vs RDS for idempotency
 
 ##### DynamoDB advantages
 
@@ -535,7 +258,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-#### 7.5 Securing AWS order-create endpoint
+#### 4.5 Securing AWS order-create endpoint
 
 ##### Security layers
 
@@ -551,7 +274,7 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-#### 7.6 Autoscaling compute while protecting RDS
+#### 4.6 Autoscaling compute while protecting RDS
 
 ##### Compute scaling metrics
 
@@ -572,9 +295,9 @@ Client → API service → Retrieval layer/vector DB → LLM endpoint → Respon
 
 ---
 
-### 8. Docker, Git, and CI/CD
+### 5. Docker, Git, and CI/CD
 
-#### 8.1 Starting and creating Docker containers
+#### 5.1 Starting and creating Docker containers
 
 ##### Basic command
 
@@ -603,7 +326,7 @@ A container is created from one image, but it may communicate with containers cr
 
 ---
 
-#### 8.2 Checking Docker image size
+#### 5.2 Checking Docker image size
 
 ```bash
 docker images
@@ -617,7 +340,7 @@ docker image inspect <image_name> --format='{{.Size}}'
 
 ---
 
-#### 8.3 Debugging a crashing Docker container
+#### 5.3 Debugging a crashing Docker container
 
 ##### Commands
 
@@ -642,7 +365,7 @@ docker exec -it <container_id> sh
 
 ---
 
-#### 8.4 Dockerized CI/CD pipeline
+#### 5.4 Dockerized CI/CD pipeline
 
 ##### Pipeline flow
 
@@ -669,7 +392,7 @@ kubectl rollout undo deployment/app
 
 ---
 
-#### 8.5 Git: remove file from last commit before push
+#### 5.5 Git: remove file from last commit before push
 
 ##### Keep file locally but remove from commit
 
@@ -688,7 +411,7 @@ git commit --amend
 
 ---
 
-#### 8.6 Git: remove experimental files from commit history
+#### 5.6 Git: remove experimental files from commit history
 
 ##### If only last commit
 
@@ -708,7 +431,7 @@ Then edit commits and remove unwanted files.
 
 ---
 
-#### 8.7 Git: reconciling long-lived branches after restructuring
+#### 5.7 Git: reconciling long-lived branches after restructuring
 
 ##### Safe process
 
@@ -730,181 +453,7 @@ git rebase -i HEAD~N
 git cherry-pick <commit_hash>
 ```
 
----
-
-### Cloud, DevOps & Monitoring
-
----
-
-#### AWS Services
-
-##### Interview Question
-
-**What AWS services have you worked with or would use?**
-
-##### Common Services
-
-|  Service   |             Use             |
-| ---------- | --------------------------- |
-| EC2        | Virtual machines            |
-| S3         | Object storage              |
-| Lambda     | Serverless functions        |
-| IAM        | Access control              |
-| CloudWatch | Logs and monitoring         |
-| ECS/EKS    | Container orchestration     |
-| ECR        | Container registry          |
-| RDS        | Managed relational database |
-| SageMaker  | ML training/deployment      |
-
----
-
-#### EC2 vs Lambda
-
-##### Interview Question
-
-**What is the difference between EC2 and Lambda?**
-
-##### Answer
-
-|               EC2               |             Lambda              |
-| ------------------------------- | ------------------------------- |
-| Server-based                    | Serverless                      |
-| You manage instance             | AWS manages runtime             |
-| Good for long-running workloads | Good for event-driven workloads |
-| More control                    | Less operational overhead       |
-
----
-
-#### Docker
-
-##### Interview Question
-
-**What is Docker and why use it?**
-
-##### Answer
-
-Docker packages an application and its dependencies into a container so it runs consistently across environments.
-
-##### Dockerfile Example
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
-```
-
----
-
-#### Kubernetes
-
-##### Interview Question
-
-**What is Kubernetes used for?**
-
-##### Answer
-
-Kubernetes is used to orchestrate containers at scale.
-
-##### It Handles
-
-- Deployment
-- Scaling
-- Service discovery
-- Load balancing
-- Self-healing
-- Rolling updates
-- Configuration management
-
----
-
-#### CI/CD
-
-##### Interview Question
-
-**What is CI/CD?**
-
-##### Answer
-
-CI/CD automates software testing and deployment.
-
-| Term |            Meaning             |
-| ---- | ------------------------------ |
-| CI   | Continuous Integration         |
-| CD   | Continuous Delivery/Deployment |
-
-##### Pipeline Example
-
-```text
-Code push
-→ lint
-→ unit tests
-→ integration tests
-→ build Docker image
-→ security scan
-→ deploy to staging
-→ deploy to production
-```
-
----
-
-#### Production Monitoring
-
-##### Interview Question
-
-**What would you monitor in production?**
-
-##### Answer
-
-Monitor both application and infrastructure health.
-
-##### Metrics
-
-- Request latency
-- Error rate
-- Throughput
-- CPU/memory usage
-- Disk usage
-- API failures
-- Queue length
-- Model performance
-- Drift
-- Token usage
-- Cost
-
-##### Tools
-
-- Prometheus
-- Grafana
-- CloudWatch
-- Datadog
-- ELK Stack
-- OpenTelemetry
-
----
-
-### 10. Docker & Containerization
-
-#### Likely Questions
-
-- What is Docker?
-- Why use containers?
-- What is a Dockerfile?
-- What is Docker Compose?
-- How do you reduce Docker image size?
-- How do containers help in local development?
-- Difference between image and container?
-- How do you pass environment variables?
-- How do you debug a container?
-
----
+### 6. Docker & Containerization
 
 #### Dockerfile Example
 
@@ -975,21 +524,7 @@ services:
 
 ---
 
-### 11. Kubernetes & Deployment Basics
-
-#### Likely Questions
-
-- What is Kubernetes?
-- What is a pod?
-- What is a deployment?
-- What is a service?
-- What is a config map?
-- What is a secret?
-- How does Kubernetes help with scaling?
-- How do rolling deployments work?
-- How do health checks work?
-
----
+### 7. Kubernetes & Deployment Basics
 
 #### Kubernetes Deployment Example
 
@@ -1049,19 +584,7 @@ spec:
 
 ---
 
-### 12. CI/CD
-
-#### Likely Questions
-
-- What is CI/CD?
-- What steps should a CI pipeline include?
-- How do you deploy safely?
-- What is a rollback?
-- How do you manage environment-specific configs?
-- How do you ensure tests run before deployment?
-- How do you handle database migrations in deployment?
-
----
+### 8. CI/CD
 
 #### Typical CI Pipeline
 
@@ -1140,19 +663,7 @@ jobs:
 
 ---
 
-### 13. Cloud Platforms
-
-#### Likely Questions
-
-- What cloud services have you used?
-- How do you deploy a Python API?
-- How do you store secrets?
-- How do you monitor a cloud app?
-- Difference between IaaS, PaaS, and serverless?
-- How do you scale backend services?
-- How do you handle environment variables?
-
----
+### 9. Cloud Platforms
 
 #### Cloud Deployment Concepts
 
@@ -1707,22 +1218,3 @@ This reduces scattered special-case logic and makes release risk visible.
 #### Canary deployment?
 
 Send a small percentage of traffic/users to the new version, evaluate health/business signals, then expand.
-
----
-
-## Quick DevOps Revision Card
-
-```text
-CI vs delivery vs deployment
-Pipeline: checkout → build → lint → unit → security → package → integration → deploy → smoke
-Static security POC → tune → informational → blocking
-Docker packages runtime; Kubernetes orchestrates replicas
-Pod vs K8s Service vs logical application service
-Liveness vs readiness
-Stateless horizontal scaling
-Autoscale on real bottleneck signal
-CI/CD → AWS: OIDC/role assumption/STS temporary credentials
-EC2 management: prefer SSM; EC2 workload uses instance profile
-Compatibility matrix for multi-product releases
-Staged/canary/rollback strategy
-```

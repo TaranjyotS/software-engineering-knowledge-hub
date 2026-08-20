@@ -40,9 +40,9 @@ This file has been refreshed to keep the original repository topic while merging
 
 ---
 
-### 2. Backend and Microservices Architecture
+### 1. Backend and Microservices Architecture
 
-#### 2.1 Pros and cons of microservices
+#### 1.1 Pros and cons of microservices
 
 ##### Pros
 
@@ -66,7 +66,7 @@ This file has been refreshed to keep the original repository topic while merging
 
 ---
 
-#### 2.2 Database ownership in microservices
+#### 1.2 Database ownership in microservices
 
 ##### Topic covered
 
@@ -94,7 +94,7 @@ Solution → Transaction Service calls User Service API or reads a replicated us
 
 ---
 
-#### 2.3 Service communication patterns
+#### 1.3 Service communication patterns
 
 ##### Synchronous communication
 
@@ -123,7 +123,7 @@ Examples:
 
 ---
 
-#### 2.4 API Gateway and BFF/API composition
+#### 1.4 API Gateway and BFF/API composition
 
 ##### Question covered
 
@@ -156,9 +156,9 @@ Client → API Gateway → BFF/API Composition Layer → Internal Microservices
 
 ---
 
-### 6. Caching, Rate Limiting, Abuse Prevention, and Feature Flags
+### 2. Caching, Rate Limiting, Abuse Prevention, and Feature Flags
 
-#### 6.1 Cache consistency when target URL changes
+#### 2.1 Cache consistency when target URL changes
 
 ##### Approach
 
@@ -173,37 +173,7 @@ Client → API Gateway → BFF/API Composition Layer → Internal Microservices
 Update destination URL in DB → delete Redis key short_code:abc → next redirect reloads fresh value.
 ```
 
----
-
-#### 6.2 Preventing cache stampede
-
-##### Techniques
-
-- Distributed lock using Redis `SETNX`.
-- Stale-while-revalidate.
-- Jittered TTL.
-- Request coalescing.
-
-##### Interview wording
-
-> Only one request should rebuild the cache; others should wait briefly or serve stale data rather than all hitting the database.
-
----
-
-#### 6.3 Graceful degradation if cache is unavailable
-
-##### Design
-
-- Cache is optimization, not source of truth.
-- Short cache timeout.
-- Fallback to DB.
-- Circuit breaker for cache failures.
-- Protect DB with backpressure/rate limiting.
-- Local in-memory LRU cache for very hot keys.
-
----
-
-#### 6.4 Rate limiting URL/order creation endpoints
+#### 2.2 Rate limiting URL/order creation endpoints
 
 ##### Best approach
 
@@ -230,7 +200,7 @@ Retry-After: 60
 
 ---
 
-#### 6.5 Protecting against automated abuse beyond rate limits
+#### 2.3 Protecting against automated abuse beyond rate limits
 
 ##### Techniques
 
@@ -245,7 +215,7 @@ Retry-After: 60
 
 ---
 
-#### 6.6 Feature flag system for safe releases
+#### 2.4 Feature flag system for safe releases
 
 ##### Design principles
 
@@ -267,7 +237,7 @@ internal users → 1% → 5% → 25% → 50% → 100%
 
 ---
 
-#### 6.7 Fast and reliable runtime flag checks
+#### 2.5 Fast and reliable runtime flag checks
 
 ##### Best practice
 
@@ -281,7 +251,7 @@ Evaluate flags locally from memory, not by calling the flag service on every req
 
 ---
 
-### 7. Distributed Systems: Celery, Redis, RabbitMQ
+### 3. Distributed Systems: Celery, Redis, RabbitMQ
 
 #### Likely Questions
 
@@ -320,7 +290,6 @@ celery_app = Celery(
     broker="redis://localhost:6379/0",
     backend="redis://localhost:6379/1",
 )
-
 
 @celery_app.task(bind=True, max_retries=3)
 def sync_order_to_partner(self, order_id: int):
@@ -365,7 +334,6 @@ import redis
 
 cache = redis.Redis(host="localhost", port=6379, decode_responses=True)
 
-
 def get_customer_profile(customer_id: int):
     key = f"customer:{customer_id}"
 
@@ -405,7 +373,7 @@ Distributed locks prevent multiple workers from processing the same item at the 
 
 ---
 
-### 16. Code Reviews & Architecture Discussions
+### 4. Code Reviews & Architecture Discussions
 
 #### Likely Questions
 
@@ -466,7 +434,7 @@ Good strategy:
 
 ---
 
-### 17. E-Commerce / Logistics / Fintech Domain Topics
+### 5. E-Commerce / Logistics / Fintech Domain Topics
 
 These are general domain concepts that may come up in product engineering interviews for commerce, logistics, payments, or ERP-style platforms.
 
@@ -920,44 +888,6 @@ A sound decision sequence is:
 
 Several system-design questions become easier when the answer is framed around **what stage of design we are in** and **what access pattern the workload actually needs**.
 
-### Functional Requirements vs Non-Functional Requirements
-
-Functional requirements describe **what the system must do**. Non-functional requirements (NFRs) describe **how well or under what constraints it must do it**.
-
-Example:
-
-```text
-Functional:
-process a payment
-
-Non-functional:
-p95 latency < 500 ms
-99.99% availability
-no loss of acknowledged transactions
-10,000 transactions/second
-strong authorization/auditability
-```
-
-Common NFR dimensions:
-
-- Scale and throughput.
-- Latency (p50/p95/p99 as appropriate).
-- Availability and fault tolerance.
-- Durability and acceptable data loss.
-- Consistency/read-after-write requirements.
-- Security and compliance.
-- Cost/operational constraints.
-
-A strong interview opening is:
-
-> Before choosing components, I want to clarify the functional requirements and the NFRs that will shape the architecture: expected scale, read/write pattern, latency target, availability, durability/consistency, security, and cost.
-
-#### Learning-platform onboarding example
-
-For an onboarding/learning platform, functional requirements might include signup, interest selection, joining courses/channels, progress tracking, and recommendations. NFRs might include fast content delivery, secure authentication, scalable media delivery, reliable progress persistence, and bounded recommendation latency. The example is useful because the same feature list can lead to very different designs depending on the NFRs.
-
----
-
 ### What Does System Overload Mean?
 
 A system is overloaded when incoming work exceeds the sustainable capacity of one or more resources: application CPU/memory, worker slots, database connections, queue consumers, cache capacity, or a downstream dependency.
@@ -1240,6 +1170,8 @@ Also clarify where relevant:
 
 A component introduced later should trace back to one of these constraints.
 
+For example, an onboarding and learning platform may need signup, interest selection, course enrollment, progress tracking, and recommendations. Its NFRs could require fast content delivery, secure authentication, scalable media delivery, reliable progress persistence, and bounded recommendation latency; the same features can lead to different architectures when those constraints change.
+
 ---
 
 ### 2. Put APIs Early in the Design
@@ -1440,22 +1372,7 @@ Every app instance contains all modules, so any endpoint can be routed to any he
 - Fewer network failure modes
 - Less observability/operational overhead
 
-#### When microservices become justified
-
-Split a module when there is a meaningful reason such as:
-
-- Very different scaling characteristics
-- Strong failure-isolation requirement
-- Independent deployment cadence
-- Clear ownership boundary
-- Independent data lifecycle
-- Technology/runtime needs that materially differ
-
-A good interview statement:
-
-> I would keep the logical boundaries clean from the start, but I would not pay distributed-system costs until independent scaling, deployment, ownership, or isolation justifies them.
-
----
+The criteria for splitting modules into services are consolidated in [Monolith Versus Microservices: Decision Framework](#monolith-versus-microservices-decision-framework).
 
 ### 5. Explain What the Server Actually Does
 
@@ -2565,34 +2482,6 @@ Practice answering these directly:
 - Saying `202` is always required for long-running work.
 - Adding sharding before indexes/cache/replication are considered.
 - Ignoring the full client → routing → compute → data → response path.
-
----
-
-## Quick Interview Revision Card
-
-```text
-1. Functional requirements
-2. Five NFR questions: scale, read/write, durability, latency, cost
-3. Overload: identify the saturated resource; protect dependencies with rate limits/backpressure/timeouts/degradation
-4. APIs/resources/auth
-5. Start Client → App → DB
-6. Define server/service/module precisely
-7. Trace one request end to end
-8. Scale stateless app behind LB if justified
-9. Derive data model from access patterns
-10. SQL/NoSQL based on invariants and queries
-11. Index the critical query
-12. Cache only hot reads; cover miss/stale/stampede/failure
-13. Replicas; cover lag/read-after-write/failover
-14. Queue only asynchronous/bursty work
-15. Outbox + at-least-once + idempotency
-16. Strong consistency for ownership/allocation
-17. Shard late and discuss hot keys
-18. Security + observability + cost
-19. Final evolved diagram + trade-off summary
-```
-
----
 
 ## Additional Senior System-Design Deep Dives
 

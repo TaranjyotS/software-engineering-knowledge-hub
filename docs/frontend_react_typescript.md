@@ -27,13 +27,13 @@ This is a new topic file created because the attached repository files did not h
 
 ---
 
-### 11. ReactJS Interview Topics
+### 1. ReactJS Interview Topics
 
-#### 11.1 What Is React?
+#### 1.1 What Is React?
 
 > "React is a JavaScript library for building user interfaces using reusable components. It allows developers to manage UI state efficiently and build dynamic frontend applications."
 
-#### 11.2 State vs Props
+#### 1.2 State vs Props
 
 | Concept |             Meaning              |
 | ------- | -------------------------------- |
@@ -62,7 +62,7 @@ function Counter() {
 }
 ```
 
-#### 11.3 React Component Lifecycle
+#### 1.3 React Component Lifecycle
 
 In functional components, lifecycle behavior is handled using hooks.
 
@@ -84,7 +84,7 @@ function UserProfile() {
 }
 ```
 
-#### 11.4 useEffect
+#### 1.4 useEffect
 
 > "`useEffect` is used for side effects such as API calls, subscriptions, timers, and updating external systems."
 
@@ -110,7 +110,7 @@ function Users() {
 }
 ```
 
-#### 11.5 useMemo
+#### 1.5 useMemo
 
 > "`useMemo` is used to memoize expensive calculations so they are not recomputed unnecessarily on every render."
 
@@ -120,30 +120,30 @@ const filteredUsers = useMemo(() => {
 }, [users]);
 ```
 
-#### 11.6 useEffect vs useMemo
+#### 1.6 useEffect vs useMemo
 
 |   Hook    |                   Used For                   |
 | --------- | -------------------------------------------- |
 | useEffect | Side effects like API calls                  |
 | useMemo   | Performance optimization for computed values |
 
-#### 11.7 Virtual DOM
+#### 1.7 Virtual DOM
 
 > "React keeps a virtual representation of the UI in memory. When state changes, React compares the new virtual DOM with the previous one and updates only the necessary parts of the real DOM."
 
-#### 11.8 React Interview Line
+#### 1.8 React Interview Line
 
 > "I understand React through components, props, state, hooks, lifecycle behavior, API integration, and reusable UI development."
 
 ---
 
-### 12. TypeScript Interview Topics
+### 2. TypeScript Interview Topics
 
-#### 12.1 Why Use TypeScript?
+#### 2.1 Why Use TypeScript?
 
 > "TypeScript adds static typing to JavaScript, helping catch errors earlier, improve maintainability, and provide better IDE support."
 
-#### 12.2 Benefits
+#### 2.2 Benefits
 
 - Compile-time error detection
 - Better autocomplete
@@ -152,7 +152,7 @@ const filteredUsers = useMemo(() => {
 - Improved maintainability
 - Better API response typing
 
-#### 12.3 Interface vs Type
+#### 2.3 Interface vs Type
 
 |         Interface         |             Type              |
 | ------------------------- | ----------------------------- |
@@ -174,7 +174,7 @@ type ApiResponse<T> = {
 };
 ```
 
-#### 12.4 TypeScript API Integration Example
+#### 2.4 TypeScript API Integration Example
 
 ```ts
 type AgentResponse = {
@@ -202,7 +202,7 @@ async function askAgent(question: string): Promise<AgentResponse> {
 
 ---
 
-### 15. Full-Stack / Product Engineering
+### 3. Full-Stack / Product Engineering
 
 #### Likely Questions
 

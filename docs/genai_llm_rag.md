@@ -303,7 +303,7 @@ Examples:
 
 #### 2.6 Different Chunking Strategies
 
-##### 1. Fixed-size chunking
+##### 2.6.1 Fixed-size chunking
 
 Split by fixed token or word count.
 
@@ -317,7 +317,7 @@ Good because it is simple, but it may split related content.
 
 ---
 
-##### 2. Recursive chunking
+##### 2.6.2 Recursive chunking
 
 Split in this order:
 
@@ -329,25 +329,25 @@ Best for preserving meaning while staying within chunk size.
 
 ---
 
-##### 3. Sentence-based chunking
+##### 2.6.3 Sentence-based chunking
 
 Keeps sentences intact. Useful for articles and policies.
 
 ---
 
-##### 4. Paragraph-based chunking
+##### 2.6.4 Paragraph-based chunking
 
 Keeps full paragraphs together. Useful for documentation, manuals, and policies.
 
 ---
 
-##### 5. Semantic chunking
+##### 2.6.5 Semantic chunking
 
 Splits when the topic changes. Higher quality but more expensive.
 
 ---
 
-##### 6. Sliding window / overlapping chunks
+##### 2.6.6 Sliding window / overlapping chunks
 
 Uses overlap so context is not lost at boundaries.
 
@@ -358,7 +358,7 @@ Typical values:
 
 ---
 
-##### 7. Metadata-based chunking
+##### 2.6.7 Metadata-based chunking
 
 Preserves fields such as:
 
@@ -440,7 +440,6 @@ LLM response with citations
 
 ```python
 from pypdf import PdfReader
-
 
 def extract_pdf_text(path: str):
     reader = PdfReader(path)
@@ -544,7 +543,7 @@ Examples:
 
 Evaluate three layers:
 
-##### 1. Retrieval quality
+##### 3.5.1 Retrieval quality
 
 Metrics:
 
@@ -555,7 +554,7 @@ Metrics:
 - Context precision
 - Context recall
 
-##### 2. Generation quality
+##### 3.5.2 Generation quality
 
 Metrics:
 
@@ -567,7 +566,7 @@ Metrics:
 - Hallucination rate
 - Instruction following
 
-##### 3. System performance
+##### 3.5.3 System performance
 
 Metrics:
 
@@ -702,9 +701,9 @@ Useful for imbalanced datasets.
 
 ---
 
-### 15. System Design for AI Assistants
+### 4. System Design for AI Assistants
 
-#### 15.1 Design a production AI assistant
+#### 4.1 Design a production AI assistant
 
 ##### Architecture
 
@@ -730,7 +729,7 @@ Response + Citations
 
 ---
 
-#### 15.2 Core components
+#### 4.2 Core components
 
 - Frontend UI
 - FastAPI backend
@@ -748,7 +747,7 @@ Response + Citations
 
 ---
 
-#### 15.3 Production concerns
+#### 4.3 Production concerns
 
 - Access control
 - Data privacy
@@ -764,7 +763,7 @@ Response + Citations
 
 ---
 
-#### 15.4 Security-focused AI assistant example
+#### 4.4 Security-focused AI assistant example
 
 ```text
 Security Logs / Events
@@ -795,13 +794,9 @@ Use cases:
 
 ---
 
-### 4. AI Agents
+### 5. AI Agents
 
-#### 4.1 What Is an AI Agent?
-
-> "An AI agent is a software system that uses an LLM along with tools, memory, external APIs, decision logic, and workflows to complete tasks. Unlike a simple chatbot, an agent can take actions, call APIs, retrieve data, create tickets, check order status, and complete multi-step workflows."
-
-#### 4.2 Chatbot vs AI Agent
+#### 5.1 Chatbot vs AI Agent
 
 |          Chatbot           |         AI Agent         |
 | -------------------------- | ------------------------ |
@@ -811,7 +806,7 @@ Use cases:
 | Often static               | Can reason through steps |
 | Usually reactive           | Can be goal-oriented     |
 
-#### 4.3 Components of an AI Agent
+#### 5.2 Components of an AI Agent
 
 - LLM
 - Prompt / system instructions
@@ -824,7 +819,7 @@ Use cases:
 - Evaluation framework
 - Human escalation path
 
-#### 4.4 Example: Customer Support AI Agent
+#### 5.3 Example: Customer Support AI Agent
 
 A customer support AI agent may:
 
@@ -851,55 +846,9 @@ LLM Response
 User
 ```
 
-#### 4.5 Agent Evaluation Metrics
+### 6. RAG Improvement & Interview Positioning
 
-- Task completion rate
-- Conversation success rate
-- Escalation rate
-- Hallucination rate
-- API success/failure rate
-- Latency
-- Token cost
-- User satisfaction
-- Safety issue rate
-
----
-
-### 5. RAG Systems
-
-#### 5.1 What Is RAG?
-
-> "RAG stands for Retrieval-Augmented Generation. It allows an LLM to retrieve relevant information from an external knowledge source before generating an answer. This helps make responses more accurate, grounded, and up to date."
-
-#### 5.2 Simple RAG Flow
-
-```text
-Documents
-  ↓
-Chunking
-  ↓
-Embeddings
-  ↓
-Vector Database
-  ↓
-User Query
-  ↓
-Query Embedding
-  ↓
-Similarity Search
-  ↓
-Relevant Chunks
-  ↓
-LLM
-  ↓
-Final Answer
-```
-
-#### 5.3 Interview Answer: RAG System You Worked On
-
-> "A typical RAG system I have worked with or evaluated involves document ingestion, chunking, embedding generation, vector storage, retrieval, and LLM response generation. When the user asks a question, the system retrieves the most relevant chunks and passes them to the LLM as context. This improves accuracy and reduces hallucinations compared to relying only on the model's internal knowledge."
-
-#### 5.4 Why Use RAG?
+#### 6.1 Why Use RAG?
 
 - Reduces hallucinations
 - Improves factual grounding
@@ -908,7 +857,7 @@ Final Answer
 - Helps with compliance and traceability
 - Supports citations or source references
 
-#### 5.5 How to Improve a RAG System
+#### 6.2 How to Improve a RAG System
 
 > "I would improve a RAG system by tuning chunking, improving embeddings, using better retrieval strategies, adding reranking, improving prompts, and evaluating both retrieval quality and answer quality."
 
@@ -923,54 +872,9 @@ Final Answer
 | Prompt     | Make instructions clearer             |
 | Evaluation | Measure retrieval and answer quality  |
 
-#### 5.6 RAG Quality Metrics
+### 7. LLM Evaluation Metadata & Improvement Tracking
 
-Split evaluation into two parts:
-
-##### Retrieval Quality
-
-- Are the correct documents retrieved?
-- Are retrieved chunks relevant?
-- Is important context missing?
-
-Metrics:
-
-- Precision@K
-- Recall@K
-- Context relevance
-- Context coverage
-- Retrieval accuracy
-
-##### Response Quality
-
-- Is the answer correct?
-- Is it grounded in retrieved context?
-- Is it complete?
-- Is it relevant?
-- Does it hallucinate?
-
-Metrics:
-
-- Accuracy
-- Relevance
-- Completeness
-- Groundedness
-- Hallucination rate
-- User satisfaction
-
-#### 5.7 Strong RAG Interview Line
-
-> "Even if the LLM is strong, poor retrieval will lead to poor answers. That is why I evaluate both retrieval quality and response quality."
-
----
-
-### 6. LLM Evaluation & Metadata
-
-#### 6.1 Simple Explanation
-
-> "When evaluating an LLM or AI agent, I look at whether the answer is correct, useful, safe, and grounded. I also track metadata such as latency, token usage, model version, prompt version, retrieved documents, user feedback, and conversation outcome."
-
-#### 6.2 What Metadata Would You Track?
+#### 7.1 What Metadata Would You Track?
 
 ##### Prompt Metadata
 
@@ -1004,11 +908,7 @@ Metrics:
 - Number of turns
 - Drop-off point
 
-#### 6.3 Simple Interview Answer
-
-> "I track whether the model gave the correct answer, how fast it responded, how many tokens it used, whether it hallucinated, whether users were satisfied, and whether the right documents were retrieved in RAG-based flows."
-
-#### 6.4 Metrics for LLM / Agent Evaluation
+#### 7.2 Metrics for LLM / Agent Evaluation
 
 - Accuracy
 - Relevance
@@ -1022,19 +922,15 @@ Metrics:
 - Escalation rate
 - Safety issue rate
 
-#### 6.5 How Do You Know an Agent Is Improving?
+#### 7.3 How Do You Know an Agent Is Improving?
 
 > "I compare metrics before and after changes. If hallucinations decrease, conversation success increases, latency stays acceptable, and user satisfaction improves, then the agent is improving."
 
 ---
 
-### 7. Prompt Engineering
+### 8. Prompt Techniques & Runtime Controls
 
-#### 7.1 What Is Prompt Engineering?
-
-> "Prompt engineering is the process of designing instructions, examples, constraints, and output formats to guide an LLM toward reliable and consistent responses."
-
-#### 7.2 Prompt Engineering Techniques
+#### 8.1 Prompt Engineering Techniques
 
 - Zero-shot prompting
 - Few-shot prompting
@@ -1046,7 +942,7 @@ Metrics:
 - Output formatting
 - Chain-of-thought style reasoning guidance, where appropriate
 
-#### 7.3 Example Prompt Template
+#### 8.2 Example Prompt Template
 
 ```text
 You are a customer support AI assistant.
@@ -1066,7 +962,7 @@ Retrieved context:
 Answer:
 ```
 
-#### 7.4 What Is Temperature?
+#### 8.3 What Is Temperature?
 
 > "Temperature controls randomness in model responses. Lower temperature makes answers more deterministic and consistent. Higher temperature makes answers more creative but less predictable."
 
@@ -1076,19 +972,19 @@ Answer:
 | 0.3 - 0.7   | Balanced                  |
 | 0.8+        | Creative, more variable   |
 
-#### 7.5 Interview Line
+#### 8.4 Interview Line
 
 > "For customer support or enterprise agents, I usually prefer lower temperature because consistency and reliability matter more than creativity."
 
 ---
 
-### 8. Productionizing AI Agents
+### 9. Production Rollout for AI Agents
 
-#### 8.1 What Does It Mean to Take an Agent to Production?
+#### 9.1 What Does It Mean to Take an Agent to Production?
 
 > "Taking an AI agent into production means moving it from a prototype or demo into a reliable system that real users can use safely. It includes API integrations, authentication, testing, monitoring, logging, deployment, fallback handling, and continuous evaluation."
 
-#### 8.2 Production Checklist
+#### 9.2 Production Checklist
 
 - Clear scope and supported workflows
 - API/database integrations
@@ -1106,11 +1002,11 @@ Answer:
 - CI/CD pipeline
 - Rollback strategy
 
-#### 8.3 Strong Interview Answer
+#### 9.3 Strong Interview Answer
 
 > "First, I would define the agent's scope and supported workflows. Then I would integrate the required APIs or databases, add authentication and permissions, and test common and edge-case user journeys. Before release, I would run simulation tests and evaluate accuracy, hallucinations, latency, and failure cases. After deployment, I would monitor live conversations, review negative feedback, create issues for failures, and continuously improve prompts, retrieval, and API handling."
 
-#### 8.4 Common Production Failure Cases
+#### 9.4 Common Production Failure Cases
 
 - Hallucinated response
 - Wrong API called
@@ -1151,45 +1047,12 @@ Answer:
 
 ---
 
-### 17. LLM / GenAI Application Development
-
-#### Topics to revise
-
-- Hosted LLM APIs.
-- Azure OpenAI.
-- OpenAI.
-- Anthropic.
-- Prompt design.
-- Context construction.
-- Chaining/orchestration.
-- Tool/function calling.
-- RAG systems.
-- Summarization.
-- Classification.
-- Code assistants.
-- Evaluation.
-- Guardrails.
-- Cost and latency management.
-
-#### Common interview questions
-
-1. How have you worked with LLMs?
-2. What is RAG?
-3. How do you reduce hallucinations?
-4. How do you evaluate an LLM application?
-5. How do you manage token cost?
-6. What are guardrails?
-7. What is prompt engineering?
-8. What is context construction?
-9. How do you monitor LLM applications in production?
-
----
+### 11. LLM / GenAI Application Development
 
 #### Example: Simple LLM wrapper pattern
 
 ```python
 from dataclasses import dataclass
-
 
 @dataclass
 class LLMResponse:
@@ -1197,7 +1060,6 @@ class LLMResponse:
     model: str
     prompt_tokens: int
     completion_tokens: int
-
 
 class LLMClient:
     def __init__(self, provider: str, model: str) -> None:
@@ -1220,18 +1082,7 @@ Wrapping LLM providers behind an internal interface makes it easier to switch pr
 
 ---
 
-### 18. Prompt Engineering & Context Construction
-
-#### Prompt engineering topics
-
-- Clear instructions.
-- Role/context setting.
-- Constraints.
-- Examples/few-shot prompting.
-- Output format control.
-- Chain-of-thought alternatives such as concise reasoning summaries.
-- Prompt versioning.
-- Prompt testing.
+### 12. Prompt Engineering & Context Construction
 
 #### Context construction topics
 
@@ -1242,24 +1093,6 @@ Wrapping LLM providers behind an internal interface makes it easier to switch pr
 - Adding metadata.
 - Separating system, developer, and user instructions.
 
-#### Example prompt template
-
-```text
-You are a technical assistant. Answer the user's question using only the provided context.
-
-Context:
-{retrieved_context}
-
-Question:
-{question}
-
-Rules:
-- If the context does not contain the answer, say you do not know.
-- Do not invent facts.
-- Cite the document section used.
-- Keep the answer concise.
-```
-
 #### Common interview question
 
 ##### How do you reduce hallucinations using prompt design?
@@ -1268,194 +1101,7 @@ Rules:
 
 I would ground the model with retrieved context, explicitly instruct it to answer only from the provided context, require it to say when information is missing, add citations or source references, and evaluate outputs against expected answers. Prompting helps, but it should be combined with retrieval quality, guardrails, and monitoring.
 
----
-
-### 19. RAG: Retrieval-Augmented Generation
-
-RAG is one of the most important technical areas for this role.
-
-#### RAG pipeline
-
-```text
-Documents
-   ↓
-Ingestion
-   ↓
-Parsing / Cleaning
-   ↓
-Chunking
-   ↓
-Embedding Generation
-   ↓
-Vector Database
-   ↓
-Retriever
-   ↓
-Prompt Construction
-   ↓
-LLM Generation
-   ↓
-Evaluation / Monitoring
-```
-
-#### Topics to revise
-
-- Document ingestion.
-- Chunking strategies.
-- Embeddings.
-- Vector search.
-- Hybrid search.
-- Metadata filtering.
-- Reranking.
-- Prompt construction.
-- Citation generation.
-- Evaluation.
-- Monitoring.
-
----
-
-#### Example: Simple RAG pseudocode
-
-```python
-class RAGService:
-    def __init__(self, vector_store, llm_client) -> None:
-        self.vector_store = vector_store
-        self.llm_client = llm_client
-
-    def answer(self, question: str) -> str:
-        chunks = self.vector_store.search(query=question, top_k=5)
-        context = "\n\n".join(chunk.text for chunk in chunks)
-
-        prompt = f"""
-        Answer the question using only this context.
-
-        Context:
-        {context}
-
-        Question:
-        {question}
-        """
-
-        return self.llm_client.generate(prompt).text
-```
-
----
-
-#### Chunking strategies
-
-|         Strategy         |                      Use case                      |
-| ------------------------ | -------------------------------------------------- |
-| Fixed-size chunks        | Simple documents, fast baseline                    |
-| Sliding window           | Preserves context across chunk boundaries          |
-| Semantic chunking        | Better for topic-based documents                   |
-| Structure-aware chunking | PDFs, Markdown, HTML, legal/financial docs         |
-| Hierarchical chunking    | Long documents where section-level retrieval helps |
-
-#### Common interview question
-
-##### How would you build a RAG system?
-
-**Answer:**
-
-I would design an ingestion pipeline to parse and clean documents, split them into meaningful chunks, generate embeddings, store them in a vector database with metadata, retrieve relevant chunks at query time, optionally rerank the results, construct a grounded prompt, call the LLM, return the answer with citations, and monitor retrieval quality, hallucination rate, latency, and cost.
-
----
-
-### 20. Embeddings & Vector Databases
-
-#### Embeddings
-
-Embeddings are numerical representations of text that capture semantic meaning. Similar text should have similar vectors.
-
-#### Vector databases mentioned or relevant
-
-- FAISS.
-- pgvector.
-- Pinecone.
-- Other managed vector stores.
-
-#### Topics to revise
-
-- Cosine similarity.
-- Approximate nearest neighbor search.
-- Embedding model selection.
-- Metadata filtering.
-- Hybrid search.
-- Reranking.
-- Vector index refresh.
-- Embedding drift.
-
-#### Example: Cosine similarity concept
-
-```python
-import numpy as np
-
-
-def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
-    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
-```
-
-#### Common interview questions
-
-1. What are embeddings?
-2. What is a vector database?
-3. What is semantic search?
-4. What is hybrid search?
-5. How do you choose chunk size?
-6. How do you evaluate retrieval quality?
-
----
-
-### 21. LLM Evaluation, Guardrails, and Safety
-
-#### Evaluation topics
-
-- Accuracy.
-- Relevance.
-- Completeness.
-- Faithfulness/groundedness.
-- Hallucination rate.
-- Toxicity/safety.
-- Instruction following.
-- Human-in-the-loop review.
-- Automated evaluation.
-- Regression testing for prompts.
-
-#### Guardrails topics
-
-- Input validation.
-- Output validation.
-- Policy filters.
-- PII redaction.
-- Prompt injection detection.
-- Grounding requirements.
-- Safe fallback responses.
-- Human escalation.
-
-#### Example LLM evaluation checklist
-
-```text
-For each generated answer:
-1. Is it grounded in retrieved context?
-2. Does it answer the actual question?
-3. Is any unsupported claim present?
-4. Is sensitive information exposed?
-5. Is the tone appropriate?
-6. Is the output format correct?
-7. Does it include citations where required?
-```
-
-#### Common interview question
-
-##### How would you evaluate a RAG system?
-
-**Answer:**
-
-I would evaluate both retrieval and generation. For retrieval, I would measure whether the correct documents or chunks appear in the top-k results. For generation, I would measure groundedness, factual accuracy, answer relevance, completeness, hallucination rate, and user satisfaction. I would use a mix of automated metrics, curated test sets, and human review.
-
----
-
-### 23. Model Selection, Fine-Tuning, LoRA/QLoRA
+### 13. Model Selection, Fine-Tuning, LoRA/QLoRA
 
 #### Model selection topics
 
@@ -1490,18 +1136,11 @@ I would use RAG when the model needs access to changing or private knowledge, su
 
 ---
 
-### 24. Multimodal AI Familiarity
+### 14. Multimodal AI Familiarity
 
 The role mentions familiarity with models that can handle text, images, or structured data.
 
-#### Topics to revise
-
-- Text + image models.
-- OCR/document understanding.
-- Table extraction.
-- Structured data reasoning.
-- Multimodal prompt design.
-- Safety concerns for images/documents.
+Relevant areas include text-and-image models, OCR and document understanding, table extraction, structured-data reasoning, multimodal prompt design, and safety controls for uploaded images or documents.
 
 #### Possible interview question
 
@@ -1513,9 +1152,9 @@ Multimodal AI can help process documents, screenshots, forms, invoices, charts, 
 
 ---
 
-### 11. GenAI, ChatGPT API, and Prompt Engineering
+### 15. GenAI, ChatGPT API, and Prompt Engineering
 
-#### 11.1 What is the ChatGPT API?
+#### 15.1 What is the ChatGPT API?
 
 ##### Answer
 
@@ -1533,7 +1172,7 @@ The API receives input, processes it using a language model, and returns a gener
 
 ---
 
-#### 11.2 Simple ChatGPT API flow
+#### 15.2 Simple ChatGPT API flow
 
 ```text
 User/Application
@@ -1549,7 +1188,7 @@ Application UI
 
 ---
 
-#### 11.3 Common use cases of ChatGPT API
+#### 15.3 Common use cases of ChatGPT API
 
 - Chatbots
 - Resume analysis
@@ -1563,7 +1202,7 @@ Application UI
 
 ---
 
-#### 11.4 Pros of ChatGPT API
+#### 15.4 Pros of ChatGPT API
 
 |            Advantage            |              Explanation              |
 | ------------------------------- | ------------------------------------- |
@@ -1576,7 +1215,7 @@ Application UI
 
 ---
 
-#### 11.5 Cons of ChatGPT API
+#### 15.5 Cons of ChatGPT API
 
 |      Limitation       |                    Explanation                     |
 | --------------------- | -------------------------------------------------- |
@@ -1588,27 +1227,7 @@ Application UI
 | Dependency risk       | Application depends on external model/provider     |
 | Context limits        | Large documents may exceed context size            |
 
----
-
-#### 11.6 What is prompt engineering?
-
-##### Answer
-
-Prompt engineering is the process of designing prompts to get accurate, relevant, structured, and consistent outputs from an AI model.
-
-It includes:
-
-- Clear instructions
-- Context
-- Examples
-- Output format
-- Constraints
-- Tone/style guidance
-- Validation rules
-
----
-
-#### 11.7 How do you know if a prompt is good?
+#### 15.6 How do you know if a prompt is good?
 
 ##### Strong Interview Answer
 
@@ -1616,9 +1235,9 @@ It includes:
 
 ---
 
-#### 11.8 Criteria for a good prompt
+#### 15.7 Criteria for a good prompt
 
-##### 1. Clarity
+##### 15.7.1 Clarity
 
 Bad prompt:
 
@@ -1634,7 +1253,7 @@ Explain Python multithreading in less than 200 words with one real-world example
 
 ---
 
-##### 2. Specificity
+##### 15.7.2 Specificity
 
 Bad prompt:
 
@@ -1650,7 +1269,7 @@ Optimize my resume for a Senior Python Developer role focusing on FastAPI, AWS, 
 
 ---
 
-##### 3. Output structure
+##### 15.7.3 Output structure
 
 Good prompt:
 
@@ -1664,7 +1283,7 @@ Return the answer as JSON with fields:
 
 ---
 
-##### 4. Hallucination control
+##### 15.7.4 Hallucination control
 
 Good prompt:
 
@@ -1675,13 +1294,13 @@ Do not invent experience, skills, companies, or projects.
 
 ---
 
-##### 5. Consistency
+##### 15.7.5 Consistency
 
 A good prompt should produce similar quality outputs across multiple runs and multiple test cases.
 
 ---
 
-##### 6. Business alignment
+##### 15.7.6 Business alignment
 
 A prompt is good if it solves the intended business problem.
 
@@ -1694,37 +1313,9 @@ Examples:
 
 ---
 
-### 13. LLMs, RAG, Prompt Engineering, and GenAI Evaluation
+### 16. Provider Fit, Prompt Versioning & Regression Testing
 
-#### 13.1 LLM model selection
-
-##### Models discussed generally
-
-- GPT-style models.
-- Claude-style models.
-- LLaMA/open-source models.
-- Gemini-style models.
-- Smaller/mini models.
-- Embedding models.
-
-##### Selection criteria
-
-- Accuracy/reasoning.
-- Latency.
-- Cost.
-- Context window.
-- Data privacy.
-- Deployment control.
-- Fine-tuning/customization.
-- Ecosystem/integration.
-
-##### Interview wording
-
-> I choose the model based on use case constraints, not popularity. The main trade-offs are accuracy, latency, cost, privacy, and deployment control.
-
----
-
-#### 13.2 Claude-style model use cases
+#### 16.1 Claude-style model use cases
 
 ##### Strengths
 
@@ -1739,71 +1330,7 @@ Examples:
 - Compliance-heavy tasks.
 - Internal knowledge assistants.
 
----
-
-#### 13.3 Why use RAG?
-
-##### RAG solves
-
-- Hallucinations.
-- Need for private enterprise data.
-- Need for up-to-date information.
-- Need for traceability/auditability.
-- Avoiding retraining for every knowledge update.
-
-##### One-line answer
-
-> RAG grounds the model in retrieved trusted context before generation.
-
-##### Banking/regulated style answer
-
-> In regulated domains, RAG is important because answers must be grounded, traceable, and auditable instead of relying on pure model memory.
-
----
-
-#### 13.4 RAG evaluation
-
-##### Evaluate retrieval separately
-
-- Did we retrieve the right chunks?
-- Top-k relevance.
-- Context precision/recall.
-
-##### Evaluate generation separately
-
-- Correctness.
-- Groundedness.
-- Completeness.
-- Hallucination rate.
-- Citation/source accuracy.
-
----
-
-#### 13.5 Prompt engineering
-
-##### Effective prompt structure
-
-1. Clear task.
-2. Relevant context.
-3. Constraints.
-4. Output format.
-5. Examples/few-shot if needed.
-6. Safety instructions.
-7. Evaluation/iteration.
-
-##### Example
-
-```text
-You are a risk analyst.
-Analyze the following transaction data.
-Use only the provided data.
-If information is missing, say "Insufficient information".
-Return JSON with risk_level and reason.
-```
-
----
-
-#### 13.6 Prompt versioning
+#### 16.2 Prompt versioning
 
 ##### Production principle
 
@@ -1821,7 +1348,7 @@ Return JSON with risk_level and reason.
 
 ---
 
-#### 13.7 MLflow for prompt/model experiments
+#### 16.3 MLflow for prompt/model experiments
 
 ##### What to log
 
@@ -1840,7 +1367,7 @@ Use Git/config for source control and MLflow for experiment tracking.
 
 ---
 
-#### 13.8 LLM evaluation and factual accuracy
+#### 16.4 LLM evaluation and factual accuracy
 
 ##### Criteria
 
@@ -1862,7 +1389,7 @@ Use Git/config for source control and MLflow for experiment tracking.
 
 ---
 
-#### 13.9 Stabilizing AI systems with regression tests
+#### 16.5 Stabilizing AI systems with regression tests
 
 ##### Golden evaluation set
 
@@ -1930,71 +1457,6 @@ Transformers use self-attention to understand relationships between tokens in a 
 - Positional encoding
 - Feed-forward layers
 
----
-
-#### RLHF
-
-##### Interview Question
-
-**Explain RLHF.**
-
-##### Answer
-
-RLHF stands for **Reinforcement Learning from Human Feedback**. It is used to align model outputs with human preferences.
-
-##### Typical RLHF Pipeline
-
-1. Pretrain a base model
-2. Collect human preference data
-3. Train a reward model
-4. Fine-tune the model using reinforcement learning
-5. Evaluate output quality and safety
-
-##### Strong Sample Answer
-
-```text
-RLHF is a technique used to improve the behavior of language models using human feedback. Instead of only training on next-token prediction, the model is further optimized based on human preferences, such as helpfulness, correctness, clarity, and safety.
-```
-
----
-
-#### Prompt Engineering
-
-##### Interview Question
-
-**What makes a good prompt?**
-
-##### Answer
-
-A good prompt is clear, specific, contextual, and testable.
-
-##### Good Prompt Characteristics
-
-|   Characteristic    |            Meaning            |
-| ------------------- | ----------------------------- |
-| Clear goal          | The model knows what to do    |
-| Context             | Provides necessary background |
-| Constraints         | Defines boundaries            |
-| Output format       | Specifies structure           |
-| Examples            | Shows expected behavior       |
-| Evaluation criteria | Makes quality measurable      |
-
-##### Example
-
-Weak prompt:
-
-```text
-Summarize this.
-```
-
-Better prompt:
-
-```text
-Summarize the following technical incident report in 5 bullet points. Focus on root cause, customer impact, mitigation, long-term fix, and unresolved risks. Avoid adding assumptions not supported by the text.
-```
-
----
-
 #### Prompt Orchestration
 
 ##### Interview Question
@@ -2018,446 +1480,7 @@ User query
 → final answer
 ```
 
----
-
-### RAG: Retrieval-Augmented Generation
-
----
-
-#### What Is RAG?
-
-##### Interview Question
-
-**Explain RAG.**
-
-##### Answer
-
-RAG stands for **Retrieval-Augmented Generation**. It combines search/retrieval with LLM generation.
-
-Instead of relying only on the model's internal knowledge, a RAG system retrieves relevant external context and gives that context to the model before generation.
-
-##### RAG Pipeline
-
-```text
-Documents
-→ chunking
-→ embeddings
-→ vector database
-→ user query
-→ query embedding
-→ similarity search
-→ retrieve top-k chunks
-→ prompt with context
-→ LLM response
-```
-
----
-
-#### Why Use RAG?
-
-##### Benefits
-
-- Reduces hallucination
-- Adds current knowledge
-- Supports enterprise/private data
-- Avoids expensive full model fine-tuning
-- Improves traceability through sources
-
----
-
-#### RAG Code Example
-
-```python
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
-
-documents = [
-    "Python is commonly used for machine learning.",
-    "FastAPI is a modern Python web framework.",
-    "Vector databases store embeddings for similarity search."
-]
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-embeddings = model.encode(documents)
-embeddings = np.array(embeddings).astype("float32")
-
-dimension = embeddings.shape[1]
-index = faiss.IndexFlatL2(dimension)
-index.add(embeddings)
-
-query = "What is used for similarity search?"
-query_embedding = model.encode([query]).astype("float32")
-
-distances, indices = index.search(query_embedding, k=2)
-
-for idx in indices[0]:
-    print(documents[idx])
-```
-
----
-
-#### Chunking Strategies
-
-##### Interview Question
-
-**What are different ways to chunk documents for RAG?**
-
-##### Types of Chunking
-
-|      Strategy       |          Description           |      Best For       |
-| ------------------- | ------------------------------ | ------------------- |
-| Fixed-size chunking | Split by token/character count | Simple documents    |
-| Sliding window      | Overlapping chunks             | Preserving context  |
-| Sentence-based      | Split by sentence boundaries   | Clean text          |
-| Paragraph-based     | Split by paragraphs            | Reports/articles    |
-| Semantic chunking   | Split by topic meaning         | Complex documents   |
-| Structure-aware     | Split by headings/sections     | PDFs, manuals, docs |
-
-##### Example
-
-```python
-def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100):
-    chunks = []
-    start = 0
-
-    while start < len(text):
-        end = start + chunk_size
-        chunks.append(text[start:end])
-        start += chunk_size - overlap
-
-    return chunks
-
-sample_text = "A" * 2000
-chunks = chunk_text(sample_text)
-
-print(len(chunks))
-```
-
----
-
-#### RAG Evaluation
-
-##### Interview Question
-
-**How do you evaluate a RAG system as a whole?**
-
-##### Evaluation Areas
-
-|        Area        |                    Question                    |
-| ------------------ | ---------------------------------------------- |
-| Retrieval quality  | Did we retrieve the right context?             |
-| Generation quality | Did the answer use the context correctly?      |
-| Faithfulness       | Is the answer grounded in retrieved documents? |
-| Relevance          | Does the answer address the user query?        |
-| Completeness       | Is anything important missing?                 |
-| Latency            | Is the system fast enough?                     |
-| Cost               | Are token and infrastructure costs acceptable? |
-
-##### Useful Metrics
-
-- Recall@K
-- Precision@K
-- MRR
-- NDCG
-- Faithfulness score
-- Answer relevance
-- Context relevance
-- Hallucination rate
-
----
-
-### AI Agents & Tool Calling
-
----
-
-#### What Is an AI Agent?
-
-##### Interview Question
-
-**What is an AI agent?**
-
-##### Answer
-
-An AI agent is an LLM-powered system that can plan steps, use tools, observe results, and iterate toward completing a goal.
-
-##### Agent Workflow
-
-```text
-User goal
-→ planning
-→ tool selection
-→ tool execution
-→ observation
-→ reasoning
-→ final response
-```
-
----
-
-#### Agent vs Generative AI
-
-##### Interview Question
-
-**What is the difference between Agentic AI and Generative AI?**
-
-##### Answer
-
-|            Generative AI            |                   Agentic AI                    |
-| ----------------------------------- | ----------------------------------------------- |
-| Generates content                   | Takes actions toward a goal                     |
-| Usually single-turn or prompt-based | Multi-step workflow                             |
-| Produces text/images/code           | Uses tools/APIs/systems                         |
-| Example: summarize document         | Example: investigate incident and create report |
-
-##### Strong Answer
-
-```text
-Generative AI produces outputs such as text, code, or summaries. Agentic AI goes further by planning, calling tools, checking results, and iterating until it completes a task.
-```
-
----
-
-#### Tool Calling
-
-##### Interview Question
-
-**What is tool calling in LLM systems?**
-
-##### Answer
-
-Tool calling allows an LLM to call external functions, APIs, databases, or services when it needs information or actions beyond text generation.
-
-##### Example Tool Calling Flow
-
-```text
-User: What is the status of order 123?
-LLM identifies required tool: get_order_status(order_id=123)
-Tool returns data
-LLM summarizes answer to user
-```
-
-##### Python-Style Tool Example
-
-```python
-def get_order_status(order_id: str) -> dict:
-    return {
-        "order_id": order_id,
-        "status": "shipped",
-        "estimated_delivery": "2026-07-05"
-    }
-
-def agent_response(order_id: str) -> str:
-    status = get_order_status(order_id)
-    return (
-        f"Order {status['order_id']} is {status['status']} "
-        f"and is expected by {status['estimated_delivery']}."
-    )
-
-print(agent_response("123"))
-```
-
----
-
-### Embeddings, Vector Databases & Indexing
-
----
-
-#### Embeddings
-
-##### Interview Question
-
-**What is an embedding?**
-
-##### Answer
-
-An embedding is a numerical vector representation of data such as text, images, or audio. It captures semantic meaning so similar items are close together in vector space.
-
-##### Example
-
-```text
-"car" and "vehicle" should have similar embeddings.
-"car" and "banana" should be farther apart.
-```
-
----
-
-#### Vector Databases
-
-##### Interview Question
-
-**Why use a vector database?**
-
-##### Answer
-
-A vector database stores embeddings and supports similarity search. It is commonly used in RAG systems and recommendation systems.
-
-##### Examples
-
-- FAISS
-- ChromaDB
-- Pinecone
-- Weaviate
-- Milvus
-- Qdrant
-
----
-
-#### Similarity Search
-
-##### Common Similarity Metrics
-
-|       Metric       |              Use              |
-| ------------------ | ----------------------------- |
-| Cosine similarity  | Measures angle/direction      |
-| Dot product        | Common in embedding retrieval |
-| Euclidean distance | Measures direct distance      |
-
-##### Simple Cosine Similarity Example
-
-```python
-import numpy as np
-
-def cosine_similarity(a, b):
-    a = np.array(a)
-    b = np.array(b)
-
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-vector_1 = [1, 2, 3]
-vector_2 = [1, 2, 4]
-
-print(cosine_similarity(vector_1, vector_2))
-```
-
----
-
-#### Indexing Strategies
-
-##### Interview Question
-
-**What are indexing strategies for vector search?**
-
-##### Answer
-
-Indexing strategies improve retrieval speed and scalability.
-
-|   Strategy    |                   Description                   |
-| ------------- | ----------------------------------------------- |
-| Flat index    | Exact search, slower at scale                   |
-| HNSW          | Graph-based approximate nearest neighbor search |
-| IVF           | Clusters vectors before search                  |
-| PQ            | Compresses vectors to reduce memory             |
-| Hybrid search | Combines keyword + vector search                |
-
-##### Strong Answer
-
-```text
-For small datasets, exact search may be enough. For large-scale systems, approximate nearest neighbor indexes like HNSW or IVF are better because they reduce latency while maintaining high recall.
-```
-
----
-
-### LLM Evaluation & Hallucination Reduction
-
----
-
-#### What Is Hallucination?
-
-##### Interview Question
-
-**What is hallucination in LLMs?**
-
-##### Answer
-
-Hallucination happens when an LLM generates information that sounds confident but is false, unsupported, or not grounded in the provided context.
-
----
-
-#### How to Reduce Hallucinations
-
-##### Techniques
-
-- Use RAG with trusted sources
-- Require citations or source references
-- Add instruction to avoid unsupported claims
-- Use validation checks
-- Use structured outputs
-- Use retrieval confidence thresholds
-- Use human review for high-risk cases
-- Evaluate outputs against ground truth
-
-##### Example Prompt Instruction
-
-```text
-Answer only using the provided context. If the context does not contain the answer, say: "I do not have enough information to answer."
-```
-
----
-
-#### LLM Evaluation
-
-##### Interview Question
-
-**How do you evaluate an LLM system?**
-
-##### Evaluation Dimensions
-
-|  Dimension   |                Meaning                |
-| ------------ | ------------------------------------- |
-| Accuracy     | Is the answer correct?                |
-| Relevance    | Does it answer the question?          |
-| Faithfulness | Is it grounded in context?            |
-| Completeness | Does it cover necessary details?      |
-| Safety       | Does it avoid harmful output?         |
-| Consistency  | Similar inputs produce stable outputs |
-| Latency      | Response time                         |
-| Cost         | Token and infrastructure cost         |
-
-##### Evaluation Methods
-
-- Human evaluation
-- Golden test sets
-- LLM-as-judge
-- Automated metrics
-- A/B testing
-- Regression testing
-
----
-
-#### BLEU and ROUGE
-
-##### Interview Question
-
-**What are BLEU and ROUGE?**
-
-##### Answer
-
-BLEU and ROUGE are text evaluation metrics.
-
-| Metric |     Common Use      |
-| ------ | ------------------- |
-| BLEU   | Machine translation |
-| ROUGE  | Summarization       |
-
-##### BLEU
-
-BLEU measures n-gram overlap between generated text and reference text.
-
-##### ROUGE
-
-ROUGE measures overlap, recall, and similarity between generated summaries and reference summaries.
-
-##### Important Limitation
-
-```text
-BLEU and ROUGE can be useful, but they do not always capture semantic correctness, factuality, or usefulness. For LLM applications, human evaluation and task-specific metrics are often needed.
-```
-
----
-
-### 8. AI / LLM / GenAI Integration
+### 17. AI / LLM / GenAI Integration
 
 #### Likely Questions
 
@@ -2480,43 +1503,11 @@ BLEU and ROUGE can be useful, but they do not always capture semantic correctnes
 
 > I have worked with LLM evaluation, prompt-based workflows, model output analysis, and AI quality assessment. My interest is not only in evaluating models, but in building software systems that integrate AI into practical workflows.
 
----
-
-#### Prompt Engineering
-
-##### Good Prompt Structure
-
-```text
-You are an assistant helping summarize customer orders.
-
-Task:
-Summarize the order issue in 3 bullet points.
-
-Rules:
-- Do not invent missing information.
-- If the customer did not provide a shipping address, say "shipping address not provided".
-- Keep the summary under 80 words.
-
-Input:
-{customer_message}
-```
-
-##### Why This Is Good
-
-- Defines role
-- Gives a specific task
-- Adds constraints
-- Defines output style
-- Reduces hallucination
-
----
-
 #### Structured Output Example
 
 ```python
 from pydantic import BaseModel
 from typing import Literal
-
 
 class OrderIssue(BaseModel):
     issue_type: Literal["shipping_delay", "payment_issue", "return_request", "other"]
@@ -2558,81 +1549,6 @@ def classify_customer_message(message: str) -> OrderIssue:
 - Have fallback behavior
 - Monitor cost and latency
 - Evaluate quality over time
-
----
-
-#### Hallucination Reduction
-
-Use:
-
-- Clear instructions
-- Source-grounded context
-- RAG
-- Structured outputs
-- Confidence thresholds
-- Human review for high-risk actions
-- Refusal rules
-- Post-generation validation
-
-##### Example Guardrail
-
-```python
-def safe_answer(question: str, retrieved_docs: list[str]) -> str:
-    if not retrieved_docs:
-        return "I do not have enough information to answer that."
-
-    prompt = (
-        "Answer only using the provided context. "
-        "If the answer is not in the context, say you do not know.\n\n"
-        f"Context:\n{retrieved_docs}\n\n"
-        f"Question:\n{question}"
-    )
-
-    return llm_client.generate(prompt)
-```
-
----
-
-#### RAG High-Level Flow
-
-```text
-User question
-   ↓
-Embed question
-   ↓
-Search vector database
-   ↓
-Retrieve relevant documents
-   ↓
-Send context + question to LLM
-   ↓
-Generate grounded answer
-   ↓
-Validate / cite / log response
-```
-
-##### Interview Explanation
-
-RAG is useful when the model needs company-specific, document-specific, or fresh information that is not reliably stored in its training data.
-
----
-
-#### AI Evaluation Criteria
-
-Evaluate outputs for:
-
-- Correctness
-- Relevance
-- Completeness
-- Faithfulness to source
-- Safety
-- Tone
-- Format compliance
-- Latency
-- Cost
-- User usefulness
-
----
 
 #### Using AI Tools as an Engineer
 
@@ -2905,7 +1821,6 @@ A safer approach:
 ```python
 import json
 
-
 def first_json_object(text: str) -> dict | None:
     decoder = json.JSONDecoder()
 
@@ -3092,20 +2007,16 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-
 class ReviewState(TypedDict):
     request: str
     risk: str
     approved: bool
 
-
 def classify(state: ReviewState):
     return {"risk": classify_risk(state["request"])}
 
-
 def route_after_classification(state: ReviewState):
     return "approval" if state["risk"] == "high" else "execute"
-
 
 graph = StateGraph(ReviewState)
 graph.add_node("classify", classify)

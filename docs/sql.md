@@ -40,9 +40,9 @@ This file has been refreshed to keep the original repository topic while merging
 
 ---
 
-### 11. SQL Interview Patterns
+### 1. SQL Interview Patterns
 
-#### 11.1 Top 3 orders per customer
+#### 1.1 Top 3 orders per customer
 
 ```sql
 SELECT *
@@ -62,7 +62,7 @@ WHERE rn <= 3;
 
 ---
 
-#### 11.2 Type 2 SCD as-of join
+#### 1.2 Type 2 SCD as-of join
 
 ```sql
 SELECT *
@@ -80,7 +80,7 @@ JOIN customer_address a
 
 ---
 
-#### 11.3 Monthly spend increased for 3 consecutive months
+#### 1.3 Monthly spend increased for 3 consecutive months
 
 ```sql
 WITH m AS (
@@ -117,63 +117,7 @@ QUALIFY SUM(increased) OVER (
 
 **Pattern:** Aggregate monthly, compare with `LAG`, then use a rolling window.
 
----
-
-### 10. Databases, ORM, and Data Modeling
-
-#### Topics to revise
-
-- Relational databases.
-- SQL basics.
-- Indexing.
-- Normalization.
-- Transactions.
-- SQLAlchemy ORM.
-- Migrations.
-- Connection pooling.
-- Data modeling.
-
-#### Example: SQLAlchemy model
-
-```python
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import declarative_base
-from datetime import datetime
-
-Base = declarative_base()
-
-
-class Document(Base):
-    __tablename__ = "documents"
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String(255), nullable=False)
-    storage_path = Column(String(500), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-```
-
-#### Common interview questions
-
-1. What is an ORM?
-2. What are the benefits and risks of using an ORM?
-3. How do indexes improve query performance?
-4. How would you model documents and embeddings?
-5. How do you handle migrations?
-
----
-
-### 16. Databases, Caching, and Messaging Systems
-
-#### Databases
-
-Topics mentioned or implied:
-
-- PostgreSQL.
-- MySQL.
-- SQLAlchemy.
-- Data modeling.
-- Transactions.
-- Indexes.
+### 2. Caching and Messaging Systems
 
 #### Redis
 
@@ -846,9 +790,9 @@ Sorting or clustering data can help zone-map pruning skip row groups even withou
 
 ---
 
-### 3. SQL Interview Questions
+### 6. SQL Interview Questions
 
-#### 3.1 Successful Revenue by Region
+#### 6.1 Successful Revenue by Region
 
 ##### Interview Question
 
@@ -874,7 +818,7 @@ ORDER BY total_revenue DESC;
 
 ---
 
-#### 3.2 Top One Transaction Per Customer
+#### 6.2 Top One Transaction Per Customer
 
 ##### Interview Question
 
@@ -918,7 +862,7 @@ WHERE rn = 1;
 
 ---
 
-#### 3.3 Top Transaction With Ties
+#### 6.3 Top Transaction With Ties
 
 ##### Follow-Up Question
 
@@ -955,7 +899,7 @@ WHERE rnk = 1;
 
 ---
 
-#### 3.4 Latest Transaction Per Customer
+#### 6.4 Latest Transaction Per Customer
 
 If **top** means most recent transaction:
 
@@ -982,7 +926,7 @@ WHERE rn = 1;
 
 ---
 
-#### 3.5 Customers With More Than One Paid Transaction
+#### 6.5 Customers With More Than One Paid Transaction
 
 ##### Interview Question
 
@@ -1036,7 +980,7 @@ WHERE status = 'PAID'
 
 ---
 
-### 6. Databases, ORMs & PostgreSQL
+### 7. Databases, ORMs & PostgreSQL
 
 #### Likely Questions
 
@@ -1098,7 +1042,6 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
-
 class Customer(Base):
     __tablename__ = "customers"
 
@@ -1107,7 +1050,6 @@ class Customer(Base):
     name = Column(String, nullable=False)
 
     orders = relationship("Order", back_populates="customer")
-
 
 class Order(Base):
     __tablename__ = "orders"
@@ -1567,20 +1509,3 @@ It reuses a bounded set of database connections instead of creating a new physic
 - Reduce unnecessary selected data.
 - Check N+1 and repeated queries.
 - Measure before/after rather than adding indexes blindly.
-
----
-
-## Quick Persistence Revision Card
-
-```text
-Session/transaction scoped to request
-Rollback on failure
-DB constraints enforce concurrency invariants
-Composite index follows access pattern
-Optimistic version/conditional UPDATE
-Unique source IDs for idempotent ingestion
-Transactional outbox
-Single-primary replicas + lag/read-after-write
-Connection-pool capacity
-SQL vs NoSQL from relationships/invariants/access patterns
-```

@@ -27,22 +27,9 @@ This is a new topic file created because the attached repository files did not h
 
 ---
 
-### 6. Production Monitoring, Usage Tracking & Reliability
+### 1. Production Monitoring, Usage Tracking & Reliability
 
-#### 6.1 Traditional production metrics
-
-- Latency
-- Throughput
-- Error rate
-- CPU
-- Memory
-- Disk
-- Availability
-- Request volume
-
----
-
-#### 6.2 AI-specific production metrics
+#### 1.1 AI-specific production metrics
 
 - Token usage
 - Cost per request
@@ -58,7 +45,7 @@ This is a new topic file created because the attached repository files did not h
 
 ---
 
-#### 6.3 Tracking which user calls which API and token usage
+#### 1.2 Tracking which user calls which API and token usage
 
 ##### Usage table
 
@@ -88,7 +75,6 @@ from fastapi import FastAPI, Request
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
-
 
 @app.middleware("http")
 async def track_request_usage(request: Request, call_next):
@@ -128,7 +114,7 @@ total_tokens = usage.total_tokens
 
 ---
 
-#### 6.4 Reliability patterns
+#### 1.3 Reliability patterns
 
 - Retries with backoff
 - Timeouts
@@ -144,43 +130,15 @@ total_tokens = usage.total_tokens
 
 ---
 
-### 13. Testing, Quality Engineering & AI QA
+### 2. Testing, Quality Engineering & AI QA
 
-#### 13.1 Testing Strategy
+#### 2.1 Testing Strategy
 
 **Interview answer:**
 
 > I follow a layered testing strategy. I start with unit tests, then integration tests, API tests, end-to-end tests, regression tests, performance tests, and security tests. For AI systems, I also test prompts, RAG retrieval, hallucination behavior, tool-calling accuracy, and agent workflows.
 
----
-
-#### 13.2 Testing Pyramid
-
-```text
-        E2E Tests
-     Integration Tests
-        Unit Tests
-```
-
-Most tests should be unit tests because they are fast and reliable.
-
----
-
-#### 13.3 Software testing types
-
-|  Test Type  |                    Purpose                    |
-| ----------- | --------------------------------------------- |
-| Unit        | Test individual functions/classes             |
-| Integration | Test component interactions                   |
-| API         | Validate endpoints, schemas, status codes     |
-| E2E         | Simulate full user workflow                   |
-| Regression  | Ensure existing features still work           |
-| Performance | Check latency, throughput, load               |
-| Security    | Auth, injection, data leakage, access control |
-
----
-
-#### 13.4 AI Testing
+#### 2.2 AI Testing
 
 For AI systems, test:
 
@@ -198,7 +156,7 @@ For AI systems, test:
 
 ---
 
-#### 13.5 Quality Engineering Standards
+#### 2.3 Quality Engineering Standards
 
 **Interview answer:**
 
@@ -206,13 +164,13 @@ For AI systems, test:
 
 ---
 
-### 9. Security for AI Applications
+### 3. Security for AI Applications
 
-#### 9.1 Why Security Matters in AI Agent Development
+#### 3.1 Why Security Matters in AI Agent Development
 
 > "Security is very important because AI agents may connect to APIs, databases, customer records, internal tools, or sensitive business systems. I would not treat it like just a chatbot; I would secure the full flow."
 
-#### 9.2 Security Areas to Mention
+#### 3.2 Security Areas to Mention
 
 ##### Authentication
 
@@ -257,21 +215,18 @@ For AI systems, test:
 - Human escalation
 - Audit logs
 
-#### 9.3 Strong Interview Answer
+#### 3.3 Strong Interview Answer
 
 > "For AI agents, I would secure both the traditional application layer and the AI-specific layer. That means authentication, authorization, secure API access, secret management, input validation, prompt-injection protection, restricted tool access, logging, monitoring, and human escalation for risky workflows."
 
 ---
 
-### 21. Testing, Monitoring & Continuous Improvement
+### 4. Testing, Monitoring & Continuous Improvement
 
-#### 21.1 Testing AI Agents
+#### 4.1 Testing AI Agents
 
 Types of tests:
 
-- Unit tests
-- Integration tests
-- End-to-end tests
 - Prompt regression tests
 - Simulation tests
 - Retrieval tests
@@ -279,7 +234,7 @@ Types of tests:
 - Safety tests
 - Edge-case tests
 
-#### 21.2 Simulation Tests
+#### 4.2 Simulation Tests
 
 > "Simulation tests are scripted user journeys used to check how the agent behaves across expected and edge-case scenarios before going live."
 
@@ -293,7 +248,7 @@ Examples:
 - User asks for sensitive information
 - Agent needs to escalate to human
 
-#### 21.3 Reviewing Live Conversations
+#### 4.3 Reviewing Live Conversations
 
 Steps:
 
@@ -306,167 +261,11 @@ Steps:
 7. Deploy fix
 8. Monitor whether the issue decreases
 
-#### 21.4 Production Metrics
-
-- Conversation success rate
-- Resolution rate
-- Escalation rate
-- Hallucination rate
-- Latency
-- Token usage
-- User satisfaction
-- API failure rate
-- Retrieval accuracy
-- Cost per conversation
-- Error rate
-
-#### 21.5 Strong Interview Line
+#### 4.4 Strong Interview Line
 
 > "For production AI systems, improvement is continuous. I would review live conversations, analyze failure patterns, create issues, improve prompts or retrieval, test again, and monitor metrics after deployment."
 
----
-
-### 11. Testing & Code Quality
-
-The role emphasizes high-quality tested code.
-
-#### Topics to revise
-
-- Unit testing.
-- Integration testing.
-- Test fixtures.
-- Mocking.
-- Pytest.
-- Linting.
-- Formatting.
-- Type checking.
-- Code reviews.
-- Test coverage.
-
----
-
-#### Example: Pytest unit test
-
-```python
-from app.services.pricing import calculate_total
-
-
-def test_calculate_total_with_tax() -> None:
-    result = calculate_total(price=100.0, tax_rate=0.13)
-    assert result == 113.0
-```
-
----
-
-#### Example: Mocking an external LLM call
-
-```python
-from unittest.mock import Mock
-
-
-def test_answer_generation_uses_context() -> None:
-    mock_llm = Mock()
-    mock_llm.generate.return_value = "The policy allows refunds within 30 days."
-
-    context = "Refunds are allowed within 30 days of purchase."
-    question = "Can I get a refund?"
-
-    answer = mock_llm.generate(question=question, context=context)
-
-    assert "30 days" in answer
-    mock_llm.generate.assert_called_once()
-```
-
-**Interview explanation:**
-
-For LLM systems, tests should not only check code paths but also validate prompt formatting, retrieval behavior, fallback logic, and safety handling.
-
----
-
-### 14. Observability & Production Monitoring
-
-#### Topics to revise
-
-- Structured logging.
-- Metrics.
-- Distributed tracing.
-- Dashboards.
-- Alerting.
-- Error rates.
-- Latency percentiles.
-- Token usage monitoring for LLM apps.
-- Cost dashboards.
-- Incident response.
-- Post-incident learning.
-
-#### Example structured log
-
-```python
-import logging
-
-logger = logging.getLogger(__name__)
-
-
-def log_llm_request(user_id: str, model: str, tokens: int, latency_ms: float) -> None:
-    logger.info(
-        "llm_request_completed",
-        extra={
-            "user_id": user_id,
-            "model": model,
-            "tokens": tokens,
-            "latency_ms": latency_ms,
-        },
-    )
-```
-
-#### Useful production metrics
-
-|   Area   |                           Metrics                            |
-| -------- | ------------------------------------------------------------ |
-| API      | request count, error rate, p95 latency, p99 latency          |
-| Database | slow queries, connection pool usage, lock waits              |
-| LLM      | token count, cost, latency, model errors, fallback rate      |
-| RAG      | retrieval precision, empty retrieval rate, citation accuracy |
-| System   | CPU, memory, pod restarts, queue depth                       |
-
----
-
-### 15. Security, Privacy, and PII Handling
-
-#### Topics to revise
-
-- Secrets management.
-- Least privilege access.
-- Input validation.
-- Authentication.
-- Authorization.
-- Encryption at rest.
-- Encryption in transit.
-- Secure coding.
-- PII handling.
-- Data retention.
-- Audit logs.
-- Prompt injection risks.
-- Safe output handling.
-
-#### Common interview questions
-
-1. How do you protect secrets?
-2. How do you handle PII in an LLM system?
-3. What is least privilege?
-4. What is prompt injection?
-5. How do you validate user input?
-6. How do you prevent sensitive data leakage?
-
-#### Example answer: Handling PII in GenAI systems
-
-```text
-I would avoid sending unnecessary PII to the model, mask or redact sensitive fields where possible, enforce access controls, log only safe metadata, encrypt data at rest and in transit, and define clear retention policies. I would also add guardrails to prevent the model from exposing sensitive information in outputs.
-```
-
----
-
-### 22. LLM Cost, Latency, and Reliability Optimization
+### 5. LLM Cost, Latency, and Reliability Optimization
 
 #### Topics to revise
 
@@ -493,7 +292,6 @@ MODEL_PRICES = {
     }
 }
 
-
 def estimate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
     price = MODEL_PRICES[model]
     return (
@@ -510,66 +308,9 @@ def estimate_cost(model: str, input_tokens: int, output_tokens: int) -> float:
 
 I would reduce unnecessary context, use efficient chunk retrieval, cache repeated responses, choose the smallest model that meets quality requirements, batch requests when appropriate, stream responses for user experience, monitor token usage, and route complex requests to stronger models only when necessary.
 
----
+### 6. AI Production Challenges
 
-### 10. API Security
-
-#### 10.1 How can we secure an API?
-
-##### Strong Answer
-
-> To secure an API, I would apply security at multiple layers: authentication, authorization, input validation, transport security, rate limiting, proper CORS, secrets management, and monitoring.
-
----
-
-#### 10.2 Common API security methods
-
-|           Area           |               How to secure                |
-| ------------------------ | ------------------------------------------ |
-| Authentication           | JWT, OAuth2, API keys                      |
-| Authorization            | RBAC, permissions, scopes                  |
-| Transport security       | HTTPS/TLS                                  |
-| Input validation         | Pydantic/schema validation                 |
-| Rate limiting            | Prevent abuse and DDoS                     |
-| CORS                     | Allow only trusted frontend domains        |
-| Secrets                  | Store in env vars or secret manager        |
-| SQL injection prevention | ORM or parameterized queries               |
-| Logging/monitoring       | Track suspicious behavior                  |
-| Token expiry             | Short-lived access tokens + refresh tokens |
-
----
-
-#### 10.3 FastAPI security-style example
-
-```python
-from fastapi import Depends, FastAPI, HTTPException, status
-
-app = FastAPI()
-
-def verify_token(token: str):
-    if token != "valid-token":
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token"
-        )
-    return True
-
-@app.get("/secure-data")
-def secure_data(is_auth: bool = Depends(verify_token)):
-    return {"message": "Secure API response"}
-```
-
----
-
-#### 10.4 Strong one-liner
-
-> API security is not just authentication; it includes authentication, authorization, validation, encryption, rate limiting, CORS, secrets management, and observability.
-
----
-
-### 12. AI Production Challenges
-
-#### 12.1 What is the most challenging problem you faced while working with AI?
+#### 6.1 What is the most challenging problem you faced while working with AI?
 
 ##### Recommended Answer: Hallucinations and response reliability
 
@@ -581,7 +322,7 @@ def secure_data(is_auth: bool = Depends(verify_token)):
 
 ---
 
-#### 12.2 Other AI challenges to mention
+#### 6.2 Other AI challenges to mention
 
 ##### Latency and scalability
 
@@ -629,7 +370,7 @@ Possible evaluation methods:
 
 ---
 
-#### 12.3 What is RAG?
+#### 6.3 What is RAG?
 
 RAG stands for **Retrieval-Augmented Generation**.
 
@@ -653,7 +394,7 @@ Generate grounded answer
 
 ---
 
-#### 12.4 Why use RAG?
+#### 6.4 Why use RAG?
 
 RAG helps:
 
@@ -665,7 +406,7 @@ RAG helps:
 
 ---
 
-#### 12.5 What are embeddings?
+#### 6.5 What are embeddings?
 
 Embeddings convert text into numerical vectors that capture semantic meaning.
 
@@ -679,7 +420,7 @@ They are used for:
 
 ---
 
-#### 12.6 Vector databases
+#### 6.6 Vector databases
 
 Common examples:
 
@@ -692,9 +433,9 @@ They store embeddings and support similarity search.
 
 ---
 
-### 9. Production Reliability, Observability, Incidents, and Runbooks
+### 7. Production Reliability, Observability, Incidents, and Runbooks
 
-#### 9.1 Diagnosing latency and incorrect predictions in ML API
+#### 7.1 Diagnosing latency and incorrect predictions in ML API
 
 ##### Step-by-step approach
 
@@ -711,7 +452,7 @@ They store embeddings and support similarity search.
 
 ---
 
-#### 9.2 Distinguishing infra vs data pipeline vs model degradation
+#### 7.2 Distinguishing infra vs data pipeline vs model degradation
 
 ##### Infrastructure signals
 
@@ -738,7 +479,7 @@ They store embeddings and support similarity search.
 
 ---
 
-#### 9.3 Handling contradictory monitoring data
+#### 7.3 Handling contradictory monitoring data
 
 ##### Decision principle
 
@@ -754,7 +495,7 @@ They store embeddings and support similarity search.
 
 ---
 
-#### 9.4 Alerting without alert fatigue
+#### 7.4 Alerting without alert fatigue
 
 ##### Principles
 
@@ -781,7 +522,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 
 ---
 
-#### 9.5 Game day / incident readiness testing
+#### 7.5 Game day / incident readiness testing
 
 ##### Scenarios
 
@@ -803,7 +544,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 
 ---
 
-#### 9.6 On-call runbooks
+#### 7.6 On-call runbooks
 
 ##### Runbook structure
 
@@ -827,7 +568,7 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 
 ---
 
-#### 9.7 Disaster recovery
+#### 7.7 Disaster recovery
 
 ##### Key terms
 
@@ -854,9 +595,9 @@ p99 redirect latency > SLA for 5 minutes and error rate > threshold
 
 ---
 
-### 14. Security, Privacy, PII, and Access Control
+### 8. Security, Privacy, PII, and Access Control
 
-#### 14.1 Handling PII in GenAI systems
+#### 8.1 Handling PII in GenAI systems
 
 ##### Main principle
 
@@ -883,7 +624,7 @@ John Smith → [CUSTOMER_NAME]
 
 ---
 
-#### 14.2 Authentication and authorization for public APIs
+#### 8.2 Authentication and authorization for public APIs
 
 ##### First-party web/mobile
 
@@ -909,7 +650,7 @@ John Smith → [CUSTOMER_NAME]
 
 ---
 
-#### 14.3 Credential and signing key rotation without downtime
+#### 8.3 Credential and signing key rotation without downtime
 
 ##### JWT signing keys
 
@@ -930,7 +671,7 @@ John Smith → [CUSTOMER_NAME]
 
 ---
 
-#### 14.4 Internal component access control
+#### 8.4 Internal component access control
 
 ##### Design
 
@@ -952,7 +693,7 @@ Admin service → restricted elevated access
 
 ---
 
-#### 14.5 Auditing permissions over time
+#### 8.5 Auditing permissions over time
 
 ##### Practices
 
@@ -966,7 +707,7 @@ Admin service → restricted elevated access
 
 ---
 
-#### 14.6 Tamper-resistant audit logs
+#### 8.6 Tamper-resistant audit logs
 
 ##### Requirements
 
@@ -990,72 +731,13 @@ Admin service → restricted elevated access
 }
 ```
 
----
-
-### 13. Monitoring, Logging, Reliability & Alerts
-
-#### What to Monitor
-
-|           Area           |               Example Metric                |
-| ------------------------ | ------------------------------------------- |
-| Pipeline success/failure | Job status                                  |
-| Freshness                | Latest transaction date                     |
-| Volume                   | Number of records processed                 |
-| Data quality             | Failed validation count                     |
-| Duplicates               | Duplicate transaction count                 |
-| Latency                  | Time from S3 arrival to report availability |
-| Cost                     | Compute and storage cost                    |
-| Error records            | Quarantine count                            |
-
-#### Reliability Patterns
-
-|      Pattern      |          Purpose           |
-| ----------------- | -------------------------- |
-| Retries           | Handle transient failures  |
-| Dead-letter queue | Store failed events        |
-| Quarantine folder | Store invalid records      |
-| Checkpointing     | Resume processing safely   |
-| Watermarking      | Track incremental progress |
-| Idempotent writes | Prevent duplicate data     |
-| Alerts            | Notify failures quickly    |
-
-#### Example Monitoring Flow
-
-```text
-ETL Job
-  ├── Logs → CloudWatch / Logging System
-  ├── Metrics → Dashboard
-  ├── Failures → Alert via Email/SNS/Slack
-  └── Bad Records → Quarantine Folder
-```
-
-##### Interview Answer
-
-> “I would monitor pipeline health, record counts, data freshness, validation failures, duplicate rate, and job latency. I would also add retries, alerting, quarantine handling, and idempotent writes to make the pipeline reliable.”
-
----
-
 ### 9. Testing With Pytest
-
-#### Likely Questions
-
-- How do you write tests in Python?
-- What is pytest?
-- Difference between unit, integration, and end-to-end tests?
-- How do you test APIs?
-- How do you mock external services?
-- How do you test background jobs?
-- How do you test AI features?
-- What should be included in CI?
-
----
 
 #### Unit Test Example
 
 ```python
 def calculate_order_total(items):
     return sum(item["price"] * item["quantity"] for item in items)
-
 
 def test_calculate_order_total():
     items = [
@@ -1075,7 +757,6 @@ from fastapi.testclient import TestClient
 from app.main import app
 
 client = TestClient(app)
-
 
 def test_create_order():
     response = client.post(
@@ -1097,7 +778,6 @@ def test_create_order():
 
 ```python
 from unittest.mock import Mock
-
 
 def test_sync_order_success():
     fake_client = Mock()
@@ -1133,20 +813,7 @@ def test_invalid_llm_output_is_rejected():
 
 ---
 
-### 14. Monitoring, Logging & Production Support
-
-#### Likely Questions
-
-- How do you handle production issues?
-- How do you debug a production incident?
-- What metrics do you monitor?
-- What logs are useful?
-- What is alert fatigue?
-- How do you write useful logs?
-- What is a postmortem?
-- How do you decide whether to rollback?
-
----
+### 10. Monitoring, Logging & Production Support
 
 #### Production Incident Answer Format
 
@@ -1175,7 +842,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 def process_payment(order_id: int, amount: float):
     logger.info(
         "Processing payment",
@@ -1195,25 +861,6 @@ def process_payment(order_id: int, amount: float):
         logger.exception("Payment failed", extra={"order_id": order_id})
         raise
 ```
-
----
-
-#### Useful Metrics
-
-Monitor:
-
-- Request latency
-- Error rate
-- Throughput
-- Queue depth
-- Job failure rate
-- Database query latency
-- CPU/memory
-- API dependency failures
-- LLM cost/latency/error rate
-- Payment/order failure rate
-
----
 
 #### Postmortem Template
 
@@ -2009,86 +1656,3 @@ Quality includes:
 - Low-friction local reproduction
 
 A tool that technically works but produces unclear failures or frequent false positives can still be a poor developer product.
-
----
-
-## Quick Testing/Security/Observability Revision Card
-
-```text
-Coverage != correctness
-Unit vs integration vs E2E
-Mock external boundaries, not every internal detail
-FastAPI dependency override + real test DB where useful
-Security scanner POC → tune → staged enforcement
-Compatibility matrix drives contract tests
-Concurrency tests use barriers/invariants, not only sleep
-Slow API: measure → trace → isolate bottleneck → optimize
-Retries: transient + timeout + bounded backoff + jitter + idempotency
-Queue depth + oldest-message age + lag + DLQ
-Readiness removes traffic; liveness restarts wedged process
-Logs + metrics + traces have different roles
-Internal developers are customers of platform tooling
-```
-
----
-
-## Production Scenario Rapid-Fire Answers
-
-### An API suddenly becomes slow
-
-1. Confirm scope and user impact by endpoint, tenant/region, error rate, and p50/p95/p99 latency.
-2. Correlate the start time with deploys, traffic, database health, dependency incidents, and configuration changes.
-3. Follow a correlation ID through traces and split time into application, database, cache, queue, and downstream calls.
-4. Check CPU/memory, worker or event-loop saturation, connection pools, slow queries, locks, and dependency timeouts.
-5. Roll back or reduce traffic if a recent change is strongly correlated and mitigation is safe.
-6. Fix, load test, deploy gradually, and add the missing alert/regression test.
-
-### A downstream service is unavailable
-
-Use explicit timeouts, bounded retries only for transient/idempotent operations, exponential backoff with jitter, a circuit breaker, and bulkhead/concurrency limits. Degrade, cache, queue, or fail fast only when the business contract permits. Monitor dependency latency, error rate, circuit state, retry volume, and queue age. An unbounded retry policy amplifies the outage.
-
-### A Kafka consumer receives the same event twice
-
-Assume at-least-once delivery. Give every event or business operation a stable ID and atomically record that ID with the business update, normally through a unique constraint/inbox table. If the ID already exists, acknowledge without repeating the effect. Commit the offset only after successful processing. Use an outbox when a database state change and produced event must remain consistent.
-
-### A new API field must not break old clients
-
-Make the change additive and optional or provide a safe server default. Preserve existing names, types, and meanings. Keep translation at the version boundary, update the compatibility matrix, and add contract tests for old request/response shapes and new behavior. Release server compatibility first, monitor adoption, and deprecate only after an explicit migration window.
-
-### Bandit reports a high-severity finding during release
-
-The required gate stops promotion. Verify the rule, severity, confidence, reachability, and whether it is new. Fix a real issue and rerun the scanner/tests. For a false positive, use the narrowest documented suppression with required review; never disable the rule globally. Exceptional risk acceptance belongs to authorized security/business owners, not one developer.
-
-### Several I/O calls must run concurrently
-
-Use async clients, one coroutine per independent operation, explicit timeouts, cancellation handling, and a semaphore to protect the dependency. Decide whether one failure cancels the group or partial results are acceptable. Do not run blocking clients or CPU-heavy work on the event loop.
-
-```python
-import asyncio
-
-
-async def fetch_all(client, requests):
-    limit = asyncio.Semaphore(8)
-
-    async def one(request):
-        async with limit:
-            return await asyncio.wait_for(client.fetch(request), timeout=2)
-
-    return await asyncio.gather(*(one(request) for request in requests))
-```
-
-### A query slows down as data grows
-
-Capture the exact query/parameters and inspect a real execution plan. Look for scans, cardinality-estimation errors, expensive joins/sorts, spills, lock waits, stale statistics, poor pagination, and N+1 access. Choose an index, rewrite, keyset pagination, precomputation, partitioning, or retention change based on evidence, then validate with realistic volume and monitor write/plan impact.
-
-### A deployment introduces errors
-
-Pause rollout, compare the new and previous versions, and restore the last known-good immutable artifact or shift traffic when rollback is safe. Database migrations must support rollback through expand-migrate-contract. Preserve logs, traces, image/commit/configuration identifiers, and failed requests. Reproduce, add a regression/deployment check, and redeploy gradually with success criteria.
-
-### An AI agent requests a sensitive tool operation
-
-The model cannot authorize itself. Trusted orchestration checks the authenticated actor, tenant/resource, allow-listed tool, action, schema, policy, and data classification. Use short-lived least-privilege credentials. Require human confirmation for sensitive/irreversible actions, revalidate fresh state before execution, make the operation idempotent, redact the audit trail, and retain a kill switch.
-
-### Monitor a FastAPI microservice
-
-Track request rate, error rate, p50/p95/p99 latency, CPU, memory, restarts, worker/event-loop saturation, connection-pool usage, dependency/database timing, and queue lag where applicable. Use structured logs with correlation ID and deployment version, distributed traces across dependencies, separate readiness/liveness, and alerts tied to user-impacting SLOs rather than every fluctuation. Avoid high-cardinality user IDs in metric labels.

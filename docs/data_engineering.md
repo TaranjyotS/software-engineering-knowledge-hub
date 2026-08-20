@@ -27,9 +27,9 @@ This is a new topic file created because the attached repository files did not h
 
 ---
 
-### 10. Big Data, PySpark & Data Engineering
+### 1. Big Data, PySpark & Data Engineering
 
-#### 10.1 Big data frameworks
+#### 1.1 Big data frameworks
 
 **Interview answer:**
 
@@ -45,7 +45,7 @@ Common tools:
 
 ---
 
-#### 10.2 Apache Spark / PySpark
+#### 1.2 Apache Spark / PySpark
 
 **Interview answer:**
 
@@ -65,7 +65,7 @@ Tasks on Partitions
 
 ---
 
-#### 10.3 Transformations vs Actions
+#### 1.3 Transformations vs Actions
 
 ##### Transformations are lazy
 
@@ -86,7 +86,7 @@ df.write.parquet(...)
 
 ---
 
-#### 10.4 Narrow vs Wide Transformations
+#### 1.4 Narrow vs Wide Transformations
 
 |          Narrow           |                   Wide                   |
 | ------------------------- | ---------------------------------------- |
@@ -100,7 +100,7 @@ df.write.parquet(...)
 
 ---
 
-#### 10.5 Repartition vs Coalesce
+#### 1.5 Repartition vs Coalesce
 
 |     Method      |                    Meaning                     |
 | --------------- | ---------------------------------------------- |
@@ -109,7 +109,7 @@ df.write.parquet(...)
 
 ---
 
-#### 10.6 Broadcast Join
+#### 1.6 Broadcast Join
 
 Use when one table is small enough to fit in executor memory.
 
@@ -125,7 +125,7 @@ result = large_df.join(broadcast(small_df), "user_id", "left")
 
 ---
 
-#### 10.7 Skew Handling
+#### 1.7 Skew Handling
 
 If one key has too many rows, one partition becomes a bottleneck.
 
@@ -148,7 +148,7 @@ ORDER BY cnt DESC;
 
 ---
 
-#### 10.8 PySpark Rolling GMV Example
+#### 1.8 PySpark Rolling GMV Example
 
 ```python
 from pyspark.sql import functions as F
@@ -191,7 +191,7 @@ country_gmv = (
 
 ---
 
-#### 10.9 Spark bottleneck troubleshooting
+#### 1.9 Spark bottleneck troubleshooting
 
 **Answer:**
 
@@ -199,9 +199,9 @@ country_gmv = (
 
 ---
 
-### 12. Document Parsing, OCR & PDF Processing
+### 2. Document Parsing, OCR & PDF Processing
 
-#### 12.1 Document Parsing
+#### 2.1 Document Parsing
 
 **Interview answer:**
 
@@ -229,7 +229,7 @@ RAG / AI Agent
 
 ---
 
-#### 12.2 When to use OCR
+#### 2.2 When to use OCR
 
 Use OCR when content is not machine-readable:
 
@@ -244,7 +244,7 @@ Do **not** use OCR when the PDF already has selectable text. Direct extraction i
 
 ---
 
-#### 12.3 How OCR works
+#### 2.3 How OCR works
 
 ##### OCR pipeline
 
@@ -280,7 +280,7 @@ Tools:
 
 ---
 
-#### 12.4 PyPDF2 / pypdf
+#### 2.4 PyPDF2 / pypdf
 
 **Interview answer:**
 
@@ -307,9 +307,9 @@ for page in reader.pages:
 
 ---
 
-### 14. Data Visualization
+### 3. Data Visualization
 
-#### 14.1 What is Data Visualization?
+#### 3.1 What is Data Visualization?
 
 **Interview answer:**
 
@@ -317,7 +317,7 @@ for page in reader.pages:
 
 ---
 
-#### 14.2 Common visualization types
+#### 3.2 Common visualization types
 
 |  Chart Type  |            Use Case            |
 | ------------ | ------------------------------ |
@@ -330,7 +330,7 @@ for page in reader.pages:
 
 ---
 
-#### 14.3 Visualization for AI Systems
+#### 3.3 Visualization for AI Systems
 
 Useful dashboard metrics:
 
@@ -355,7 +355,7 @@ Tools:
 
 ---
 
-### 1. Transaction Dataset Schema
+### 4. Transaction Dataset Schema
 
 The interview scenario used a transaction dataset with columns similar to the following:
 
@@ -398,9 +398,9 @@ For this dataset, the discussion covered:
 
 ---
 
-### 2. Python / Pandas Data Handling
+### 5. Python / Pandas Data Handling
 
-#### 2.1 Add a New Column
+#### 5.1 Add a New Column
 
 ##### Interview Question
 
@@ -428,7 +428,7 @@ df["final_amount"] = df["amount"] - df["discount"]
 
 ---
 
-#### 2.2 Add Date-Based Columns
+#### 5.2 Add Date-Based Columns
 
 If asked to create features from the transaction date:
 
@@ -457,7 +457,7 @@ df["is_successful"] = df["status"].eq("SUCCESS")
 
 ---
 
-#### 2.3 Handling Missing Values
+#### 5.3 Handling Missing Values
 
 ##### Interview Question
 
@@ -508,7 +508,7 @@ df_clean = df.dropna(subset=[
 
 ---
 
-#### 2.4 Handling the Discount Column
+#### 5.4 Handling the Discount Column
 
 ##### Interview Question
 
@@ -543,7 +543,7 @@ Missing discount = 0 only if business confirms missing means “no discount appl
 
 ---
 
-#### 2.5 Basic Data Validation in Pandas
+#### 5.5 Basic Data Validation in Pandas
 
 ```python
 ## Duplicate transaction IDs
@@ -572,9 +572,9 @@ invalid_dates = df[df["transaction_date"].isnull()]
 
 ---
 
-### 4. Data Quality
+### 6. Data Quality
 
-#### 4.1 Data Quality Dimensions
+#### 6.1 Data Quality Dimensions
 
 ##### Interview Question
 
@@ -594,7 +594,7 @@ A strong answer uses these dimensions:
 
 ---
 
-#### 4.2 Column-Level Data Quality Rules
+#### 6.2 Column-Level Data Quality Rules
 
 |       Column       |                           Data Quality Rule                           |
 | ------------------ | --------------------------------------------------------------------- |
@@ -655,7 +655,7 @@ print(quality_report)
 
 ---
 
-#### 4.3 Automating Data Quality Checks
+#### 6.3 Automating Data Quality Checks
 
 Useful tools/patterns:
 
@@ -671,9 +671,9 @@ Useful tools/patterns:
 
 ---
 
-### 5. Data Engineering / ETL Pipelines
+### 7. Data Engineering / ETL Pipelines
 
-#### 5.1 Simple Five-Step Data Quality Pipeline
+#### 7.1 Simple Five-Step Data Quality Pipeline
 
 ##### Interview Question
 
@@ -716,7 +716,7 @@ Data Warehouse / Analytics / ML
 
 ---
 
-#### 5.2 Cloud-Based ETL Pipeline
+#### 7.2 Cloud-Based ETL Pipeline
 
 ##### Interview Question
 
@@ -747,7 +747,7 @@ Reports / Dashboards / ML / Downstream Systems
 
 ---
 
-#### 5.3 Event-Driven Batch ETL From S3
+#### 7.3 Event-Driven Batch ETL From S3
 
 ##### Interview Question
 
@@ -789,7 +789,7 @@ Reports / Dashboards / Downstream Systems
 
 ---
 
-#### 5.4 Handling Bad Records / Quarantine Pattern
+#### 7.4 Handling Bad Records / Quarantine Pattern
 
 Do not silently delete bad records.
 
@@ -825,9 +825,9 @@ s3://data-lake/transactions/quarantine/
 
 ---
 
-### 6. Batch, Streaming & Micro-Batch Processing
+### 8. Batch, Streaming & Micro-Batch Processing
 
-#### 6.1 Batch Processing
+#### 8.1 Batch Processing
 
 Batch processing means collecting data over a period and processing it together.
 
@@ -875,7 +875,7 @@ BI Dashboards
 
 ---
 
-#### 6.2 Streaming Processing
+#### 8.2 Streaming Processing
 
 Streaming processes data continuously as soon as it arrives.
 
@@ -921,7 +921,7 @@ Data Lake / Warehouse / Alerts
 
 ---
 
-#### 6.3 Micro-Batch Processing
+#### 8.3 Micro-Batch Processing
 
 Micro-batch is a hybrid model where data is processed in small time windows, such as every 30 seconds or every 1 minute.
 
@@ -956,7 +956,7 @@ Repeat
 
 ---
 
-#### 6.4 When to Use Which
+#### 8.4 When to Use Which
 
 |           Requirement           | Recommended Approach |
 | ------------------------------- | -------------------- |
@@ -973,7 +973,7 @@ Repeat
 
 ---
 
-#### 6.5 Lambda vs Kappa Architecture
+#### 8.5 Lambda vs Kappa Architecture
 
 ##### Lambda Architecture
 
@@ -1004,7 +1004,7 @@ Serving Layer
 
 ---
 
-### 7. Architecture Design Considerations
+### 9. Architecture Design Considerations
 
 #### Interview Question
 
@@ -1033,7 +1033,7 @@ Key factors:
 
 ---
 
-### 8. Data Lineage
+### 10. Data Lineage
 
 #### Interview Question
 
@@ -1098,9 +1098,9 @@ Lineage answers:
 
 ---
 
-### 9. Storage Model Design
+### 11. Storage Model Design
 
-#### 9.1 Raw, Staging, Curated, Serving Layers
+#### 11.1 Raw, Staging, Curated, Serving Layers
 
 ##### Interview Question
 
@@ -1138,7 +1138,7 @@ s3://company-data-lake/transactions/quarantine/year=2026/month=06/day=01/
 
 ---
 
-#### 9.2 Star Schema for Transactions
+#### 11.2 Star Schema for Transactions
 
 ##### Fact Table
 
@@ -1211,7 +1211,7 @@ GROUP BY r.region_name, d.month;
 
 ---
 
-#### 9.3 Why Use These Layers?
+#### 11.3 Why Use These Layers?
 
 ##### Interview Question
 
@@ -1235,7 +1235,7 @@ GROUP BY r.region_name, d.month;
 
 ---
 
-### 10. Amazon S3 Performance Optimization
+### 12. Amazon S3 Performance Optimization
 
 #### Interview Question
 
@@ -1255,7 +1255,7 @@ GROUP BY r.region_name, d.month;
 | Transfer Acceleration  | Faster global uploads           |
 | Right storage class    | Cost optimization               |
 
-#### 10.1 Partitioning
+#### 12.1 Partitioning
 
 Good layout:
 
@@ -1274,7 +1274,7 @@ s3://transactions/all_transactions.csv
 
 ---
 
-#### 10.2 Use Columnar File Formats
+#### 12.2 Use Columnar File Formats
 
 Prefer:
 
@@ -1296,7 +1296,7 @@ Avoid for large analytics workloads:
 
 ---
 
-#### 10.3 Avoid Small Files Problem
+#### 12.3 Avoid Small Files Problem
 
 Bad:
 
@@ -1314,7 +1314,7 @@ Small files create overhead for Spark and query engines.
 
 ---
 
-#### 10.4 Multipart Upload
+#### 12.4 Multipart Upload
 
 Use multipart upload for large files.
 
@@ -1326,15 +1326,15 @@ Benefits:
 
 ---
 
-#### 10.5 Interview Answer
+#### 12.5 Interview Answer
 
 > “To optimize S3 performance, I would use proper partitioning, Parquet/ORC formats, compression, multipart upload for large files, parallel reads and writes, and avoid the small-files problem. For analytics, I would partition by columns such as date or region so Athena or Spark scans only the required data.”
 
 ---
 
-### 11. Delta Lake & Lakehouse Architecture
+### 13. Delta Lake & Lakehouse Architecture
 
-#### 11.1 What is Delta Lake?
+#### 13.1 What is Delta Lake?
 
 ##### Interview Question
 
@@ -1378,7 +1378,7 @@ The `_delta_log` tracks transaction metadata.
 
 ---
 
-#### 11.2 Key Delta Lake Features
+#### 13.2 Key Delta Lake Features
 
 |      Feature       |             Why It Matters             |
 | ------------------ | -------------------------------------- |
@@ -1413,7 +1413,7 @@ WHEN NOT MATCHED THEN
 
 ---
 
-#### 11.3 What is Lakehouse Architecture?
+#### 13.3 What is Lakehouse Architecture?
 
 ##### Definition
 
@@ -1431,7 +1431,7 @@ SQL / BI / ML / AI Workloads
 
 ---
 
-#### 11.4 Bronze, Silver, Gold Layers
+#### 13.4 Bronze, Silver, Gold Layers
 
 | Layer  |          Purpose           |          Example          |
 | ------ | -------------------------- | ------------------------- |
@@ -1459,9 +1459,9 @@ Dashboards / ML / Reports
 
 ---
 
-### 12. Incremental Loads
+### 14. Incremental Loads
 
-#### 12.1 What Are Incremental Loads?
+#### 14.1 What Are Incremental Loads?
 
 ##### Interview Question
 
@@ -1490,9 +1490,9 @@ If there are 100 million transactions:
 
 ---
 
-#### 12.2 Incremental Load Strategies
+#### 14.2 Incremental Load Strategies
 
-##### 1. Timestamp-Based Loading
+##### 14.2.1 Timestamp-Based Loading
 
 Use `updated_at`, `created_at`, or `last_modified_at`.
 
@@ -1514,7 +1514,7 @@ Cons:
 
 ---
 
-##### 2. High Watermark
+##### 14.2.2 High Watermark
 
 Track the highest processed ID or timestamp.
 
@@ -1531,7 +1531,7 @@ Works best when:
 
 ---
 
-##### 3. Change Data Capture / CDC
+##### 14.2.3 Change Data Capture / CDC
 
 CDC captures:
 
@@ -1557,7 +1557,7 @@ new_amount = 900
 
 ---
 
-##### 4. MERGE / UPSERT
+##### 14.2.4 MERGE / UPSERT
 
 Used in Delta Lake, Snowflake, BigQuery, Redshift, and many warehouses.
 
@@ -1589,7 +1589,7 @@ WHEN NOT MATCHED THEN
 
 ---
 
-#### 12.3 Managing Incremental Loads
+#### 14.3 Managing Incremental Loads
 
 ##### Interview Question
 
@@ -1629,7 +1629,7 @@ WHERE pipeline_name = 'transaction_etl';
 
 ---
 
-#### 12.4 Failure Handling and Idempotency
+#### 14.4 Failure Handling and Idempotency
 
 ##### Important Interview Point
 
@@ -1660,63 +1660,19 @@ Then use `MERGE` to prevent duplicates.
 
 ---
 
-### 14. Common Interview Follow-Ups
+### 15. Common Interview Follow-Ups
 
-#### Q1. Why fill missing discount with zero?
-
-> “Because discount is optional. If business confirms that missing means no discount was applied, zero is the correct business-driven imputation. Mean or median could distort revenue.”
-
----
-
-#### Q2. What if amount is missing?
-
-> “Amount is critical for revenue calculations. I would not blindly impute it. I would retrieve it from the source system or quarantine/drop the record depending on the business rule.”
-
----
-
-#### Q3. Why use raw, staging, and curated layers?
-
-> “Raw supports audit and replay. Staging supports validation and cleaning. Curated provides trusted, business-ready data for reports and ML.”
-
----
-
-#### Q4. Why not query directly from S3 raw data?
+#### Q1. Why not query directly from S3 raw data?
 
 > “Raw data may contain duplicates, missing values, invalid records, and inconsistent formats. Curated data improves trust, consistency, and performance.”
 
----
-
-#### Q5. Batch or streaming for transaction data?
-
-> “For daily reporting, batch is enough. For fraud detection or instant alerts, streaming is better. For near-real-time dashboards, micro-batch can be a practical compromise.”
-
----
-
-#### Q6. How do you handle duplicate transaction IDs?
-
-```sql
-SELECT transaction_id, COUNT(*)
-FROM transactions
-GROUP BY transaction_id
-HAVING COUNT(*) > 1;
-```
-
-Then choose a rule:
-
-- Keep latest by `updated_at`
-- Keep successful transaction
-- Quarantine duplicates
-- Resolve from source system
-
----
-
-#### Q7. How do you ensure reports are correct?
+#### Q2. How do you ensure reports are correct?
 
 > “I would use curated data, apply consistent business definitions, validate against source totals, track lineage, monitor data quality, and reconcile key metrics like daily revenue with finance systems.”
 
 ---
 
-#### Q8. What is the difference between `WHERE` and `HAVING`?
+#### Q3. What is the difference between `WHERE` and `HAVING`?
 
 |  Clause  |             Used For             |
 | -------- | -------------------------------- |
@@ -1735,7 +1691,7 @@ HAVING COUNT(*) > 1;
 
 ---
 
-#### Q9. What is the difference between `ROW_NUMBER`, `RANK`, and `DENSE_RANK`?
+#### Q4. What is the difference between `ROW_NUMBER`, `RANK`, and `DENSE_RANK`?
 
 |    Function    |              Behavior              |
 | -------------- | ---------------------------------- |
@@ -1743,21 +1699,7 @@ HAVING COUNT(*) > 1;
 | `RANK()`       | Same rank for ties, leaves gaps    |
 | `DENSE_RANK()` | Same rank for ties, no gaps        |
 
----
-
-#### Q10. What is the difference between full load and incremental load?
-
-|       Full Load       |          Incremental Load          |
-| --------------------- | ---------------------------------- |
-| Processes all records | Processes only new/changed records |
-| Simpler               | More complex                       |
-| Slower for large data | Faster                             |
-| Higher cost           | Lower cost                         |
-| Good for initial load | Good for regular pipelines         |
-
----
-
-#### Q11. How do you answer a simple interviewer greeting?
+#### Q5. How do you answer a simple interviewer greeting?
 
 If the interviewer starts with:
 
@@ -1766,122 +1708,3 @@ If the interviewer starts with:
 A simple professional response:
 
 > “I’m doing well, thank you. I appreciate the opportunity to speak with you today. How are you doing?”
-
----
-
-### Data Engineering & Large Datasets
-
----
-
-#### Handling Large Datasets
-
-##### Interview Question
-
-**How do you work with large datasets?**
-
-##### Answer
-
-For large datasets, avoid loading everything into memory. Use distributed processing, partitioning, efficient file formats, and incremental processing.
-
-##### Techniques
-
-- PySpark
-- Dask
-- Partitioning
-- Parquet files
-- Batch processing
-- Streaming pipelines
-- Data sampling
-- Feature selection
-- Indexing
-- Data versioning
-
----
-
-#### PySpark
-
-##### Interview Question
-
-**What is PySpark used for?**
-
-##### Answer
-
-PySpark is the Python API for Apache Spark. It is used for distributed data processing across large datasets.
-
-##### PySpark Example
-
-```python
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
-
-spark = SparkSession.builder.appName("InterviewExample").getOrCreate()
-
-df = spark.read.parquet("s3://bucket/events/")
-
-filtered = df.filter(col("event_type") == "purchase")
-
-result = filtered.groupBy("user_id").count()
-
-result.show()
-```
-
----
-
-#### ETL Pipeline
-
-##### Interview Question
-
-**How would you design a simple ETL pipeline?**
-
-##### Answer
-
-```text
-Source data
-→ ingestion
-→ validation
-→ transformation
-→ storage
-→ downstream reporting/ML system
-→ monitoring
-```
-
-##### Example Architecture
-
-|     Stage     |       Example Tool        |
-| ------------- | ------------------------- |
-| Ingestion     | S3, API, Kafka            |
-| Processing    | Python, Spark             |
-| Storage       | S3, PostgreSQL, Data Lake |
-| Orchestration | Airflow                   |
-| Monitoring    | CloudWatch, Prometheus    |
-| Reporting     | Dashboard, BI tool        |
-
----
-
-#### Incremental Loads
-
-##### Interview Question
-
-**How do you manage incremental loads?**
-
-##### Answer
-
-Incremental loading processes only new or changed data instead of reprocessing everything.
-
-##### Strategies
-
-- Timestamp-based loading
-- Change Data Capture
-- Watermarking
-- Partition-based ingestion
-- Idempotent writes
-- Upserts/merge operations
-
-##### Example
-
-```python
-def get_new_records(df, last_processed_timestamp):
-    return df[df["updated_at"] > last_processed_timestamp]
-```
-
----

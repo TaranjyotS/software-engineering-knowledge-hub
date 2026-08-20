@@ -39,31 +39,9 @@ This file has been refreshed to keep the original repository topic while merging
 
 ---
 
-### 4. Python Internals & Concurrency
+### 1. Python Internals & Concurrency
 
-#### 4.1 Python GIL
-
-**Interview answer:**
-
-> The Global Interpreter Lock, or GIL, is a mechanism in CPython that allows only one thread to execute Python bytecode at a time inside a process. It simplifies memory management but limits true parallelism for CPU-bound multithreaded workloads. For I/O-bound tasks like API calls or database queries, threads or asyncio still work well because they spend most of their time waiting. For CPU-bound work, multiprocessing is usually better.
-
----
-
-#### 4.2 Threading vs Multiprocessing vs AsyncIO
-
-|    Approach     |       Best For        |                            Notes                             |
-| --------------- | --------------------- | ------------------------------------------------------------ |
-| Threading       | Simple I/O-bound work | Shared memory, affected by GIL for CPU work                  |
-| Multiprocessing | CPU-bound work        | Separate processes, avoids GIL limits                        |
-| AsyncIO         | High-concurrency I/O  | Single-threaded event loop, efficient for many network calls |
-
-**Interview answer:**
-
-> I choose based on workload. For many API calls or LLM requests, I use asyncio with an async HTTP client and semaphores for rate limits. For CPU-heavy tasks, I use multiprocessing. Threading is useful for simpler I/O tasks, but not ideal for CPU-bound computation because of the GIL.
-
----
-
-#### 4.3 AsyncIO with rate limiting
+#### 1.1 AsyncIO with rate limiting
 
 ```python
 import asyncio
@@ -74,7 +52,6 @@ MAX_CONCURRENCY = 10
 RATE_LIMIT = 50  # requests per minute
 
 semaphore = asyncio.Semaphore(MAX_CONCURRENCY)
-
 
 class RateLimiter:
     def __init__(self, rate_per_minute: int):
@@ -90,9 +67,7 @@ class RateLimiter:
                 await asyncio.sleep(wait_time)
             self.last_call = time.monotonic()
 
-
 rate_limiter = RateLimiter(RATE_LIMIT)
-
 
 async def fetch(session: aiohttp.ClientSession, url: str):
     retries = 0
@@ -119,24 +94,13 @@ async def fetch(session: aiohttp.ClientSession, url: str):
             await asyncio.sleep(2 ** retries)
             retries += 1
 
-
 async def fetch_all(urls):
     async with aiohttp.ClientSession() as session:
         tasks = [fetch(session, url) for url in urls]
         return await asyncio.gather(*tasks)
 ```
 
----
-
-#### 4.4 Semaphore
-
-**Interview answer:**
-
-> A semaphore controls how many tasks can run concurrently. In an LLM application, I might allow only 10 simultaneous API requests to avoid hitting provider rate limits or overwhelming downstream services.
-
----
-
-#### 4.5 Retry Strategy
+#### 1.2 Retry Strategy
 
 For API or LLM failures:
 
@@ -150,13 +114,13 @@ For API or LLM failures:
 
 ---
 
-### 15. Python Topics
+### 2. Python Topics
 
-#### 15.1 Why Use Generators in AI Pipelines?
+#### 2.1 Why Use Generators in AI Pipelines?
 
 > "Generators help process large datasets efficiently by producing one item at a time instead of loading everything into memory."
 
-#### 15.2 Generator Example
+#### 2.2 Generator Example
 
 ```python
 def read_documents(file_paths):
@@ -168,7 +132,7 @@ for document in read_documents(["doc1.txt", "doc2.txt"]):
     print(document[:100])
 ```
 
-#### 15.3 AI Pipeline Use Case
+#### 2.3 AI Pipeline Use Case
 
 In a RAG ingestion pipeline:
 
@@ -186,7 +150,7 @@ def process_documents(documents):
             store_embedding(chunk, embedding)
 ```
 
-#### 15.4 Benefits of Generators
+#### 2.4 Benefits of Generators
 
 - Memory efficient
 - Good for large files
@@ -196,13 +160,13 @@ def process_documents(documents):
 - Useful for document chunking
 - Prevents loading everything into RAM
 
-#### 15.5 Strong Interview Line
+#### 2.5 Strong Interview Line
 
 > "I use generators in AI pipelines to stream large datasets, documents, logs, or chunks one item at a time, which improves memory efficiency and scalability."
 
 ---
 
-### 4. Python Core Topics
+### 3. Python Core Topics
 
 The role expects strong Python fundamentals.
 
@@ -227,7 +191,6 @@ The role expects strong Python fundamentals.
 ```python
 from typing import Optional
 
-
 def calculate_total(price: float, tax_rate: float, discount: Optional[float] = None) -> float:
     total = price + (price * tax_rate)
     if discount:
@@ -247,13 +210,11 @@ Type hints improve readability, make large codebases easier to maintain, and all
 import asyncio
 import httpx
 
-
 async def fetch_url(url: str) -> str:
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         response.raise_for_status()
         return response.text
-
 
 async def main() -> None:
     urls = [
@@ -263,7 +224,6 @@ async def main() -> None:
     ]
     results = await asyncio.gather(*(fetch_url(url) for url in urls))
     print(len(results))
-
 
 ## asyncio.run(main())
 ```
@@ -281,7 +241,6 @@ import time
 from functools import wraps
 from typing import Callable, Any
 
-
 def log_duration(func: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -291,7 +250,6 @@ def log_duration(func: Callable[..., Any]) -> Callable[..., Any]:
         print(f"{func.__name__} took {duration:.4f}s")
         return result
     return wrapper
-
 
 @log_duration
 def process_records(records: list[dict]) -> int:
@@ -304,9 +262,9 @@ A decorator wraps a function to add reusable behavior such as logging, timing, a
 
 ---
 
-### 1. Python Fundamentals
+### 4. Python Fundamentals
 
-#### 1.1 What is the difference between a tuple and a set?
+#### 4.1 What is the difference between a tuple and a set?
 
 ##### Interview Answer
 
@@ -349,7 +307,7 @@ The set removes duplicates and does not guarantee insertion order.
 
 ---
 
-#### 1.2 Write a list comprehension to find squares from 1 to 5
+#### 4.2 Write a list comprehension to find squares from 1 to 5
 
 ##### Code
 
@@ -373,9 +331,9 @@ print(squares)
 
 ---
 
-### 2. Python Operators & Expressions
+### 5. Python Operators & Expressions
 
-#### 2.1 What is the output of `2**3**2`?
+#### 5.1 What is the output of `2**3**2`?
 
 ##### Code
 
@@ -414,7 +372,7 @@ Step-by-step:
 
 ---
 
-#### 2.2 What is the output of `a | b` when `a = 4` and `b = 11`?
+#### 5.2 What is the output of `a | b` when `a = 4` and `b = 11`?
 
 ##### Code
 
@@ -455,9 +413,9 @@ Binary `1111` equals decimal `15`.
 
 ---
 
-### 3. Lists, Tuples, and Sets
+### 6. Lists, Tuples, and Sets
 
-#### 3.1 What does `seta ^ setb` mean?
+#### 6.1 What does `seta ^ setb` mean?
 
 ##### Answer
 
@@ -493,7 +451,7 @@ Equivalent expression:
 
 ---
 
-#### 3.2 Different ways to join two lists
+#### 6.2 Different ways to join two lists
 
 ##### Method 1: Using `+`
 
@@ -599,7 +557,7 @@ Output:
 
 ---
 
-#### 3.3 Difference between `append()` and `extend()`
+#### 6.3 Difference between `append()` and `extend()`
 
 ##### `append()`
 
@@ -656,7 +614,7 @@ for item in list2:
 
 ---
 
-#### 3.4 What happens when we multiply a list by 2?
+#### 6.4 What happens when we multiply a list by 2?
 
 ##### Example
 
@@ -678,7 +636,7 @@ Output:
 
 ---
 
-#### 3.5 Character list multiplication
+#### 6.5 Character list multiplication
 
 ##### Example
 
@@ -737,9 +695,9 @@ Output:
 
 ---
 
-### 4. Python Functions, Decorators, and Generators
+### 7. Python Functions, Decorators, and Generators
 
-#### 4.1 What are decorators in Python?
+#### 7.1 What are decorators in Python?
 
 ##### Interview Answer
 
@@ -852,7 +810,7 @@ It tells FastAPI:
 
 ---
 
-#### 4.2 What is a generator in Python?
+#### 7.2 What is a generator in Python?
 
 ##### Interview Answer
 
@@ -909,7 +867,7 @@ The values are generated one by one.
 
 ---
 
-#### 4.3 Difference between `yield` and `return`
+#### 7.3 Difference between `yield` and `return`
 
 |             `return`             |           `yield`            |
 | -------------------------------- | ---------------------------- |
@@ -920,7 +878,7 @@ The values are generated one by one.
 
 ---
 
-#### 4.4 When should we use `yield` and when should we use `return`?
+#### 7.4 When should we use `yield` and when should we use `return`?
 
 ##### Use `return` when:
 
@@ -986,9 +944,9 @@ This generates values on demand.
 
 ---
 
-### 5. Exception Handling
+### 8. Exception Handling
 
-#### 5.1 When does the `finally` block execute?
+#### 8.1 When does the `finally` block execute?
 
 ##### Answer
 
@@ -1087,120 +1045,11 @@ Even if reading fails, the file is closed.
 
 > The `finally` block always executes and is mainly used for cleanup operations like closing files, database connections, or network sockets.
 
----
-
-### 6. Concurrency in Python
-
-#### 6.1 What is the GIL?
-
-##### Answer
-
-GIL stands for **Global Interpreter Lock**.
-
-It is a mechanism in CPython that allows only one thread to execute Python bytecode at a time within a process.
-
----
-
-##### Why does Python have GIL?
-
-The GIL simplifies:
-
-- Memory management
-- Thread safety of Python objects
-- Reference counting
-
----
-
-##### Important Effect
-
-Even if we create multiple threads, only one thread can execute Python bytecode at a time in CPython.
-
----
-
-#### 6.2 Is multithreading useless because of GIL?
-
-No.
-
-Multithreading is still useful for **I/O-bound tasks**, such as:
-
-- API calls
-- Database queries
-- File operations
-- Network requests
-- External LLM calls
-
-While one thread waits for I/O, another thread can run.
-
----
-
-#### 6.3 Why is multiprocessing better for CPU-heavy tasks?
-
-For CPU-heavy tasks, threads compete for the GIL.
-
-Examples:
-
-- Image processing
-- ML computation
-- Mathematical calculations
-- Large data transformations
-
-Multiprocessing creates separate processes with separate Python interpreters, so it bypasses the GIL.
-
----
-
-#### 6.4 Multithreading vs Multiprocessing
-
-|         Multithreading          |        Multiprocessing         |
-| ------------------------------- | ------------------------------ |
-| Multiple threads in one process | Multiple independent processes |
-| Shared memory                   | Separate memory                |
-| Lightweight                     | Heavier                        |
-| Good for I/O-bound tasks        | Good for CPU-bound tasks       |
-| Affected by GIL                 | Bypasses GIL                   |
-
----
-
-##### Multithreading Example
-
-```python
-import threading
-
-def task():
-    print("Running thread")
-
-t1 = threading.Thread(target=task)
-t1.start()
-t1.join()
-```
-
----
-
-##### Multiprocessing Example
-
-```python
-from multiprocessing import Process
-
-def task():
-    print("Running process")
-
-p = Process(target=task)
-p.start()
-p.join()
-```
-
----
-
-##### Strong Interview Answer
-
-> Multithreading is mainly useful for I/O-bound concurrency, while multiprocessing is better for CPU-bound parallel execution because it bypasses Python’s GIL by running separate processes.
-
----
-
-### 13. Coding Interview Practice Topics
+### 9. Coding Interview Practice Topics
 
 These topics were discussed as likely coding interview preparation areas.
 
-#### 13.1 Arrays and strings
+#### 9.1 Arrays and strings
 
 Prepare:
 
@@ -1234,7 +1083,7 @@ Output:
 
 ---
 
-#### 13.2 Hash maps
+#### 9.2 Hash maps
 
 Useful for:
 
@@ -1270,7 +1119,7 @@ Output:
 
 ---
 
-#### 13.3 Sliding window
+#### 9.3 Sliding window
 
 Useful for:
 
@@ -1302,7 +1151,7 @@ Output:
 
 ---
 
-#### 13.4 Stack
+#### 9.4 Stack
 
 Useful for:
 
@@ -1342,7 +1191,7 @@ True
 
 ---
 
-#### 13.5 Linked list
+#### 9.5 Linked list
 
 Prepare:
 
@@ -1368,7 +1217,7 @@ def reverse_list(head):
 
 ---
 
-#### 13.6 Trees
+#### 9.6 Trees
 
 Prepare:
 
@@ -1390,7 +1239,7 @@ def max_depth(root):
 
 ---
 
-#### 13.7 SQL topics
+#### 9.7 SQL topics
 
 Prepare:
 
@@ -1422,58 +1271,7 @@ WHERE rn = 1;
 
 ### 10. Python Core Concepts
 
-#### 10.1 Threading, multiprocessing, asyncio, and GIL
-
-##### GIL
-
-The Global Interpreter Lock allows only one thread to execute Python bytecode at a time in CPython.
-
-##### Threading
-
-Best for I/O-bound tasks.
-
-```python
-import threading
-
-def fetch():
-    print("I/O task")
-
-thread = threading.Thread(target=fetch)
-thread.start()
-thread.join()
-```
-
-##### Multiprocessing
-
-Best for CPU-bound tasks.
-
-```python
-from multiprocessing import Pool
-
-def square(x):
-    return x * x
-
-with Pool() as pool:
-    print(pool.map(square, [1, 2, 3]))
-```
-
-##### AsyncIO
-
-Best for high-concurrency I/O with async libraries.
-
-```python
-import asyncio
-
-async def fetch():
-    await asyncio.sleep(1)
-    return "done"
-
-asyncio.run(fetch())
-```
-
----
-
-#### 10.2 Mutable vs immutable objects
+#### 10.1 Mutable vs immutable objects
 
 ##### Mutable
 
@@ -1499,7 +1297,7 @@ Examples:
 
 ---
 
-#### 10.3 List vs tuple
+#### 10.2 List vs tuple
 
 ##### List
 
@@ -1522,7 +1320,7 @@ point = (10, 20)
 
 ---
 
-#### 10.4 Dictionary keys
+#### 10.3 Dictionary keys
 
 Dictionary keys must be hashable.
 
@@ -1554,7 +1352,7 @@ valid = {(1, 2): "ok"}
 
 ---
 
-#### 10.5 Class variables vs instance variables
+#### 10.4 Class variables vs instance variables
 
 ```python
 class User:
@@ -1582,7 +1380,7 @@ print(User.role)  # member
 
 ---
 
-#### 10.6 Instance method, class method, static method
+#### 10.5 Instance method, class method, static method
 
 ```python
 class Example:
@@ -1606,35 +1404,7 @@ class Example:
 - Class method: needs class state or alternate constructor.
 - Static method: utility function logically belongs to class.
 
----
-
-#### 10.7 Decorators and custom decorators
-
-##### Simple decorator
-
-```python
-def log_call(func):
-    def wrapper(*args, **kwargs):
-        print(f"Calling {func.__name__}")
-        return func(*args, **kwargs)
-    return wrapper
-
-@log_call
-def greet(name):
-    return f"Hello {name}"
-```
-
-##### Flask/FastAPI-like use case
-
-- Authentication.
-- Authorization.
-- Logging.
-- Timing.
-- Validation.
-
----
-
-#### 10.8 `*args` and `**kwargs`
+#### 10.6 `*args` and `**kwargs`
 
 ```python
 def demo(required, *args, **kwargs):
@@ -1655,7 +1425,7 @@ Output:
 
 ---
 
-#### 10.9 `==` vs `is`
+#### 10.7 `==` vs `is`
 
 ##### `==`
 
@@ -1682,7 +1452,7 @@ if value is None:
 
 ---
 
-#### 10.10 Exceptions, multiple except blocks, and finally
+#### 10.8 Handling multiple exception types
 
 ```python
 try:
@@ -1691,25 +1461,11 @@ except ZeroDivisionError:
     print("division by zero")
 except TypeError:
     print("wrong type")
-finally:
-    print("always runs")
-```
-
-##### Important behavior
-
-`finally` runs even if `return` occurs in `try`.
-
-```python
-def test():
-    try:
-        return "try"
-    finally:
-        print("finally still runs")
 ```
 
 ---
 
-#### 10.11 Mutable default argument bug
+#### 10.9 Mutable default argument bug
 
 ##### Bad
 
@@ -1735,7 +1491,7 @@ Default arguments are evaluated once when the function is defined.
 
 ---
 
-#### 10.12 Lists, sets, and dicts for membership/deduplication
+#### 10.10 Lists, sets, and dicts for membership/deduplication
 
 ##### List
 
@@ -2033,253 +1789,15 @@ print(print_order([2, 2, 2]))     # [0, 1, 2]
 
 ---
 
-### Python
+### Python Memory and Performance
 
-Python is likely to come up because it is central to AI/ML, backend development, data processing, and automation.
+Python performance is likely to come up because the language is central to AI/ML, backend development, data processing, and automation.
 
----
-
-#### Python GIL
-
-##### Interview Question
-
-**What is the Python GIL?**
-
-##### Answer
-
-The **Global Interpreter Lock (GIL)** is a lock in CPython that allows only one thread to execute Python bytecode at a time.
-
-This means Python threads are not ideal for CPU-heavy parallel computation, because multiple threads cannot truly execute Python bytecode in parallel.
-
-##### When It Matters
-
-|      Task Type       |                         Best Approach                         |
-| -------------------- | ------------------------------------------------------------- |
-| CPU-bound tasks      | Multiprocessing                                               |
-| I/O-bound tasks      | Threading or AsyncIO                                          |
-| Network calls        | AsyncIO                                                       |
-| File/database calls  | Threading or AsyncIO                                          |
-| Heavy ML computation | NumPy/PyTorch/TensorFlow native operations or multiprocessing |
-
-##### Sample Answer
-
-```text
-The GIL prevents multiple native Python threads from executing Python bytecode simultaneously. For I/O-bound tasks, threading can still help because threads release the GIL while waiting for external operations. But for CPU-bound workloads, multiprocessing is usually better because each process has its own Python interpreter and memory space.
-```
-
----
-
-#### Threading vs Multiprocessing vs AsyncIO
-
-##### Interview Question
-
-**When would you use threading, multiprocessing, or AsyncIO?**
-
-##### Comparison Table
-
-|    Approach     |       Best For       |                  Example                  |
-| --------------- | -------------------- | ----------------------------------------- |
-| Threading       | I/O-bound tasks      | Reading files, calling APIs               |
-| Multiprocessing | CPU-bound tasks      | Image processing, heavy computation       |
-| AsyncIO         | High-concurrency I/O | Thousands of API calls, async web servers |
-
-##### Threading Example
-
-```python
-import threading
-import requests
-
-def fetch_url(url: str) -> None:
-    response = requests.get(url, timeout=10)
-    print(url, response.status_code)
-
-urls = [
-    "https://example.com",
-    "https://example.org",
-]
-
-threads = []
-
-for url in urls:
-    thread = threading.Thread(target=fetch_url, args=(url,))
-    threads.append(thread)
-    thread.start()
-
-for thread in threads:
-    thread.join()
-```
-
-##### Multiprocessing Example
-
-```python
-from multiprocessing import Pool
-
-def square(number: int) -> int:
-    return number * number
-
-if __name__ == "__main__":
-    numbers = [1, 2, 3, 4, 5]
-
-    with Pool(processes=4) as pool:
-        results = pool.map(square, numbers)
-
-    print(results)
-```
-
-##### AsyncIO Example
-
-```python
-import asyncio
-import aiohttp
-
-async def fetch(session: aiohttp.ClientSession, url: str) -> str:
-    async with session.get(url) as response:
-        return await response.text()
-
-async def main() -> None:
-    urls = [
-        "https://example.com",
-        "https://example.org",
-    ]
-
-    async with aiohttp.ClientSession() as session:
-        tasks = [fetch(session, url) for url in urls]
-        results = await asyncio.gather(*tasks)
-
-    print(len(results))
-
-asyncio.run(main())
-```
-
----
-
-#### Decorators
-
-##### Interview Question
-
-**What is a decorator in Python?**
-
-##### Answer
-
-A decorator is a function that wraps another function to extend or modify its behavior without changing the original function code.
-
-##### Common Uses
-
-- Logging
-- Authentication
-- Authorization
-- Caching
-- Timing
-- Retry logic
-- Monitoring
-
-##### Code Example
-
-```python
-from functools import wraps
-from time import perf_counter
-
-def timing_decorator(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        start = perf_counter()
-        result = func(*args, **kwargs)
-        end = perf_counter()
-        print(f"{func.__name__} took {end - start:.4f} seconds")
-        return result
-    return wrapper
-
-@timing_decorator
-def process_data():
-    return sum(range(1_000_000))
-
-print(process_data())
-```
-
-##### Interview Tip
-
-Mention `functools.wraps` because it preserves the original function's metadata.
-
----
-
-#### Generators
-
-##### Interview Question
-
-**What is a generator in Python?**
-
-##### Answer
-
-A generator is a function that uses `yield` to return values lazily one at a time instead of storing everything in memory.
-
-##### Why Generators Are Useful
-
-- Memory efficient
-- Good for streaming data
-- Useful for large files
-- Helpful in data pipelines
-
-##### Code Example
-
-```python
-def read_large_file(file_path: str):
-    with open(file_path, "r", encoding="utf-8") as file:
-        for line in file:
-            yield line.strip()
-
-for row in read_large_file("data.txt"):
-    print(row)
-```
-
-##### `yield` vs `return`
-
-| Keyword  |                Behavior                 |
-| -------- | --------------------------------------- |
-| `return` | Ends the function and returns one value |
-| `yield`  | Pauses the function and resumes later   |
-
----
-
-#### Try, Except, Finally
-
-##### Interview Question
-
-**When does the finally block execute?**
-
-##### Answer
-
-The `finally` block executes regardless of whether an exception occurs or not. It is commonly used for cleanup operations.
-
-##### Code Example
-
-```python
-def read_file(path: str) -> None:
-    file = None
-
-    try:
-        file = open(path, "r", encoding="utf-8")
-        print(file.read())
-    except FileNotFoundError:
-        print("File not found")
-    finally:
-        if file:
-            file.close()
-        print("Cleanup completed")
-```
-
-##### Important Point
-
-Even if there is a `return` inside `try` or `except`, `finally` usually still executes before the function exits.
-
----
-
-#### Python Memory and Performance
-
-##### Interview Question
+#### Interview Question
 
 **How would you improve Python performance?**
 
-##### Answer
+#### Answer
 
 Possible approaches:
 
@@ -2291,7 +1809,7 @@ Possible approaches:
 - Cache repeated computations
 - Profile before optimizing
 
-##### Example: Caching
+#### Example: Caching
 
 ```python
 from functools import lru_cache
@@ -2307,7 +1825,7 @@ print(fibonacci(35))
 
 ---
 
-### 4. Python Engineering
+### 12. Python Engineering
 
 #### Likely Questions
 
@@ -2353,114 +1871,6 @@ def get_order(order_id: int) -> dict:
 - Do not expose internal errors directly to users.
 - Preserve the original exception using `from exc`.
 
----
-
-#### Decorator Example
-
-```python
-import time
-from functools import wraps
-
-def measure_time(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.time()
-        result = func(*args, **kwargs)
-        duration = time.time() - start
-        print(f"{func.__name__} took {duration:.2f}s")
-        return result
-    return wrapper
-
-
-@measure_time
-def process_orders():
-    # expensive operation
-    return "done"
-```
-
-##### When to Use Decorators
-
-Use decorators for cross-cutting concerns such as:
-
-- Logging
-- Timing
-- Authentication
-- Authorization
-- Retry logic
-- Caching
-
----
-
-#### Generator Example
-
-```python
-def stream_order_ids(orders):
-    for order in orders:
-        yield order["id"]
-
-
-orders = [{"id": 1}, {"id": 2}, {"id": 3}]
-
-for order_id in stream_order_ids(orders):
-    print(order_id)
-```
-
-##### Interview Explanation
-
-A generator is useful when:
-
-- Data is large
-- You do not want to load everything into memory
-- You want lazy evaluation
-- You are processing streams or batches
-
----
-
-#### Python GIL
-
-##### Question
-
-What is the Global Interpreter Lock?
-
-##### Answer
-
-The GIL is a lock in CPython that allows only one thread to execute Python bytecode at a time. This means CPU-bound Python code does not get true parallel execution with threads.
-
-##### Practical Impact
-
-- Use **threading** for I/O-bound work.
-- Use **multiprocessing** for CPU-bound work.
-- Use **asyncio** for high-concurrency I/O workloads.
-
----
-
-#### Threading vs Multiprocessing vs AsyncIO
-
-|    Approach     |       Best For       |               Example               |
-| --------------- | -------------------- | ----------------------------------- |
-| Threading       | I/O-bound tasks      | Calling multiple APIs               |
-| Multiprocessing | CPU-bound tasks      | Image processing, heavy computation |
-| AsyncIO         | High-concurrency I/O | WebSocket server, async API calls   |
-
-```python
-import asyncio
-import httpx
-
-async def fetch_url(url: str):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        return response.status_code
-
-async def main():
-    results = await asyncio.gather(
-        fetch_url("https://example.com"),
-        fetch_url("https://example.org"),
-    )
-    print(results)
-
-asyncio.run(main())
-```
-
 ### Fan-Out / Fan-In I/O Aggregation
 
 A common backend/dashboard problem is:
@@ -2484,11 +1894,9 @@ If seven independent calls each take roughly one second, running them sequential
 ```python
 import asyncio
 
-
 async def fetch_source(name: str) -> dict[str, str]:
     await asyncio.sleep(1)  # stand-in for async network/database I/O
     return {name: f"data_from_{name}"}
-
 
 async def build_dashboard() -> dict[str, str]:
     tasks = [fetch_source(f"source_{i}") for i in range(1, 8)]
@@ -2518,11 +1926,9 @@ When the libraries are synchronous/blocking, a thread pool is often the cleanest
 ```python
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
 def fetch_source(name: str) -> dict[str, str]:
     # stand-in for a blocking API/DB/file call
     return {name: f"data_from_{name}"}
-
 
 sources = [f"source_{i}" for i in range(1, 8)]
 results: list[dict[str, str]] = []
@@ -2618,13 +2024,11 @@ def first(func):
         func()
     return wrapper
 
-
 def second(func):
     def wrapper():
         print("second")
         func()
     return wrapper
-
 
 @first
 @second
@@ -2653,7 +2057,6 @@ Without `functools.wraps`, the decorated function exposes the wrapper's name and
 ```python
 from functools import wraps
 
-
 def log_call(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -2677,7 +2080,6 @@ class Resource:
     def __exit__(self, exc_type, exc_value, traceback):
         print("Close")
 
-
 with Resource():
     print("Working")
 ```
@@ -2699,11 +2101,9 @@ A frozen dataclass prevents normal field reassignment after construction.
 ```python
 from dataclasses import dataclass
 
-
 @dataclass(frozen=True)
 class User:
     name: str
-
 
 user = User("Maya")
 user.name = "Brian"  # dataclasses.FrozenInstanceError
@@ -2725,14 +2125,11 @@ class Registry(type):
             mcls.registered.append(name)
         return cls
 
-
 class Plugin(metaclass=Registry):
     pass
 
-
 class Logger(Plugin):
     pass
-
 
 class Cache(Plugin):
     pass
@@ -2774,7 +2171,6 @@ Python annotations support readers, IDEs, linters, and static type checkers, but
 def add_tax(amount: int) -> int:
     return amount + 5
 
-
 print(add_tax(True))  # 6
 ```
 
@@ -2787,7 +2183,6 @@ The number of targets must match the number of returned values unless starred un
 ```python
 def profile():
     return "Alice", 25, "Chicago"
-
 
 name, age = profile()  # ValueError: too many values to unpack
 ```
@@ -2809,7 +2204,6 @@ class User:
 
     def __init__(self, name):
         self.name = name
-
 
 user = User("Maya")
 user.email = "maya@example.com"  # AttributeError
@@ -3097,7 +2491,6 @@ A mutex permits one thread at a time inside the protected critical section.
 ```python
 import threading
 
-
 class Counter:
     def __init__(self):
         self._value = 0
@@ -3152,7 +2545,6 @@ limit parallel downloads
 import asyncio
 
 semaphore = asyncio.Semaphore(10)
-
 
 async def call_service(client, url):
     async with semaphore:
@@ -3566,30 +2958,3 @@ A thread/task waits indefinitely because other contenders repeatedly acquire the
 #### What is contention?
 
 Multiple workers frequently compete for the same synchronization/resource, reducing parallel progress and increasing latency.
-
----
-
-### Senior Concurrency Revision Card
-
-```text
-Race condition
-Critical section
-Lock / mutex
-RLock
-Semaphore
-Condition variable
-Thread-safe Queue
-Deadlock + lock ordering
-Starvation
-Contention
-Coarse vs fine-grained locking
-Lock sharding
-GIL limits vs logical thread safety
-Threads vs processes vs asyncio
-Fan-out/fan-in: gather async I/O, thread pool for blocking I/O
-Timeouts + partial-failure policy for aggregated calls
-Optimistic vs pessimistic concurrency
-Leases/heartbeats for distributed ownership
-```
-
-Runnable examples are available in `coding_questions/concurrent_data_structures.py`.

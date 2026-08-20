@@ -38,142 +38,9 @@ This file has been refreshed to keep the original repository topic while merging
 
 > Backend API design, FastAPI, Flask, REST, gRPC, GraphQL, request validation, API security, pagination, scaling APIs, and clean architecture.
 
----
+### 1. API Integration Topics
 
-### 5. FastAPI & Backend API Design
-
-#### 5.1 What is FastAPI?
-
-**Interview answer:**
-
-> FastAPI is a modern high-performance Python framework for building REST APIs. It is built on Starlette for ASGI/async request handling and Pydantic for validation. It uses Python type hints to provide automatic request validation, serialization, and OpenAPI/Swagger documentation.
-
----
-
-#### 5.2 Why FastAPI?
-
-- Native async support
-- High performance with ASGI
-- Pydantic validation
-- Automatic OpenAPI docs
-- Dependency injection
-- Easy testing
-- Strong fit for AI APIs and microservices
-
----
-
-#### 5.3 FastAPI vs Flask
-
-|         Flask          |        FastAPI         |
-| ---------------------- | ---------------------- |
-| WSGI                   | ASGI                   |
-| Mostly sync            | Native async           |
-| Manual validation      | Pydantic validation    |
-| Swagger via extensions | Built-in OpenAPI       |
-| Lightweight            | Better for modern APIs |
-
----
-
-#### 5.4 Request flow
-
-```text
-Client
-  ↓
-Load Balancer / API Gateway
-  ↓
-FastAPI
-  ↓
-Middleware
-  ↓
-Pydantic Validation
-  ↓
-Business Logic
-  ↓
-Database / Vector DB / LLM API
-  ↓
-JSON Response
-```
-
----
-
-#### 5.5 Pydantic Example
-
-```python
-from pydantic import BaseModel
-
-
-class UserRequest(BaseModel):
-    name: str
-    age: int
-```
-
-If `age` is not an integer, FastAPI automatically returns a validation error.
-
----
-
-#### 5.6 Dependency Injection
-
-Use for:
-
-- Database sessions
-- Authentication
-- Configuration
-- Logging
-- Reusable services
-
-```python
-from fastapi import Depends, FastAPI
-
-app = FastAPI()
-
-
-def get_db():
-    db = "database_session"
-    return db
-
-
-@app.get("/items")
-async def get_items(db=Depends(get_db)):
-    return {"db": db}
-```
-
----
-
-#### 5.7 FastAPI for AI Applications
-
-**Answer:**
-
-> FastAPI is a strong fit for AI applications because LLM calls, vector database queries, and external API calls are I/O-bound. Async endpoints allow the service to handle many concurrent requests efficiently. FastAPI also integrates naturally with Python AI libraries, Pydantic validation, Docker, Kubernetes, and CI/CD pipelines.
-
----
-
-### 13. API Integration Topics
-
-#### 13.1 REST vs GraphQL
-
-|             REST              |           GraphQL            |
-| ----------------------------- | ---------------------------- |
-| Multiple endpoints            | Single endpoint              |
-| Server defines response shape | Client requests exact fields |
-| Simple and widely used        | Flexible for complex data    |
-| Can over-fetch/under-fetch    | Reduces over-fetching        |
-
-#### 13.2 How to Secure APIs
-
-Mention:
-
-- HTTPS
-- JWT / OAuth
-- API keys
-- Rate limiting
-- RBAC
-- Input validation
-- Request logging
-- Secrets management
-- CORS configuration
-- Error handling without leaking details
-
-#### 13.3 API Integration in AI Agents
+#### 1.1 API Integration in AI Agents
 
 An AI agent may call APIs to:
 
@@ -185,122 +52,13 @@ An AI agent may call APIs to:
 - Search databases
 - Retrieve documents
 
-#### 13.4 Strong Interview Line
+### 2. Scaling FastAPI Applications
 
-> "When integrating APIs into an AI agent, I focus on authentication, permissions, input validation, error handling, timeout handling, retries, logging, and making sure the agent only has access to tools it is allowed to use."
-
----
-
-### 14. FastAPI Topics
-
-#### 14.1 What Is FastAPI?
-
-> "FastAPI is a modern Python web framework for building APIs. It supports async endpoints, automatic documentation, Pydantic validation, dependency injection, and high performance."
-
-#### 14.2 Dependency Injection in FastAPI
-
-> "Dependency injection in FastAPI is used to provide reusable components such as database sessions, authentication, configuration, or service classes to endpoints using `Depends`."
-
-##### Example
-
-```python
-from fastapi import Depends, FastAPI
-
-app = FastAPI()
-
-async def get_current_user():
-    return {"username": "alex"}
-
-@app.get("/profile")
-async def get_profile(user=Depends(get_current_user)):
-    return {"user": user}
-```
-
-#### 14.3 Benefits of Dependency Injection
-
-- Loose coupling
-- Reusable dependencies
-- Cleaner code
-- Better testing
-- Centralized resource management
-- Easier mocking
-- Better separation of concerns
-
-#### 14.4 Async Endpoints in FastAPI
-
-> "Async endpoints help improve concurrency when the application is waiting on I/O operations like database queries, external APIs, vector database retrievals, or LLM calls."
-
-##### Example
-
-```python
-from fastapi import FastAPI
-
-app = FastAPI()
-
-async def call_llm_api(query: str) -> str:
-    # Simulated async external API call
-    return f"Answer for: {query}"
-
-@app.get("/agent-response")
-async def agent_response(query: str):
-    result = await call_llm_api(query)
-    return {"answer": result}
-```
-
-#### 14.5 When to Use Async
-
-Use async for:
-
-- External API calls
-- Database calls with async drivers
-- LLM provider calls
-- Vector DB retrieval
-- File/network I/O
-- Streaming responses
-
-Do not expect async to improve CPU-heavy tasks by itself.
-
-#### 14.6 FastAPI Troubleshooting
-
-##### Step-by-Step Approach
-
-1. Check logs and traceback
-2. Validate request input
-3. Check Pydantic model
-4. Test with Swagger UI, Postman, or curl
-5. Check dependencies
-6. Check authentication/authorization
-7. Check async issues such as missing `await`
-8. Check database connection/session
-9. Check external API failures
-10. Check response model mismatch
-
-##### Common FastAPI Issues
-
-- 422 validation errors
-- Missing required fields
-- Incorrect data types
-- Dependency failure
-- Auth failure
-- Missing `await`
-- Blocking call inside async route
-- DB session issue
-- External API timeout
-- Response model mismatch
-
-##### Strong Interview Line
-
-> "Most FastAPI endpoint issues come from validation errors, dependency failures, missing awaits, database/session problems, external API failures, or response model mismatches."
-
----
-
-### 19. Scaling FastAPI Applications
-
-#### 19.1 Scaling FastAPI from 5 Pods to 100 Pods
+#### 2.1 Scaling FastAPI from 5 Pods to 100 Pods
 
 > "To scale a FastAPI application from 5 pods to 100 pods, I would use Kubernetes Horizontal Pod Autoscaler. First, I would make sure the application is stateless, containerized properly, and has health checks. Then Kubernetes can scale pods based on CPU, memory, or custom request metrics."
 
-#### 19.2 Key Steps
+#### 2.2 Key Steps
 
 - Make application stateless
 - Containerize with Docker
@@ -315,7 +73,7 @@ Do not expect async to improve CPU-heavy tasks by itself.
 - Watch external API rate limits
 - Monitor LLM latency and token cost
 
-#### 19.3 Example Kubernetes HPA
+#### 2.3 Example Kubernetes HPA
 
 ```yaml
 apiVersion: autoscaling/v2
@@ -338,7 +96,7 @@ spec:
           averageUtilization: 70
 ```
 
-#### 19.4 Readiness and Liveness Probe Example
+#### 2.4 Readiness and Liveness Probe Example
 
 ```yaml
 readinessProbe:
@@ -356,13 +114,13 @@ livenessProbe:
   periodSeconds: 10
 ```
 
-#### 19.5 Strong Interview Line
+#### 2.5 Strong Interview Line
 
 > "Scaling pods is easy; the real challenge is making sure the database, cache, external APIs, vector database, and LLM provider can handle the increased traffic too."
 
 ---
 
-### 5. Backend API Development
+### 3. Backend API Development
 
 #### Topics to revise
 
@@ -410,65 +168,7 @@ livenessProbe:
 
 Consistent error formats make APIs easier to consume, debug, monitor, and document.
 
----
-
-### 6. FastAPI
-
-FastAPI is a strong match for Python backend and GenAI services because it supports async endpoints, automatic OpenAPI docs, dependency injection, and Pydantic validation.
-
-#### Topics to revise
-
-- FastAPI routing.
-- Pydantic models.
-- Dependency injection.
-- Request validation.
-- Response models.
-- Async endpoints.
-- Middleware.
-- Exception handlers.
-- Background tasks.
-- Authentication dependencies.
-- Testing with `TestClient`.
-
----
-
-#### Example: FastAPI endpoint
-
-```python
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
-app = FastAPI(title="Document QA API")
-
-
-class QuestionRequest(BaseModel):
-    document_id: str = Field(..., min_length=1)
-    question: str = Field(..., min_length=5)
-
-
-class AnswerResponse(BaseModel):
-    answer: str
-    confidence: float
-
-
-@app.post("/ask", response_model=AnswerResponse)
-def ask_question(payload: QuestionRequest) -> AnswerResponse:
-    if payload.document_id != "demo-doc":
-        raise HTTPException(status_code=404, detail="Document not found")
-
-    return AnswerResponse(
-        answer="This is a sample answer from the retrieval pipeline.",
-        confidence=0.87,
-    )
-```
-
-**Interview explanation:**
-
-Pydantic validates request bodies automatically. FastAPI also generates API documentation and supports typed response models, which improves maintainability.
-
----
-
-### 7. Flask
+### 4. Flask
 
 Flask may be discussed because the role mentioned FastAPI/Flask.
 
@@ -576,9 +276,7 @@ Instead of creating and configuring one global application at import time, const
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-
 db = SQLAlchemy()
-
 
 def create_app(config_object: str | None = None) -> Flask:
     app = Flask(__name__)
@@ -634,7 +332,7 @@ The WSGI server owns worker/process lifecycle and accepts production traffic; Fl
 
 ---
 
-### 8. REST, gRPC, and API Design
+### 5. REST, gRPC, and API Design
 
 #### REST
 
@@ -652,16 +350,6 @@ DELETE /documents/{document_id}
 
 gRPC is often used for internal service-to-service communication where performance, strict contracts, and streaming are important.
 
-#### REST vs gRPC
-
-|       Area        |           REST           |                    gRPC                     |
-| ----------------- | ------------------------ | ------------------------------------------- |
-| Transport         | HTTP/JSON                | HTTP/2 + Protocol Buffers                   |
-| Human readability | High                     | Lower                                       |
-| Browser support   | Easy                     | Less direct                                 |
-| Performance       | Good                     | Very high                                   |
-| Best for          | Public APIs, web clients | Internal microservices, low-latency systems |
-
 #### Common interview question
 
 ##### When would you choose gRPC over REST?
@@ -672,7 +360,7 @@ Use gRPC when services need strong contracts, low latency, efficient binary seri
 
 ---
 
-### 9. Clean Architecture & Code Organization
+### 6. Clean Architecture & Code Organization
 
 #### Topics to revise
 
@@ -996,55 +684,9 @@ def get_car(price: int):
 | 409  | Conflict              |
 | 500  | Internal Server Error |
 
----
+### 8. Async APIs and Concurrent Requests
 
-### 8. FastAPI and Flask
-
-#### 8.1 Have you worked with Flask and FastAPI?
-
-##### Strong Answer
-
-> Yes, I have worked with both Flask and FastAPI. Flask is a lightweight and flexible Python web framework, while FastAPI is a modern framework designed for high-performance APIs using Python type hints, async support, and automatic documentation.
-
----
-
-#### 8.2 Major differences between Flask and FastAPI
-
-|                  Flask                  |                 FastAPI                  |
-| --------------------------------------- | ---------------------------------------- |
-| Older, mature framework                 | Newer, modern API-first framework        |
-| Mostly synchronous by default           | Native async/await support               |
-| Manual validation usually required      | Built-in validation using Pydantic       |
-| Swagger docs need extra setup           | Swagger/OpenAPI docs built in            |
-| Very flexible and minimal               | More structured for API development      |
-| Good for simple apps and custom control | Good for scalable, high-performance APIs |
-
----
-
-##### Strong Interview Answer
-
-> Flask gives more flexibility and is great for lightweight web apps or when we want full control over structure. FastAPI is better for modern REST APIs because it provides automatic Swagger documentation, request and response validation with Pydantic, native async support, and strong performance. I prefer FastAPI for API-first services, but Flask is still useful for simple services and quick prototypes.
-
----
-
-#### 8.3 Why use FastAPI?
-
-FastAPI is useful because it provides:
-
-- Native async support
-- Pydantic request validation
-- Automatic Swagger documentation
-- OpenAPI support
-- Type hint-based development
-- High performance
-- Dependency injection
-- Cleaner API development experience
-
----
-
-### 9. Async APIs and Concurrent Requests
-
-#### 9.1 What is async support in FastAPI?
+#### 8.1 What is async support in FastAPI?
 
 FastAPI supports `async` and `await` using ASGI.
 
@@ -1052,7 +694,7 @@ This allows non-blocking request handling.
 
 ---
 
-#### 9.2 API without async
+#### 8.2 API without async
 
 ```python
 @app.get("/users")
@@ -1074,7 +716,7 @@ Good for:
 
 ---
 
-#### 9.3 API with async
+#### 8.3 API with async
 
 ```python
 @app.get("/users")
@@ -1097,7 +739,7 @@ Good for:
 
 ---
 
-#### 9.4 Async vs sync interview answer
+#### 8.4 Async vs sync interview answer
 
 > The main difference is blocking versus non-blocking execution. In a synchronous API, the worker waits until the task finishes. In an async API, when the code is waiting for an I/O operation like a database call or external API call, the event loop can process other requests. Async improves concurrency and scalability for I/O-heavy workloads, especially GenAI APIs where LLM calls may take several seconds.
 
@@ -1107,7 +749,7 @@ Important:
 
 ---
 
-#### 9.5 What happens when two users hit the same API at the same time?
+#### 8.5 What happens when two users hit the same API at the same time?
 
 ##### Answer
 
@@ -1167,7 +809,7 @@ That is incorrect.
 
 ---
 
-#### 9.6 How to handle race conditions in APIs
+#### 8.6 How to handle race conditions in APIs
 
 Use:
 
@@ -1230,9 +872,9 @@ Better HTTP status for second user:
 
 ---
 
-### 15. Code Review and API Fix Case Topics
+### 9. Code Review and API Fix Case Topics
 
-#### 15.1 User API endpoint defects identified
+#### 9.1 User API endpoint defects identified
 
 ##### Issues covered
 
@@ -1249,7 +891,7 @@ Better HTTP status for second user:
 
 ---
 
-#### 15.2 Which issue to fix first?
+#### 9.2 Which issue to fix first?
 
 ##### Highest priority options
 
@@ -1266,7 +908,7 @@ Security issues have the highest blast radius and can expose sensitive data or a
 
 ---
 
-#### 15.3 Corrected API implementation pattern
+#### 9.3 Corrected API implementation pattern
 
 ##### Pseudocode
 
@@ -1336,7 +978,7 @@ app.get('/api/users', async (req, res) => {
 
 ---
 
-#### 15.4 One performance improvement to recommend
+#### 9.4 One performance improvement to recommend
 
 ##### Best choices
 
@@ -1359,53 +1001,7 @@ Choose **Redis/in-memory caching for hot users**.
 
 ---
 
-### Backend Engineering & FastAPI
-
----
-
-#### FastAPI
-
-##### Interview Question
-
-**Why use FastAPI?**
-
-##### Answer
-
-FastAPI is a modern Python web framework used for building APIs quickly and efficiently.
-
-##### Benefits
-
-- High performance
-- Async support
-- Pydantic validation
-- Automatic OpenAPI documentation
-- Easy dependency injection
-- Strong typing support
-
-##### FastAPI Example
-
-```python
-from fastapi import FastAPI
-from pydantic import BaseModel
-
-app = FastAPI()
-
-class PredictionRequest(BaseModel):
-    text: str
-
-class PredictionResponse(BaseModel):
-    label: str
-    confidence: float
-
-@app.post("/predict", response_model=PredictionResponse)
-async def predict(request: PredictionRequest):
-    return PredictionResponse(
-        label="positive",
-        confidence=0.92
-    )
-```
-
----
+### Backend API Security & Monitoring
 
 #### API Security
 
@@ -1491,22 +1087,7 @@ async def log_requests(request: Request, call_next):
 
 ---
 
-### 5. Backend APIs: REST, GraphQL, FastAPI, Flask
-
-#### Likely Questions
-
-- How do you design REST APIs?
-- What is the difference between REST and GraphQL?
-- What experience do you have with FastAPI?
-- What experience do you have with Flask?
-- How do you handle validation?
-- How do you version APIs?
-- How do you secure APIs?
-- How do you handle pagination?
-- How do you handle idempotency?
-- How do you design APIs that are easy for frontend teams to consume?
-
----
+### 10. REST API Examples, Pagination & Idempotency
 
 #### REST API Example With FastAPI
 
@@ -1516,15 +1097,12 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-
 class OrderCreate(BaseModel):
     customer_id: int
     total_amount: float
     currency: str = "CAD"
 
-
 orders = {}
-
 
 @app.post("/orders", status_code=201)
 def create_order(payload: OrderCreate):
@@ -1539,7 +1117,6 @@ def create_order(payload: OrderCreate):
     }
 
     return orders[order_id]
-
 
 @app.get("/orders/{order_id}")
 def get_order(order_id: int):
@@ -1557,42 +1134,6 @@ This demonstrates:
 - Proper status codes
 - Clear resource-oriented design
 - Error handling with HTTP exceptions
-
----
-
-#### REST vs GraphQL
-
-|     Topic      |        REST        |            GraphQL            |
-| -------------- | ------------------ | ----------------------------- |
-| Data fetching  | Multiple endpoints | Single endpoint               |
-| Response shape | Server-defined     | Client-defined                |
-| Over-fetching  | Common             | Reduced                       |
-| Caching        | Easier with HTTP   | More complex                  |
-| Learning curve | Lower              | Higher                        |
-| Best for       | Standard CRUD APIs | Flexible UI-driven data needs |
-
-##### Example REST Request
-
-```http
-GET /orders/123
-```
-
-##### Example GraphQL Query
-
-```graphql
-query {
-  order(id: 123) {
-    id
-    status
-    customer {
-      name
-      email
-    }
-  }
-}
-```
-
----
 
 #### API Pagination Example
 
@@ -2034,6 +1575,21 @@ At the database layer the same concept may be implemented with a version column 
 
 ---
 
+### REST vs GraphQL
+
+|     Topic      |        REST        |            GraphQL            |
+| -------------- | ------------------ | ----------------------------- |
+| Data fetching  | Multiple endpoints | Single endpoint               |
+| Response shape | Server-defined     | Client-defined                |
+| Over-fetching  | Common             | Reduced                       |
+| Caching        | Easier with HTTP   | More complex                  |
+| Learning curve | Lower              | Higher                        |
+| Best for       | Standard CRUD APIs | Flexible UI-driven data needs |
+
+REST is usually the simpler choice for resource-oriented public APIs and standard HTTP caching. GraphQL is useful when clients need flexible response shapes across related data and the team can support query-cost controls and resolver observability.
+
+---
+
 ### REST vs gRPC
 
 Use REST/HTTP+JSON when:
@@ -2089,7 +1645,6 @@ Example:
 ```python
 import asyncio
 
-
 async def build_dashboard(client, urls):
     results = await asyncio.gather(
         *(client.get(url) for url in urls)
@@ -2110,11 +1665,9 @@ Use Pydantic to define API contracts and validation boundaries.
 ```python
 from pydantic import BaseModel, Field
 
-
 class CreateUserRequest(BaseModel):
     email: str
     age: int = Field(ge=0, le=130)
-
 
 class UserResponse(BaseModel):
     id: int
@@ -2151,7 +1704,6 @@ DATABASE_URL = "postgresql+psycopg://user:pass@db/app"
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-
 def get_db():
     db = SessionLocal()
     try:
@@ -2167,7 +1719,6 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 app = FastAPI()
-
 
 @app.get("/users/{user_id}")
 def get_user(user_id: int, db: Session = Depends(get_db)):
@@ -2251,7 +1802,6 @@ Unit test:
 ```python
 from unittest.mock import Mock
 
-
 def test_build_forecast():
     client = Mock()
     client.get_weather.return_value = {"temperature": 22}
@@ -2265,57 +1815,6 @@ def test_build_forecast():
 Strong interview rule:
 
 > Mock unstable or expensive external boundaries, not every internal method. If the behavior being tested depends on SQL constraints or ORM integration, a real test database is often more valuable than mocking the repository layer into meaninglessness.
-
----
-
-## Unit Testing FastAPI
-
-### Basic endpoint test
-
-```python
-from fastapi.testclient import TestClient
-
-client = TestClient(app)
-
-
-def test_health():
-    response = client.get("/health")
-
-    assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
-```
-
-### Dependency override
-
-For a DB/external client dependency:
-
-```python
-def override_get_db():
-    db = TestSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-app.dependency_overrides[get_db] = override_get_db
-```
-
-This lets the endpoint execute through real routing/validation while controlling infrastructure dependencies.
-
-### What to test
-
-- Happy path
-- Request validation errors
-- Authentication/authorization failures
-- Not-found behavior
-- Conflict/idempotency behavior
-- Database rollback on failure
-- External-service timeout/error mapping
-- Response schema
-- Concurrency-sensitive invariants at an integration level
-
----
 
 ## Request Flow: Explain It Literally
 
@@ -2387,119 +1886,6 @@ Useful tools:
 
 A compatibility matrix is especially useful when multiple client and server/framework versions coexist because it turns “which combinations work?” into explicit testable data rather than scattered conditionals.
 
----
-
-## API Interview Quick Questions
-
-### Why FastAPI over Flask?
-
-FastAPI provides stronger built-in typing/validation/OpenAPI and async-friendly ASGI behavior. Flask is intentionally lighter and can be preferable when a minimal synchronous WSGI stack or a mature existing ecosystem/codebase matters.
-
-### Why dependency injection?
-
-It makes request-scoped dependencies such as DB sessions, auth context, configuration, and external clients explicit and easier to replace in tests.
-
-### How do you secure APIs?
-
-TLS, authentication, authorization, input validation, least-privilege credentials, secrets management, rate limiting, audit logging, and secure error handling. Security depends on the threat model; JWT alone is not “API security.”
-
-### How do you handle external API failures?
-
-Timeouts, retry only transient/idempotent operations with bounded exponential backoff + jitter, circuit breaking where repeated failure would amplify load, and clear mapping to application-level errors/fallbacks.
-
-### How do you version APIs?
-
-Prefer stable contracts and additive changes where possible. When a breaking contract is necessary, expose an explicit version boundary and operate a deprecation/migration window with usage telemetry and compatibility tests.
-
-### How do you cancel a long-running job?
-
-Treat cancellation as a state transition, for example:
-
-```http
-POST /v1/jobs/{job_id}/cancel
-```
-
-rather than deleting the job resource if history/audit/status must remain available.
-
----
-
-## Quick Backend API Revision Card
-
-```text
-HTTP semantics
-201 vs 202 nuance
-Idempotency-Key
-Trusted auth context, not body user_id
-Cursor pagination
-ETag / optimistic concurrency
-REST vs gRPC
-Polling vs SSE vs WebSocket
-FastAPI request flow
-Django MVT + middleware/URL/view/ORM flow
-Flask app vs request context (`current_app`/`g` vs `request`/`session`)
-Flask application factory + production WSGI/Gunicorn
-Pydantic contract vs business/DB validation
-SQLAlchemy session per request
-Transactions + uniqueness constraints
-Mock external boundaries
-FastAPI dependency overrides
-Race conditions resolved at authoritative store
-Backward-compatibility matrix + contract tests
-```
-
-### HTTP/2 vs HTTP/3 Quick Note
-
-#### HTTP/2
-
-- Multiplexes multiple request/response streams over one TCP connection.
-- Header compression reduces repeated metadata overhead.
-- TCP packet loss can still delay progress for streams sharing the same TCP connection because reliability/order is enforced at the transport layer.
-
-#### HTTP/3
-
-- Uses QUIC over UDP.
-- Provides independent transport streams so packet loss affecting one stream does not create the same cross-stream TCP head-of-line behavior.
-- Includes modern connection establishment/migration characteristics.
-
-Interview line:
-
-> HTTP/2 improves connection utilization through multiplexing, while HTTP/3 moves HTTP onto QUIC so streams have more independent transport behavior and can avoid TCP-level head-of-line blocking across streams.
-
-### About the HTTP `QUERY` Method
-
-RFC 10008, published in June 2026, defines the HTTP `QUERY` method for a request whose query description is carried in the request content. `QUERY` is explicitly **safe** and **idempotent**, unlike a general `POST`, while avoiding the URI-size, encoding, and logging drawbacks of putting a large query into a `GET` URI.
-
-```http
-QUERY /feed HTTP/1.1
-Host: example.org
-Content-Type: application/json
-
-{"keywords": ["python", "fastapi"], "limit": 20}
-```
-
-Important points:
-
-- The request requires a media type describing the query content.
-- A successful `200 OK` can contain the results.
-- `Location` can identify a resource representing the query for later repetition.
-- `Content-Location` can identify a resource representing the result.
-- Responses are cacheable, but a cache key must incorporate the request content and relevant metadata.
-- `Accept-Query` can advertise supported query media types.
-- Because `QUERY` is not a CORS-safelisted method, browser use requires preflight.
-- Ecosystem/framework/proxy support should still be verified before choosing it for a public API.
-
-Interview comparison:
-
-| Method  |      Safe      |   Idempotent   |   Request content    |                    Typical use                    |
-| ------- | -------------- | -------------- | -------------------- | ------------------------------------------------- |
-| `GET`   | Yes            | Yes            | No defined semantics | Retrieve a URI-identified representation          |
-| `QUERY` | Yes            | Yes            | Expected             | Complex read/query whose description needs a body |
-| `POST`  | Not guaranteed | Not guaranteed | Expected             | Submit processing or create/change state          |
-
-Reference: [RFC 10008 - The HTTP QUERY Method](https://datatracker.ietf.org/doc/html/rfc10008)
-
----
-
 ## Async FastAPI, SQL, Service Layers, and Test Doubles
 
 This section extends the basic examples with a production-shaped async PostgreSQL flow and layered tests.
@@ -2532,7 +1918,6 @@ SessionFactory = async_sessionmaker(
     expire_on_commit=False,
 )
 
-
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with SessionFactory() as session:
         yield session
@@ -2559,10 +1944,8 @@ from sqlalchemy import Numeric, String
 from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-
 class Base(DeclarativeBase):
     pass
-
 
 class Account(Base):
     __tablename__ = "accounts"
@@ -2575,11 +1958,9 @@ class Account(Base):
     owner_name: Mapped[str] = mapped_column(String(100), nullable=False)
     balance: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
 
-
 class AccountCreate(BaseModel):
     owner_name: str = Field(min_length=1, max_length=100)
     opening_balance: Decimal = Field(ge=0, max_digits=12, decimal_places=2)
-
 
 class AccountResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -2596,13 +1977,11 @@ Use `Decimal`/`NUMERIC`, not binary floating point, for money.
 ```python
 from sqlalchemy import select, text
 
-
 async def find_account(db: AsyncSession, account_id: UUID) -> Account | None:
     result = await db.execute(
         select(Account).where(Account.id == account_id)
     )
     return result.scalar_one_or_none()
-
 
 async def find_account_raw(db: AsyncSession, account_id: UUID):
     result = await db.execute(
@@ -2632,12 +2011,10 @@ from pydantic import BaseModel, Field
 
 app = FastAPI()
 
-
 class TransactionCreate(BaseModel):
     account_id: UUID
     amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
     currency: str = Field(min_length=3, max_length=3)
-
 
 class TransactionRepository(Protocol):
     async def create_if_absent(
@@ -2645,7 +2022,6 @@ class TransactionRepository(Protocol):
         request: TransactionCreate,
         idempotency_key: str,
     ) -> dict: ...
-
 
 class TransactionService:
     SUPPORTED_CURRENCIES = {"CAD", "USD"}
@@ -2664,10 +2040,8 @@ class TransactionService:
             idempotency_key,
         )
 
-
 def get_transaction_service() -> TransactionService:
     raise NotImplementedError
-
 
 @app.post("/transactions", status_code=status.HTTP_201_CREATED)
 async def create_transaction(
@@ -2698,10 +2072,8 @@ from typing import Protocol
 
 import httpx
 
-
 class FraudClient(Protocol):
     async def approve(self, account_id: UUID, amount: Decimal) -> bool: ...
-
 
 class HttpFraudClient:
     def __init__(self, client: httpx.AsyncClient):
@@ -2715,15 +2087,12 @@ class HttpFraudClient:
         response.raise_for_status()
         return response.json()["approved"]
 
-
 class FraudCheckRequest(BaseModel):
     account_id: UUID
     amount: Decimal = Field(gt=0)
 
-
 def get_fraud_client() -> FraudClient:
     raise NotImplementedError
-
 
 @app.post("/fraud-decisions")
 async def check_fraud(
@@ -2742,7 +2111,6 @@ from unittest.mock import AsyncMock
 from fastapi.testclient import TestClient
 
 client = TestClient(app)
-
 
 def test_transaction_uses_fraud_client():
     fraud_client = AsyncMock()
@@ -2802,7 +2170,6 @@ Example endpoint test:
 ```python
 from decimal import Decimal
 from unittest.mock import AsyncMock
-
 
 def test_create_transaction_success():
     service = AsyncMock()

@@ -37,108 +37,9 @@ This file has been refreshed to keep the original repository topic while merging
 
 > ML fundamentals, classification, model-building workflow, evaluation metrics, overfitting, bias/variance, deep learning, TensorFlow, PyTorch, scikit-learn, and model validation.
 
----
+### 1. TensorFlow, PyTorch & Scikit-learn
 
-### 8. Machine Learning Fundamentals
-
-#### 8.1 How to build ML models
-
-**Interview answer:**
-
-> Building an ML model starts with understanding the business problem and defining the prediction target. Then I collect and clean data, perform exploratory analysis, engineer features, split the data into train/validation/test sets, train baseline models, evaluate with appropriate metrics, tune hyperparameters, and finally deploy the model with monitoring.
-
-##### ML pipeline
-
-```text
-Problem Definition
-   ↓
-Data Collection
-   ↓
-Data Cleaning
-   ↓
-Feature Engineering
-   ↓
-Train/Validation/Test Split
-   ↓
-Model Selection
-   ↓
-Training
-   ↓
-Evaluation
-   ↓
-Hyperparameter Tuning
-   ↓
-Deployment
-   ↓
-Monitoring
-```
-
----
-
-#### 8.2 Classification Models
-
-##### Logistic Regression
-
-- Good baseline
-- Interpretable
-- Good for linear binary classification
-
-##### Decision Tree
-
-- Easy to explain
-- Handles nonlinear rules
-- Can overfit
-
-##### Random Forest
-
-- Ensemble of decision trees
-- Robust general-purpose model
-- Less interpretable than one tree
-
-##### SVM
-
-- Good for smaller high-dimensional datasets
-- Can be slow on large datasets
-
-##### KNN
-
-- Simple nearest-neighbor method
-- Slow prediction on large data
-- Sensitive to scaling
-
-##### Naive Bayes
-
-- Very fast
-- Strong for text classification
-- Assumes feature independence
-
-##### Gradient Boosting / XGBoost / LightGBM
-
-- Strong for structured/tabular data
-- High accuracy
-- More tuning required
-
----
-
-#### 8.3 Classification metrics
-
-|  Metric   |                  Meaning                  |       Use Case        |
-| --------- | ----------------------------------------- | --------------------- |
-| Accuracy  | Overall correctness                       | Balanced datasets     |
-| Precision | How many predicted positives were correct | Avoid false positives |
-| Recall    | How many actual positives were detected   | Avoid false negatives |
-| F1        | Balance of precision and recall           | Imbalanced data       |
-| ROC-AUC   | Ranking/separation ability                | Binary classifiers    |
-
-**Fraud detection answer:**
-
-> Fraud detection is usually imbalanced, so I would not rely on accuracy alone. I would focus on recall, precision, F1, ROC-AUC, and business cost of false positives versus false negatives. Tree-based models like Random Forest or XGBoost are often strong choices for structured transaction data.
-
----
-
-### 9. TensorFlow, PyTorch & Scikit-learn
-
-#### 9.1 TensorFlow
+#### 1.1 TensorFlow
 
 **Interview answer:**
 
@@ -162,17 +63,7 @@ Test Model
 Deploy Model
 ```
 
-##### TensorFlow vs PyTorch
-
-|             TensorFlow             |                PyTorch                 |
-| ---------------------------------- | -------------------------------------- |
-| Strong production ecosystem        | Pythonic and research-friendly         |
-| TensorFlow Serving / Lite          | Dynamic graph, easy debugging          |
-| Common in deployment-heavy systems | Popular in research and LLM ecosystems |
-
----
-
-#### 9.2 Scikit-learn
+#### 1.2 Scikit-learn
 
 **Interview answer:**
 
@@ -200,9 +91,9 @@ Deploy Model
 
 ---
 
-### 12. Machine Learning, Data Pipelines, and Model Serving
+### 2. Machine Learning, Data Pipelines, and Model Serving
 
-#### 12.1 ML data pipeline design
+#### 2.1 ML data pipeline design
 
 ##### Stages covered
 
@@ -228,7 +119,7 @@ Deploy Model
 
 ---
 
-#### 12.2 Data quality issues in ML pipelines
+#### 2.2 Data quality issues in ML pipelines
 
 ##### Issues
 
@@ -251,7 +142,7 @@ Deploy Model
 
 ---
 
-#### 12.3 ML API latency vs accuracy trade-off
+#### 2.3 ML API latency vs accuracy trade-off
 
 ##### Topic covered
 
@@ -273,7 +164,7 @@ How to maintain low-latency predictions while preserving accuracy.
 
 ---
 
-#### 12.4 Evaluating AI/ML system in production
+#### 2.4 Evaluating AI/ML system in production
 
 ##### Dimensions
 
@@ -295,7 +186,7 @@ How to maintain low-latency predictions while preserving accuracy.
 
 ---
 
-#### 12.5 Precision and recall explained intuitively
+#### 2.5 Precision and recall explained intuitively
 
 ##### Precision
 
